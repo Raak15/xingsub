@@ -492,15 +492,19 @@ namespace XingSub
             foreach (string p in pathstr)
             {
                 Assembly ase = Assembly.LoadFrom(p);
-
-                foreach (Type type in ase.GetExportedTypes())
+                if (ase.GetName().Version.Major == Assembly.GetEntryAssembly().GetName().Version.Major)
                 {
-                    if (type.IsClass && typeof(IPlugin).IsAssignableFrom(type))
+                    foreach (Type type in ase.GetExportedTypes())
                     {
-                        IPlugin obj = (IPlugin)Activator.CreateInstance(type);
-                        System.Diagnostics.Debug.WriteLine(obj.Descriptions());
-                        list.Add(type);
+                        if (type.IsClass && typeof(IPlugin).IsAssignableFrom(type))
+                        {
+                            list.Add(type);
+                        }
                     }
+                }
+                else
+                {
+                    MessageBox.Show("该插件的主版本号与本程序的主版本号不一致。\n为了避免接口升级带来的错误，插件的主版本号必须与本程序主版本号一致。\n\n当前程序版本号: " + Assembly.GetEntryAssembly().GetName().Version.ToString(), "已跳过加载插件 " + Path.GetFileName(ase.Location), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
         }
