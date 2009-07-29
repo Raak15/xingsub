@@ -32,23 +32,25 @@
             this.timerCapture = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.FileToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.NewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.OpenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.SaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.SaveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.ImportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.ExportToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.PluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.ExitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EditToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.CutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.CopyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.PasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.DeleteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.SelectAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
             this.InsertNewlineToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator8 = new System.Windows.Forms.ToolStripSeparator();
-            this.FindAndReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.QuickReplaceToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.GotoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.OptionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.NormalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.EffectsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -63,6 +65,10 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.contextCut = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextPaste = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.contextSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
@@ -70,20 +76,6 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.timerAutoSave = new System.Windows.Forms.Timer(this.components);
-            this.contextCut = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextCopy = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextPaste = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextDelete = new System.Windows.Forms.ToolStripMenuItem();
-            this.NewToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.OpenToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.SaveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.UndoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.RedoToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.CutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.CopyToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.PasteToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.QuickFindToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.PluginToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -124,6 +116,33 @@
             this.FileToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.FileToolStripMenuItem.Text = "文件(&F)";
             // 
+            // NewToolStripMenuItem
+            // 
+            this.NewToolStripMenuItem.Image = global::XingSub.Properties.Resources._49_48_;
+            this.NewToolStripMenuItem.Name = "NewToolStripMenuItem";
+            this.NewToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
+            this.NewToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.NewToolStripMenuItem.Text = "新建(&N)";
+            this.NewToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItem_Click);
+            // 
+            // OpenToolStripMenuItem
+            // 
+            this.OpenToolStripMenuItem.Image = global::XingSub.Properties.Resources._01_34_;
+            this.OpenToolStripMenuItem.Name = "OpenToolStripMenuItem";
+            this.OpenToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
+            this.OpenToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.OpenToolStripMenuItem.Text = "打开(&O)";
+            this.OpenToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
+            // 
+            // SaveToolStripMenuItem
+            // 
+            this.SaveToolStripMenuItem.Image = global::XingSub.Properties.Resources._01_00_;
+            this.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem";
+            this.SaveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
+            this.SaveToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
+            this.SaveToolStripMenuItem.Text = "保存(&S)";
+            this.SaveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
+            // 
             // SaveAsToolStripMenuItem
             // 
             this.SaveAsToolStripMenuItem.Name = "SaveAsToolStripMenuItem";
@@ -154,6 +173,13 @@
             this.ExportToolStripMenuItem.Text = "导出(&E)";
             this.ExportToolStripMenuItem.MouseEnter += new System.EventHandler(this.ExportToolStripMenuItem_MouseEnter);
             // 
+            // PluginToolStripMenuItem
+            // 
+            this.PluginToolStripMenuItem.Enabled = false;
+            this.PluginToolStripMenuItem.Name = "PluginToolStripMenuItem";
+            this.PluginToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
+            this.PluginToolStripMenuItem.Text = "(正在扫描插件...)";
+            // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
@@ -169,9 +195,6 @@
             // EditToolStripMenuItem
             // 
             this.EditToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.UndoToolStripMenuItem,
-            this.RedoToolStripMenuItem,
-            this.toolStripSeparator4,
             this.CutToolStripMenuItem,
             this.CopyToolStripMenuItem,
             this.PasteToolStripMenuItem,
@@ -179,19 +202,37 @@
             this.toolStripSeparator5,
             this.SelectAllToolStripMenuItem,
             this.toolStripSeparator6,
-            this.InsertNewlineToolStripMenuItem,
-            this.toolStripSeparator8,
-            this.FindAndReplaceToolStripMenuItem,
-            this.GotoToolStripMenuItem});
+            this.InsertNewlineToolStripMenuItem});
             this.EditToolStripMenuItem.Name = "EditToolStripMenuItem";
             this.EditToolStripMenuItem.Size = new System.Drawing.Size(59, 20);
             this.EditToolStripMenuItem.Text = "编辑(&E)";
             // 
-            // toolStripSeparator4
+            // CutToolStripMenuItem
             // 
-            this.toolStripSeparator4.Name = "toolStripSeparator4";
-            this.toolStripSeparator4.Size = new System.Drawing.Size(174, 6);
-            this.toolStripSeparator4.Visible = false;
+            this.CutToolStripMenuItem.Image = global::XingSub.Properties.Resources._18_00_;
+            this.CutToolStripMenuItem.Name = "CutToolStripMenuItem";
+            this.CutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
+            this.CutToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.CutToolStripMenuItem.Text = "剪切(&T)";
+            this.CutToolStripMenuItem.Click += new System.EventHandler(this.CutToolStripMenuItem_Click);
+            // 
+            // CopyToolStripMenuItem
+            // 
+            this.CopyToolStripMenuItem.Image = global::XingSub.Properties.Resources._17_00_;
+            this.CopyToolStripMenuItem.Name = "CopyToolStripMenuItem";
+            this.CopyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
+            this.CopyToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.CopyToolStripMenuItem.Text = "复制(&C)";
+            this.CopyToolStripMenuItem.Click += new System.EventHandler(this.CopyToolStripMenuItem_Click);
+            // 
+            // PasteToolStripMenuItem
+            // 
+            this.PasteToolStripMenuItem.Image = global::XingSub.Properties.Resources._06_42_;
+            this.PasteToolStripMenuItem.Name = "PasteToolStripMenuItem";
+            this.PasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
+            this.PasteToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
+            this.PasteToolStripMenuItem.Text = "粘贴(&P)";
+            this.PasteToolStripMenuItem.Click += new System.EventHandler(this.PasteToolStripMenuItem_Click);
             // 
             // DeleteToolStripMenuItem
             // 
@@ -226,34 +267,6 @@
             this.InsertNewlineToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
             this.InsertNewlineToolStripMenuItem.Text = "插入空行(&I)";
             this.InsertNewlineToolStripMenuItem.Click += new System.EventHandler(this.InsertNewlineToolStripMenuItem_Click);
-            // 
-            // toolStripSeparator8
-            // 
-            this.toolStripSeparator8.Name = "toolStripSeparator8";
-            this.toolStripSeparator8.Size = new System.Drawing.Size(174, 6);
-            // 
-            // FindAndReplaceToolStripMenuItem
-            // 
-            this.FindAndReplaceToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.QuickFindToolStripMenuItem,
-            this.QuickReplaceToolStripMenuItem});
-            this.FindAndReplaceToolStripMenuItem.Name = "FindAndReplaceToolStripMenuItem";
-            this.FindAndReplaceToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.FindAndReplaceToolStripMenuItem.Text = "查找和替换(&F)";
-            // 
-            // QuickReplaceToolStripMenuItem
-            // 
-            this.QuickReplaceToolStripMenuItem.Name = "QuickReplaceToolStripMenuItem";
-            this.QuickReplaceToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.H)));
-            this.QuickReplaceToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.QuickReplaceToolStripMenuItem.Text = "快速替换(&R)";
-            // 
-            // GotoToolStripMenuItem
-            // 
-            this.GotoToolStripMenuItem.Name = "GotoToolStripMenuItem";
-            this.GotoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.G)));
-            this.GotoToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.GotoToolStripMenuItem.Text = "转到(&G)";
             // 
             // OptionsToolStripMenuItem
             // 
@@ -386,6 +399,38 @@
             this.contextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
             this.contextMenuStrip1.Size = new System.Drawing.Size(137, 148);
             // 
+            // contextCut
+            // 
+            this.contextCut.Image = global::XingSub.Properties.Resources._18_00_;
+            this.contextCut.Name = "contextCut";
+            this.contextCut.Size = new System.Drawing.Size(136, 22);
+            this.contextCut.Text = "剪切(&T)";
+            this.contextCut.Click += new System.EventHandler(this.contextCut_Click);
+            // 
+            // contextCopy
+            // 
+            this.contextCopy.Image = global::XingSub.Properties.Resources._17_00_;
+            this.contextCopy.Name = "contextCopy";
+            this.contextCopy.Size = new System.Drawing.Size(136, 22);
+            this.contextCopy.Text = "复制(&C)";
+            this.contextCopy.Click += new System.EventHandler(this.contextCopy_Click);
+            // 
+            // contextPaste
+            // 
+            this.contextPaste.Image = global::XingSub.Properties.Resources._06_42_;
+            this.contextPaste.Name = "contextPaste";
+            this.contextPaste.Size = new System.Drawing.Size(136, 22);
+            this.contextPaste.Text = "粘贴(&P)";
+            this.contextPaste.Click += new System.EventHandler(this.contextPaste_Click);
+            // 
+            // contextDelete
+            // 
+            this.contextDelete.Image = global::XingSub.Properties.Resources._00_04_;
+            this.contextDelete.Name = "contextDelete";
+            this.contextDelete.Size = new System.Drawing.Size(136, 22);
+            this.contextDelete.Text = "删除(&D)";
+            this.contextDelete.Click += new System.EventHandler(this.contextDelete_Click);
+            // 
             // toolStripSeparator7
             // 
             this.toolStripSeparator7.Name = "toolStripSeparator7";
@@ -421,125 +466,6 @@
             this.timerAutoSave.Enabled = true;
             this.timerAutoSave.Interval = 120000;
             this.timerAutoSave.Tick += new System.EventHandler(this.timerAutoSave_Tick);
-            // 
-            // contextCut
-            // 
-            this.contextCut.Image = global::XingSub.Properties.Resources._18_00_;
-            this.contextCut.Name = "contextCut";
-            this.contextCut.Size = new System.Drawing.Size(136, 22);
-            this.contextCut.Text = "剪切(&T)";
-            this.contextCut.Click += new System.EventHandler(this.contextCut_Click);
-            // 
-            // contextCopy
-            // 
-            this.contextCopy.Image = global::XingSub.Properties.Resources._17_00_;
-            this.contextCopy.Name = "contextCopy";
-            this.contextCopy.Size = new System.Drawing.Size(136, 22);
-            this.contextCopy.Text = "复制(&C)";
-            this.contextCopy.Click += new System.EventHandler(this.contextCopy_Click);
-            // 
-            // contextPaste
-            // 
-            this.contextPaste.Image = global::XingSub.Properties.Resources._06_42_;
-            this.contextPaste.Name = "contextPaste";
-            this.contextPaste.Size = new System.Drawing.Size(136, 22);
-            this.contextPaste.Text = "粘贴(&P)";
-            this.contextPaste.Click += new System.EventHandler(this.contextPaste_Click);
-            // 
-            // contextDelete
-            // 
-            this.contextDelete.Image = global::XingSub.Properties.Resources._00_04_;
-            this.contextDelete.Name = "contextDelete";
-            this.contextDelete.Size = new System.Drawing.Size(136, 22);
-            this.contextDelete.Text = "删除(&D)";
-            this.contextDelete.Click += new System.EventHandler(this.contextDelete_Click);
-            // 
-            // NewToolStripMenuItem
-            // 
-            this.NewToolStripMenuItem.Image = global::XingSub.Properties.Resources._49_48_;
-            this.NewToolStripMenuItem.Name = "NewToolStripMenuItem";
-            this.NewToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.NewToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.NewToolStripMenuItem.Text = "新建(&N)";
-            this.NewToolStripMenuItem.Click += new System.EventHandler(this.NewToolStripMenuItem_Click);
-            // 
-            // OpenToolStripMenuItem
-            // 
-            this.OpenToolStripMenuItem.Image = global::XingSub.Properties.Resources._01_34_;
-            this.OpenToolStripMenuItem.Name = "OpenToolStripMenuItem";
-            this.OpenToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.OpenToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.OpenToolStripMenuItem.Text = "打开(&O)";
-            this.OpenToolStripMenuItem.Click += new System.EventHandler(this.OpenToolStripMenuItem_Click);
-            // 
-            // SaveToolStripMenuItem
-            // 
-            this.SaveToolStripMenuItem.Image = global::XingSub.Properties.Resources._01_00_;
-            this.SaveToolStripMenuItem.Name = "SaveToolStripMenuItem";
-            this.SaveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.SaveToolStripMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.SaveToolStripMenuItem.Text = "保存(&S)";
-            this.SaveToolStripMenuItem.Click += new System.EventHandler(this.SaveToolStripMenuItem_Click);
-            // 
-            // UndoToolStripMenuItem
-            // 
-            this.UndoToolStripMenuItem.Image = global::XingSub.Properties.Resources._02_39_;
-            this.UndoToolStripMenuItem.Name = "UndoToolStripMenuItem";
-            this.UndoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Z)));
-            this.UndoToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.UndoToolStripMenuItem.Text = "撤销(&U)";
-            this.UndoToolStripMenuItem.Visible = false;
-            // 
-            // RedoToolStripMenuItem
-            // 
-            this.RedoToolStripMenuItem.Image = global::XingSub.Properties.Resources._01_39_;
-            this.RedoToolStripMenuItem.Name = "RedoToolStripMenuItem";
-            this.RedoToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Y)));
-            this.RedoToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.RedoToolStripMenuItem.Text = "重做(&R)";
-            this.RedoToolStripMenuItem.Visible = false;
-            // 
-            // CutToolStripMenuItem
-            // 
-            this.CutToolStripMenuItem.Image = global::XingSub.Properties.Resources._18_00_;
-            this.CutToolStripMenuItem.Name = "CutToolStripMenuItem";
-            this.CutToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.CutToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.CutToolStripMenuItem.Text = "剪切(&T)";
-            this.CutToolStripMenuItem.Click += new System.EventHandler(this.CutToolStripMenuItem_Click);
-            // 
-            // CopyToolStripMenuItem
-            // 
-            this.CopyToolStripMenuItem.Image = global::XingSub.Properties.Resources._17_00_;
-            this.CopyToolStripMenuItem.Name = "CopyToolStripMenuItem";
-            this.CopyToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.CopyToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.CopyToolStripMenuItem.Text = "复制(&C)";
-            this.CopyToolStripMenuItem.Click += new System.EventHandler(this.CopyToolStripMenuItem_Click);
-            // 
-            // PasteToolStripMenuItem
-            // 
-            this.PasteToolStripMenuItem.Image = global::XingSub.Properties.Resources._06_42_;
-            this.PasteToolStripMenuItem.Name = "PasteToolStripMenuItem";
-            this.PasteToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.PasteToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.PasteToolStripMenuItem.Text = "粘贴(&P)";
-            this.PasteToolStripMenuItem.Click += new System.EventHandler(this.PasteToolStripMenuItem_Click);
-            // 
-            // QuickFindToolStripMenuItem
-            // 
-            this.QuickFindToolStripMenuItem.Image = global::XingSub.Properties.Resources._19_01_;
-            this.QuickFindToolStripMenuItem.Name = "QuickFindToolStripMenuItem";
-            this.QuickFindToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.F)));
-            this.QuickFindToolStripMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.QuickFindToolStripMenuItem.Text = "快速查找(&F)";
-            // 
-            // PluginToolStripMenuItem
-            // 
-            this.PluginToolStripMenuItem.Enabled = false;
-            this.PluginToolStripMenuItem.Name = "PluginToolStripMenuItem";
-            this.PluginToolStripMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.PluginToolStripMenuItem.Text = "(正在扫描插件...)";
             // 
             // Form1
             // 
@@ -594,9 +520,6 @@
         private System.Windows.Forms.ToolStripMenuItem AboutToolStripMenuItem;
         private System.Windows.Forms.SaveFileDialog saveFileDialog1;
         private System.Windows.Forms.OpenFileDialog openFileDialog1;
-        private System.Windows.Forms.ToolStripMenuItem UndoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem RedoToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem CutToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem CopyToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem PasteToolStripMenuItem;
@@ -604,10 +527,6 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripMenuItem SelectAllToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator6;
-        private System.Windows.Forms.ToolStripMenuItem FindAndReplaceToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem QuickFindToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem QuickReplaceToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem GotoToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip contextMenuStrip1;
         private System.Windows.Forms.ToolStripMenuItem contextCut;
         private System.Windows.Forms.ToolStripMenuItem contextCopy;
@@ -617,7 +536,6 @@
         private System.Windows.Forms.ToolStripMenuItem contextSelectAll;
         private System.Windows.Forms.Timer timerAutoSave;
         private System.Windows.Forms.ToolStripMenuItem InsertNewlineToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator8;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
         private System.Windows.Forms.ToolStripMenuItem contextInsertNewline;
         private System.Windows.Forms.ToolStripMenuItem PluginToolStripMenuItem;
