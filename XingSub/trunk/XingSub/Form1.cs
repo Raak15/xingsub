@@ -5,6 +5,8 @@ using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Windows.Forms;
+using System.Text.RegularExpressions;
+using System.Drawing;
 
 namespace XingSub
 {
@@ -43,7 +45,7 @@ namespace XingSub
         private bool effectMode = false;
         private int timeOffset = 0;
 
-        private List<Type> list;
+        private List<Type> pluginsList;
 
         public Form1()
         {
@@ -62,18 +64,18 @@ namespace XingSub
                     {
                         StringBuilder buffer = new StringBuilder(255);
                         SendMessage(hWnd, WM_GETTEXT, new IntPtr(255), buffer);
-                        if (buffer.Length == 1)
+                        if (buffer.Length == 1)     //一位数在前面补“0”
                         {
-                            if (getCount != 0) timeString += "0";
+                            if (getCount != 0) timeString += "0";   //小时保持一位数
                             timeString += buffer.ToString();
                             getCount++;
                         }
-                        else if (buffer.Length == 2)
+                        else if (buffer.Length == 2)    //两位数直接插入
                         {
                             timeString += buffer.ToString();
                             getCount++;
                         }
-                        else if (buffer.Length == 3)
+                        else if (buffer.Length == 3)    //三位数（毫秒）四舍五入取前两位
                         {
                             timeString += Math.Round(float.Parse(buffer.ToString()) / 10, 0).ToString();
                             getCount++;
@@ -91,82 +93,7 @@ namespace XingSub
 
         private void timerCapture_Tick(object sender, EventArgs e)
         {
-            if (getCount == 4)
-            {
-                if (timeString.Length == 7 && timeString != lastString && timeString != "0000000")
-                {
-                    if (effectMode) //特效模式
-                    {
-                        //插入时间
-                        textBox1.SelectedText = "+" + timeString;
-
-                        //定位到下一音节
-                        int endOfLine = textBox1.Text.Substring(textBox1.SelectionStart).IndexOf(Environment.NewLine);
-                        if (endOfLine == -1)
-                        {
-                            endOfLine = textBox1.Text.Length - textBox1.SelectionStart;
-                        }
-                        int nextWord;   //寻找下一音节
-                        if (timeOffset == 0)    //自动偏移
-                        {
-                            nextWord = textBox1.Text.Substring(textBox1.SelectionStart).IndexOf(" ") + 1;   //下一空格
-                        }
-                        else
-                        {
-                            nextWord = timeOffset;
-                        }
-
-                        System.Diagnostics.Debug.WriteLine("SL:" + textBox1.SelectionStart.ToString() + "    LE:" + endOfLine.ToString());
-                        if (nextWord > endOfLine || nextWord == 0)   //如果超过行尾
-                        {
-                            textBox1.SelectionStart += endOfLine;
-                        }
-                        else
-                        {
-                            textBox1.SelectionStart += nextWord;
-                        }
-                        
-                        if (endOfLine == 0)   //如果已到达行尾
-                        {
-                            System.Diagnostics.Debug.WriteLine("End of line");
-                            textBox1.SelectionStart += 2;   //定位到下一行
-                        }
-                    }
-                    else
-                    {
-                        //定位到行首
-                        int lastNewline = textBox1.Text.Substring(0, textBox1.SelectionStart).LastIndexOf(Environment.NewLine);
-                        if (lastNewline == -1)
-                        {
-                            textBox1.SelectionStart = 0;
-                        }
-                        else
-                        {
-                            textBox1.SelectionStart = lastNewline + 2;
-                        }
-
-                        //插入时间
-                        textBox1.SelectedText = timeString;
-
-                        //定位到下一行首
-                        int nextNewline = textBox1.Text.Substring(textBox1.SelectionStart).IndexOf(Environment.NewLine);
-                        if (nextNewline == -1)
-                        {
-                            textBox1.Text += Environment.NewLine;
-                            textBox1.SelectionStart = textBox1.Text.Length;
-                        }
-                        else
-                        {
-                            textBox1.SelectionStart += (nextNewline + 2);
-                        }
-                    }
-                    toolStripStatusLabel1.Text = "已插入时间标记: " + timeString.Substring(0, 1) + ":" + timeString.Substring(1, 2) + ":" + timeString.Substring(3, 2) + "." + timeString.Substring(5, 2);
-                }
-                getCount = 0;
-                lastString = timeString;
-                timeString = "";
-            }
-            else
+            if (getCount < 4)   //未取够4次则继续
             {
                 IntPtr h = FindWindow(null, "手动定义标记");
                 if (h.ToInt32() > 0)
@@ -174,9 +101,13 @@ namespace XingSub
                     EnumChildWindows(h, callbackEnumChildWindows, this.Handle);
                 }
             }
+            else if (getCount == 4) //取够4次，插入时间
+            {
+                insertTime();
+            }
         }
 
-        private void NewToolStripMenuItem_Click(object sender, EventArgs e)
+        private void newMenuItem_Click(object sender, EventArgs e)
         {
             if (askToSave())
             {
@@ -194,7 +125,7 @@ namespace XingSub
             }
         }
 
-        private void OpenToolStripMenuItem_Click(object sender, EventArgs e)
+        private void openMenuItem_Click(object sender, EventArgs e)
         {
             if (askToSave())
             {
@@ -215,16 +146,16 @@ namespace XingSub
                 if (effectMode)
                 {
                     this.Text = "XingSub - 特效模式 [" + fileName + "]";
-                    NormalToolStripMenuItem.Checked = false;
-                    EffectsToolStripMenuItem.Checked = true;
-                    OffsetToolStripMenuItem.Enabled = true;
+                    normalModeMenuItem.Checked = false;
+                    effectsModeMenuItem.Checked = true;
+                    offsetMenuItem.Enabled = true;
                 }
                 else
                 {
                     this.Text = "XingSub - 正常模式 [" + fileName + "]";
-                    NormalToolStripMenuItem.Checked = true;
-                    EffectsToolStripMenuItem.Checked = false;
-                    OffsetToolStripMenuItem.Enabled = false;
+                    normalModeMenuItem.Checked = true;
+                    effectsModeMenuItem.Checked = false;
+                    offsetMenuItem.Enabled = false;
                 }
             }
         }
@@ -256,7 +187,7 @@ namespace XingSub
             }
         }
 
-        private void ExitToolStripMenuItem_Click(object sender, EventArgs e)
+        private void editMenuItem_Click(object sender, EventArgs e)
         {
             this.Close();
         }
@@ -266,18 +197,18 @@ namespace XingSub
             if (!askToSave()) e.Cancel = true;
         }
 
-        private void AboutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void aboutMenuItem_Click(object sender, EventArgs e)
         {
             string text = String.Format("XingSub\n版本 {0}\n(C) 2009 chenxingyu\n保留所有权利", Assembly.GetExecutingAssembly().GetName().Version.ToString());
             MessageBox.Show(text, "关于 XingSub", MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
-        private void SaveToolStripMenuItem_Click(object sender, EventArgs e)
+        private void saveMenuItem_Click(object sender, EventArgs e)
         {
             saveToFile();
         }
 
-        private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void saveAsMenuItem_Click(object sender, EventArgs e)
         {
             saveFileDialog1.Reset();
             if (effectMode)
@@ -305,20 +236,20 @@ namespace XingSub
             if (effectMode)
             {
                 this.Text = "XingSub - 特效模式 [" + fileName + "]";
-                NormalToolStripMenuItem.Checked = false;
-                EffectsToolStripMenuItem.Checked = true;
-                OffsetToolStripMenuItem.Enabled = true;
+                normalModeMenuItem.Checked = false;
+                effectsModeMenuItem.Checked = true;
+                offsetMenuItem.Enabled = true;
             }
             else
             {
                 this.Text = "XingSub - 正常模式 [" + fileName + "]";
-                NormalToolStripMenuItem.Checked = true;
-                EffectsToolStripMenuItem.Checked = false;
-                OffsetToolStripMenuItem.Enabled = false;
+                normalModeMenuItem.Checked = true;
+                effectsModeMenuItem.Checked = false;
+                offsetMenuItem.Enabled = false;
             }
         }
 
-        private void CutToolStripMenuItem_Click(object sender, EventArgs e)
+        private void cutMenuItem_Click(object sender, EventArgs e)
         {
             if (textBox1.SelectionLength > 0)
             {
@@ -326,7 +257,7 @@ namespace XingSub
             }
         }
 
-        private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
+        private void copyMenuItem_Click(object sender, EventArgs e)
         {
             if (textBox1.SelectionLength > 0)
             {
@@ -334,7 +265,7 @@ namespace XingSub
             }
         }
 
-        private void PasteToolStripMenuItem_Click(object sender, EventArgs e)
+        private void pasteMenuItem_Click(object sender, EventArgs e)
         {
             if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text))
             {
@@ -342,48 +273,14 @@ namespace XingSub
             }
         }
 
-        private void SelectAllToolStripMenuItem_Click(object sender, EventArgs e)
+        private void selectAllMenuItem_Click(object sender, EventArgs e)
         {
             textBox1.SelectAll();
         }
 
-        private void DeleteToolStripMenuItem_Click(object sender, EventArgs e)
+        private void deleteMenuItem_Click(object sender, EventArgs e)
         {
             textBox1.SelectedText = "";
-        }
-
-        private void contextCut_Click(object sender, EventArgs e)
-        {
-            if (textBox1.SelectionLength > 0)
-            {
-                textBox1.Cut();
-            }
-        }
-
-        private void contextCopy_Click(object sender, EventArgs e)
-        {
-            if (textBox1.SelectionLength > 0)
-            {
-                textBox1.Copy();
-            }
-        }
-
-        private void contextPaste_Click(object sender, EventArgs e)
-        {
-            if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text))
-            {
-                textBox1.Paste();
-            }
-        }
-
-        private void contextDelete_Click(object sender, EventArgs e)
-        {
-            textBox1.SelectedText = "";
-        }
-
-        private void contextSelectAll_Click(object sender, EventArgs e)
-        {
-            textBox1.SelectAll();
         }
 
         private void timerAutoSave_Tick(object sender, EventArgs e)
@@ -405,21 +302,26 @@ namespace XingSub
             }
         }
 
-        private void InsertNewlineToolStripMenuItem_Click(object sender, EventArgs e)
+        private void insertNewLineMenuItem_Click(object sender, EventArgs e)
         {
-            insertNewline();
+            int nextNewline = textBox1.Text.Substring(textBox1.SelectionStart).IndexOf(Environment.NewLine);
+            if (nextNewline == -1)
+            {
+                textBox1.Text += Environment.NewLine;
+                textBox1.SelectionStart = textBox1.Text.Length;
+            }
+            else
+            {
+                textBox1.SelectionStart += nextNewline;
+                textBox1.SelectedText = Environment.NewLine;
+            }
         }
 
-        private void contextInsertNewline_Click(object sender, EventArgs e)
+        private void normalModeMenuItem_Click(object sender, EventArgs e)
         {
-            insertNewline();
-        }
-
-        private void NormalToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            OffsetToolStripMenuItem.Enabled = false;
-            NormalToolStripMenuItem.Checked = true;
-            EffectsToolStripMenuItem.Checked = false;
+            offsetMenuItem.Enabled = false;
+            normalModeMenuItem.Checked = true;
+            effectsModeMenuItem.Checked = false;
             effectMode = false;
             if (Path.GetExtension(fileName) != ".xss")  //如果扩展名不符，要求另存。
             {
@@ -437,11 +339,11 @@ namespace XingSub
             saveToFile();
         }
 
-        private void EffectsToolStripMenuItem_Click(object sender, EventArgs e)
+        private void effectsModeMenuItem_Click(object sender, EventArgs e)
         {
-            OffsetToolStripMenuItem.Enabled = true;
-            NormalToolStripMenuItem.Checked = false;
-            EffectsToolStripMenuItem.Checked = true;
+            offsetMenuItem.Enabled = true;
+            normalModeMenuItem.Checked = false;
+            effectsModeMenuItem.Checked = true;
             effectMode = true;
             if (Path.GetExtension(fileName) != ".xse")  //如果扩展名不符，要求另存。
             {
@@ -459,27 +361,27 @@ namespace XingSub
             saveToFile();
         }
 
-        private void OneOffsetToolStripMenuItem_Click(object sender, EventArgs e)
+        private void offsetOneMenuItem_Click(object sender, EventArgs e)
         {
-            OneOffsetToolStripMenuItem.Checked = true;
-            TwoOffsetToolStripMenuItem.Checked = false;
-            OffsetBySpaceToolStripMenuItem.Checked = false;
+            offsetOneMenuItem.Checked = true;
+            offsetTwoMenuItem.Checked = false;
+            offsetBySpaceMenuItem.Checked = false;
             timeOffset = 1;
         }
 
-        private void TwoOffsetToolStripMenuItem_Click(object sender, EventArgs e)
+        private void offsetTwoMenuItem_Click(object sender, EventArgs e)
         {
-            OneOffsetToolStripMenuItem.Checked = false;
-            TwoOffsetToolStripMenuItem.Checked = true;
-            OffsetBySpaceToolStripMenuItem.Checked = false;
+            offsetOneMenuItem.Checked = false;
+            offsetTwoMenuItem.Checked = true;
+            offsetBySpaceMenuItem.Checked = false;
             timeOffset = 2;
         }
 
-        private void OffsetBySpaceToolStripMenuItem_Click(object sender, EventArgs e)
+        private void offsetBySpaceMenuItem_Click(object sender, EventArgs e)
         {
-            OneOffsetToolStripMenuItem.Checked = false;
-            TwoOffsetToolStripMenuItem.Checked = false;
-            OffsetBySpaceToolStripMenuItem.Checked = true;
+            offsetOneMenuItem.Checked = false;
+            offsetTwoMenuItem.Checked = false;
+            offsetBySpaceMenuItem.Checked = true;
             timeOffset = 0;
         }
 
@@ -487,7 +389,7 @@ namespace XingSub
         {
             string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             string[] pathstr = Directory.GetFiles(location, "*.dll");
-            list = new List<Type>();
+            pluginsList = new List<Type>();
 
             foreach (string p in pathstr)
             {
@@ -498,7 +400,7 @@ namespace XingSub
                     {
                         if (type.IsClass && typeof(IPlugin).IsAssignableFrom(type))
                         {
-                            list.Add(type);
+                            pluginsList.Add(type);
                         }
                     }
                 }
@@ -509,22 +411,22 @@ namespace XingSub
             }
         }
 
-        private void ExportToolStripMenuItem_MouseEnter(object sender, EventArgs e)
+        private void exportMenuItem_MouseEnter(object sender, EventArgs e)
         {
-            ExportToolStripMenuItem.DropDownItems.Clear();
-            foreach (Type plug in list)
+            exportMenuItem.DropDownItems.Clear();
+            foreach (Type plug in pluginsList)
             {
                 IPlugin obj = (IPlugin)Activator.CreateInstance(plug);
                 if (obj.IsEffects() == effectMode)
                 {
-                    ToolStripItem item = ExportToolStripMenuItem.DropDownItems.Add(obj.Descriptions());
-                    item.Name = list.IndexOf(plug).ToString();
+                    ToolStripItem item = exportMenuItem.DropDownItems.Add(obj.Descriptions());
+                    item.Name = pluginsList.IndexOf(plug).ToString();
                     item.Click += new EventHandler(item_Click);
                 }
             }
-            if (ExportToolStripMenuItem.DropDownItems.Count == 0)
+            if (exportMenuItem.DropDownItems.Count == 0)
             {
-                ToolStripItem item = ExportToolStripMenuItem.DropDownItems.Add("(没有发现导出插件)");
+                ToolStripItem item = exportMenuItem.DropDownItems.Add("(没有发现导出插件)");
                 item.Enabled = false;
             }
         }
@@ -532,7 +434,7 @@ namespace XingSub
         private void item_Click(object sender, EventArgs e)
         {
             ToolStripItem menu = (ToolStripItem)sender;
-            Type plug = list[int.Parse(menu.Name)];
+            Type plug = pluginsList[int.Parse(menu.Name)];
             IPlugin obj = (IPlugin)Activator.CreateInstance(plug);
 
             saveFileDialog1.Reset();
@@ -607,24 +509,87 @@ namespace XingSub
                     case DialogResult.No:
                         return true;
                     default:
-                        //do nothing
                         return false;
                 }
             }
         }
 
-        private void insertNewline()
+        private void insertTime()
         {
-            int nextNewline = textBox1.Text.Substring(textBox1.SelectionStart).IndexOf(Environment.NewLine);
-            if (nextNewline == -1)
+            if (getCount == 4)
             {
-                textBox1.Text += Environment.NewLine;
-                textBox1.SelectionStart = textBox1.Text.Length;
-            }
-            else
-            {
-                textBox1.SelectionStart += nextNewline;
-                textBox1.SelectedText = Environment.NewLine;
+                if (timeString.Length == 7 && timeString != lastString && timeString != "0000000")
+                {
+                    if (effectMode) //特效模式
+                    {
+                        //插入时间
+                        textBox1.SelectedText = "+" + timeString;
+
+                        //定位到下一音节
+                        int endOfLine = textBox1.Text.Substring(textBox1.SelectionStart).IndexOf(Environment.NewLine);
+                        if (endOfLine == -1)
+                        {
+                            endOfLine = textBox1.Text.Length - textBox1.SelectionStart;
+                        }
+                        int nextWord;   //寻找下一音节
+                        if (timeOffset == 0)    //自动偏移
+                        {
+                            nextWord = textBox1.Text.Substring(textBox1.SelectionStart).IndexOf(" ") + 1;   //下一空格
+                        }
+                        else
+                        {
+                            nextWord = timeOffset;
+                        }
+
+                        System.Diagnostics.Debug.WriteLine("SL:" + textBox1.SelectionStart.ToString() + "    LE:" + endOfLine.ToString());
+                        if (nextWord > endOfLine || nextWord == 0)   //如果超过行尾
+                        {
+                            textBox1.SelectionStart += endOfLine;
+                        }
+                        else
+                        {
+                            textBox1.SelectionStart += nextWord;
+                        }
+
+                        if (endOfLine == 0)   //如果已到达行尾
+                        {
+                            System.Diagnostics.Debug.WriteLine("End of line");
+                            textBox1.SelectionStart += 2;   //定位到下一行
+                        }
+                    }
+                    else
+                    {
+                        //定位到行首
+                        int lastNewline = textBox1.Text.Substring(0, textBox1.SelectionStart).LastIndexOf(Environment.NewLine);
+                        if (lastNewline == -1)
+                        {
+                            textBox1.SelectionStart = 0;
+                        }
+                        else
+                        {
+                            textBox1.SelectionStart = lastNewline + 2;
+                        }
+
+                        //插入时间
+                        textBox1.SelectedText = timeString;
+
+                        //定位到下一行首
+                        int nextNewline = textBox1.Text.Substring(textBox1.SelectionStart).IndexOf(Environment.NewLine);
+                        if (nextNewline == -1)
+                        {
+                            textBox1.Text += Environment.NewLine;
+                            textBox1.SelectionStart = textBox1.Text.Length;
+                        }
+                        else
+                        {
+                            textBox1.SelectionStart += (nextNewline + 2);
+                        }
+                    }
+                    toolStripStatusLabel1.Text = "已插入时间标记: " + timeString.Substring(0, 1) + ":" + timeString.Substring(1, 2) + ":" + timeString.Substring(3, 2) + "." + timeString.Substring(5, 2);
+                }
+                getCount = 0;
+                lastString = timeString;
+                timeString = "";
             }
         }
     }
