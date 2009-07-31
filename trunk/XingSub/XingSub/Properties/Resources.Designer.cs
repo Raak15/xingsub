@@ -102,6 +102,13 @@ namespace XingSub.Properties {
             }
         }
         
+        internal static System.Drawing.Bitmap _1 {
+            get {
+                object obj = ResourceManager.GetObject("1", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
         internal static System.Drawing.Bitmap _17_00_ {
             get {
                 object obj = ResourceManager.GetObject("(17,00)", resourceCulture);
