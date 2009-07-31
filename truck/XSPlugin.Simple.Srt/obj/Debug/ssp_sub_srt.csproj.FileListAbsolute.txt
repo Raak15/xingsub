@@ -1,7 +1,0 @@
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\ssp_sub_srt\obj\Debug\ResolveAssemblyReference.cache
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\ssp_sub_srt\bin\Debug\ssp_sub_srt.dll
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\ssp_sub_srt\bin\Debug\ssp_sub_srt.pdb
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\ssp_sub_srt\bin\Debug\XingSub.exe
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\ssp_sub_srt\bin\Debug\XingSub.pdb
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\ssp_sub_srt\obj\Debug\ssp_sub_srt.dll
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\ssp_sub_srt\obj\Debug\ssp_sub_srt.pdb

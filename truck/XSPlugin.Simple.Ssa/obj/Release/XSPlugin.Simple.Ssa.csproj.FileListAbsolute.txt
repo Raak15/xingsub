@@ -1,6 +1,0 @@
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XingSub\bin\Release\XSPlugin.Simple.Ssa.header
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XingSub\bin\Release\XSPlugin.Simple.Ssa.dll
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XingSub\bin\Release\XSPlugin.Simple.Ssa.pdb
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XSPlugin.Simple.Ssa\obj\Release\ResolveAssemblyReference.cache
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XSPlugin.Simple.Ssa\obj\Release\XSPlugin.Simple.Ssa.dll
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XSPlugin.Simple.Ssa\obj\Release\XSPlugin.Simple.Ssa.pdb

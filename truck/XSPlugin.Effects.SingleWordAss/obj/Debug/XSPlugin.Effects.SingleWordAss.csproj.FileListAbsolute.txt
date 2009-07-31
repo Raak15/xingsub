@@ -1,6 +1,0 @@
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XSPlugin.Effects.SingleWordAss\obj\Debug\ResolveAssemblyReference.cache
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XingSub\bin\Debug\XSPlugin.Effects.SingleWordAss.header
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XingSub\bin\Debug\XSPlugin.Effects.SingleWordAss.dll
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XingSub\bin\Debug\XSPlugin.Effects.SingleWordAss.pdb
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XSPlugin.Effects.SingleWordAss\obj\Debug\XSPlugin.Effects.SingleWordAss.dll
-D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XSPlugin.Effects.SingleWordAss\obj\Debug\XSPlugin.Effects.SingleWordAss.pdb
