@@ -1,0 +1,5 @@
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XingSub\bin\Release\XSPlugin.Simple.Srt.dll
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XingSub\bin\Release\XSPlugin.Simple.Srt.pdb
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XSPlugin.Simple.Srt\obj\Release\ResolveAssemblyReference.cache
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XSPlugin.Simple.Srt\obj\Release\XSPlugin.Simple.Srt.dll
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XSPlugin.Simple.Srt\obj\Release\XSPlugin.Simple.Srt.pdb

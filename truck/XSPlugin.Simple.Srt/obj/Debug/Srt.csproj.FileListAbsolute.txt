@@ -1,0 +1,16 @@
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\ssp_sub_srt\bin\Debug\SSPlugin.Simple.Srt.dll
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\ssp_sub_srt\bin\Debug\SSPlugin.Simple.Srt.pdb
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\ssp_sub_srt\bin\Debug\XingSub.exe
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\ssp_sub_srt\bin\Debug\XingSub.pdb
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\ssp_sub_srt\obj\Debug\ResolveAssemblyReference.cache
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\ssp_sub_srt\obj\Debug\SSPlugin.Simple.Srt.dll
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\ssp_sub_srt\obj\Debug\SSPlugin.Simple.Srt.pdb
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XSPlugin.Simple.Srt\bin\Debug\XSPlugin.Simple.Srt.dll
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XSPlugin.Simple.Srt\bin\Debug\XSPlugin.Simple.Srt.pdb
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XSPlugin.Simple.Srt\bin\Debug\XingSub.exe
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XSPlugin.Simple.Srt\bin\Debug\XingSub.pdb
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XSPlugin.Simple.Srt\obj\Debug\ResolveAssemblyReference.cache
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XSPlugin.Simple.Srt\obj\Debug\XSPlugin.Simple.Srt.dll
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XSPlugin.Simple.Srt\obj\Debug\XSPlugin.Simple.Srt.pdb
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XingSub\bin\Debug\XSPlugin.Simple.Srt.dll
+D:\陈星宇\我的文档\Visual Studio 2008\Projects\XingSub\XingSub\bin\Debug\XSPlugin.Simple.Srt.pdb
