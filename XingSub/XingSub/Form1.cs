@@ -47,6 +47,8 @@ namespace XingSub
 
         private List<Type> pluginsList;
 
+        private aboutForm aboutForm = new aboutForm();
+
         public Form1()
         {
             InitializeComponent();
@@ -264,8 +266,18 @@ namespace XingSub
 
         private void aboutMenuItem_Click(object sender, EventArgs e)
         {
-            string text = String.Format("XingSub\n版本 {0}\n(C) 2009 chenxingyu\n保留所有权利", Assembly.GetExecutingAssembly().GetName().Version.ToString());
-            MessageBox.Show(text, "关于 XingSub", MessageBoxButtons.OK, MessageBoxIcon.Information);
+            if (!aboutForm.Created)
+            {
+                aboutForm = new aboutForm();
+            }
+            string text = "";
+            foreach (Type plug in pluginsList)
+            {
+                text += Path.GetFileName(plug.Assembly.Location) + "\n";
+            }
+            aboutForm.versionLabel.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            aboutForm.pluginsTextBox.Text = text;
+            aboutForm.Show();
         }
 
         private void saveMenuItem_Click(object sender, EventArgs e)
@@ -604,7 +616,6 @@ namespace XingSub
                         nextWord = timeOffset;
                     }
 
-                    System.Diagnostics.Debug.WriteLine("SL:" + textBox1.SelectionStart.ToString() + "    LE:" + endOfLine.ToString());
                     if (nextWord > endOfLine || nextWord == 0)   //如果超过行尾
                     {
                         textBox1.SelectionStart += endOfLine;
@@ -616,7 +627,6 @@ namespace XingSub
 
                     if (endOfLine == 0)   //如果已到达行尾
                     {
-                        System.Diagnostics.Debug.WriteLine("End of line");
                         textBox1.SelectionStart += 2;   //定位到下一行
                     }
                 }
