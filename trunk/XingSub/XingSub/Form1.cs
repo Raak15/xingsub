@@ -273,7 +273,7 @@ namespace XingSub
             string text = "";
             foreach (Type plug in pluginsList)
             {
-                text += Path.GetFileName(plug.Assembly.Location) + "\n";
+                text += Path.GetFileName(plug.Assembly.Location) + "\r\n";
             }
             aboutForm.versionLabel.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
             aboutForm.pluginsTextBox.Text = text;
