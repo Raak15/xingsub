@@ -11,6 +11,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSPlugin.Effects.SingleWord
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSPlugin.Effects.KaraokeAss", "XSPlugin.Effects.KaraokeAss\XSPlugin.Effects.KaraokeAss.csproj", "{F659B4D1-65B7-4AFF-9522-94B0000E2D4F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XSPlugin.Effects.ScanningAss", "XSPlugin.Effects.ScanningAss\XSPlugin.Effects.ScanningAss.csproj", "{FC25ADA8-1347-4CE9-801F-235FEF34C439}"
+EndProject
 Global
 	GlobalSection(SubversionScc) = preSolution
 		Svn-Managed = True
@@ -41,6 +43,10 @@ Global
 		{F659B4D1-65B7-4AFF-9522-94B0000E2D4F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F659B4D1-65B7-4AFF-9522-94B0000E2D4F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F659B4D1-65B7-4AFF-9522-94B0000E2D4F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FC25ADA8-1347-4CE9-801F-235FEF34C439}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FC25ADA8-1347-4CE9-801F-235FEF34C439}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FC25ADA8-1347-4CE9-801F-235FEF34C439}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FC25ADA8-1347-4CE9-801F-235FEF34C439}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

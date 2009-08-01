@@ -5,7 +5,7 @@ using XingSub;
 
 namespace XSPlugin.Effects.KaraokeAss
 {
-    public class KaraokeAss : XingSub.IPlugin
+    public class KaraokeAss : IPlugin
     {
         private string descriptions = "卡拉OK特效(*.ass)";
         private string extension = "ass";
