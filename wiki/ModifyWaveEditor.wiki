@@ -6,7 +6,7 @@
 = 详细内容 =
 == 准备材料 ==
   # Resource Hacker
-  # 已经安装的Nero WaveEdit中文包
+  # 已经安装的WaveEdit中文包
 
 == 步骤 ==
   # 确保WaveEdit不在运行
