@@ -1,4 +1,4 @@
-#如何修改Nero WaveEditor。
+#How to: Modify Nero WaveEditor
 
 = 简介 =
 修改Nero WaveEditor以便我们能够使用F2键插入时间。
