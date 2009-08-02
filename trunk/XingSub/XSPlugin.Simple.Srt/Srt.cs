@@ -4,7 +4,7 @@ using XingSub;
 
 namespace XSPlugin.Simple.Srt
 {
-    public class Srt: XingSub.IPlugin
+    public class Srt: IPlugin
     {
         private string descriptions = "SRT 字幕文件(*.srt)";
         private string extension = "srt";

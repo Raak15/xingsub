@@ -48,6 +48,7 @@ namespace XingSub
         private List<Type> pluginsList;
 
         private aboutForm aboutForm = new aboutForm();
+        private paramsForm paramsForm = new paramsForm();
 
         public Form1()
         {
@@ -208,21 +209,15 @@ namespace XingSub
 
                 isSaved = true;
 
-                effectMode = (Path.GetExtension(fileName) == ".xse");
+                changeEffectsMode(Path.GetExtension(fileName) == ".xse");
 
                 if (effectMode)
                 {
                     this.Text = "XingSub - 特效模式 [" + fileName + "]";
-                    normalModeMenuItem.Checked = false;
-                    effectsModeMenuItem.Checked = true;
-                    offsetMenuItem.Enabled = true;
                 }
                 else
                 {
                     this.Text = "XingSub - 正常模式 [" + fileName + "]";
-                    normalModeMenuItem.Checked = true;
-                    effectsModeMenuItem.Checked = false;
-                    offsetMenuItem.Enabled = false;
                 }
             }
         }
@@ -396,45 +391,13 @@ namespace XingSub
 
         private void normalModeMenuItem_Click(object sender, EventArgs e)
         {
-            offsetMenuItem.Enabled = false;
-            normalModeMenuItem.Checked = true;
-            effectsModeMenuItem.Checked = false;
-            effectMode = false;
-            if (Path.GetExtension(fileName) != ".xss")  //如果扩展名不符，要求另存。
-            {
-                fileName = "";
-                isSaved = false;
-            }
-            if (fileName.Length == 0)
-            {
-                this.Text = "XingSub - 正常模式 [新文件*]";
-            }
-            else
-            {
-                this.Text = "XingSub - 正常模式 [" + fileName + "*]";
-            }
+            changeEffectsMode(false);
             saveToFile();
         }
 
         private void effectsModeMenuItem_Click(object sender, EventArgs e)
         {
-            offsetMenuItem.Enabled = true;
-            normalModeMenuItem.Checked = false;
-            effectsModeMenuItem.Checked = true;
-            effectMode = true;
-            if (Path.GetExtension(fileName) != ".xse")  //如果扩展名不符，要求另存。
-            {
-                fileName = "";
-                isSaved = false;
-            }
-            if (fileName.Length == 0)
-            {
-                this.Text = "XingSub - 特效模式 [新文件*]";
-            }
-            else
-            {
-                this.Text = "XingSub - 特效模式 [" + fileName + "*]";
-            }
+            changeEffectsMode(true);
             saveToFile();
         }
 
@@ -473,11 +436,26 @@ namespace XingSub
                 Assembly ase = Assembly.LoadFrom(p);
                 if (ase.GetName().Version.Major == Assembly.GetEntryAssembly().GetName().Version.Major)
                 {
-                    foreach (Type type in ase.GetExportedTypes())
+                    Type[] types = ase.GetExportedTypes();
+                    for (int i = 0; i < types.Length; i++)
                     {
-                        if (type.IsClass && typeof(IPlugin).IsAssignableFrom(type))
+                        if (types[i].IsClass && typeof(IPlugin).IsAssignableFrom(types[i]))
                         {
-                            pluginsList.Add(type);
+                            pluginsList.Add(types[i]);
+
+                            IPlugin obj = (IPlugin)Activator.CreateInstance(types[i]);
+                            ToolStripItem item = exportMenuItem.DropDownItems.Add(obj.Descriptions());
+                            item.Click += new EventHandler(item_Click);
+                            item.Visible = (obj.IsEffects() == effectMode);
+
+                            string pluginFile = types[i].Assembly.Location;
+                            string config = Path.Combine(Path.GetDirectoryName(pluginFile), Path.GetFileNameWithoutExtension(pluginFile) + ".header");
+                            if (File.Exists(config))
+                            {
+                                ToolStripItem pluginParams = paramsToolStripMenuItem.DropDownItems.Add(obj.Descriptions());
+                                pluginParams.Name = pluginsList.IndexOf(types[i]).ToString();
+                                pluginParams.Click += new EventHandler(pluginParams_Click);
+                            }
                         }
                     }
                 }
@@ -488,30 +466,23 @@ namespace XingSub
             }
         }
 
-        private void exportMenuItem_MouseEnter(object sender, EventArgs e)
+        private void pluginParams_Click(object sender, EventArgs e)
         {
-            exportMenuItem.DropDownItems.Clear();
-            foreach (Type plug in pluginsList)
+            ToolStripItem item = (ToolStripItem)sender;
+            string location = pluginsList[int.Parse(item.Name)].Assembly.Location;
+
+            if (!paramsForm.Created)
             {
-                IPlugin obj = (IPlugin)Activator.CreateInstance(plug);
-                if (obj.IsEffects() == effectMode)
-                {
-                    ToolStripItem item = exportMenuItem.DropDownItems.Add(obj.Descriptions());
-                    item.Name = pluginsList.IndexOf(plug).ToString();
-                    item.Click += new EventHandler(item_Click);
-                }
+                paramsForm = new paramsForm();
             }
-            if (exportMenuItem.DropDownItems.Count == 0)
-            {
-                ToolStripItem item = exportMenuItem.DropDownItems.Add("(没有发现导出插件)");
-                item.Enabled = false;
-            }
+            paramsForm.paramsFile = Path.Combine(Path.GetDirectoryName(location), Path.GetFileNameWithoutExtension(location) + ".header");
+            paramsForm.Show();
         }
 
         private void item_Click(object sender, EventArgs e)
         {
             ToolStripItem menu = (ToolStripItem)sender;
-            Type plug = pluginsList[int.Parse(menu.Name)];
+            Type plug = pluginsList[exportMenuItem.DropDownItems.IndexOf(menu)];
             IPlugin obj = (IPlugin)Activator.CreateInstance(plug);
 
             saveFileDialog1.Reset();
@@ -663,6 +634,55 @@ namespace XingSub
             getCount = 0;
             lastString = timeString;
             timeString = "";
+        }
+
+        private void changeEffectsMode(bool mode)
+        {
+            effectMode = mode;
+            offsetMenuItem.Enabled = mode;
+            normalModeMenuItem.Checked = !mode;
+            effectsModeMenuItem.Checked = mode;
+
+            if (mode)
+            {
+                if (Path.GetExtension(fileName) != ".xse")  //如果扩展名不符，要求另存。
+                {
+                    fileName = "";
+                    isSaved = false;
+                }
+
+                if (fileName.Length == 0)
+                {
+                    this.Text = "XingSub - 特效模式 [新文件*]";
+                }
+                else
+                {
+                    this.Text = "XingSub - 特效模式 [" + fileName + "*]";
+                }
+            }
+            else
+            {
+                if (Path.GetExtension(fileName) != ".xss")  //如果扩展名不符，要求另存。
+                {
+                    fileName = "";
+                    isSaved = false;
+                }
+
+                if (fileName.Length == 0)
+                {
+                    this.Text = "XingSub - 正常模式 [新文件*]";
+                }
+                else
+                {
+                    this.Text = "XingSub - 正常模式 [" + fileName + "*]";
+                }
+            }
+
+            for (int i = 0; i < pluginsList.Count; i++)
+            {
+                IPlugin obj = (IPlugin)Activator.CreateInstance(pluginsList[i]);
+                exportMenuItem.DropDownItems[i].Visible = (obj.IsEffects() == mode);
+            }
         }
 
         private void NWEToolStripMenuItem_Click(object sender, EventArgs e)
