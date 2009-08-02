@@ -1,11 +1,12 @@
 ﻿using System;
 using System.IO;
 using System.Reflection;
+using System.Xml;
 using XingSub;
 
 namespace XSPlugin.Effects.SingleWordAss
 {
-    public class SingleWordAss : XingSub.IPlugin
+    public class SingleWordAss : IPlugin
     {
         private string descriptions = "单字出现特效(*.ass)";
         private string extension = "ass";
@@ -18,11 +19,12 @@ namespace XSPlugin.Effects.SingleWordAss
             string currect = Assembly.GetExecutingAssembly().Location;
             string config = Path.Combine(Path.GetDirectoryName(currect), Path.GetFileNameWithoutExtension(currect) + ".header");
 
-            string header;
+            XmlDocument xml = new XmlDocument();
+            xml.Load(config);
 
-            StreamReader reader = File.OpenText(config);
-            header = reader.ReadToEnd();
-            reader.Close();
+            XmlNode ps = xml.DocumentElement["params"];
+
+            string header = xml.DocumentElement["head"].FirstChild.Value;
 
             StreamWriter writer = File.CreateText(path);
             writer.WriteLine(header);

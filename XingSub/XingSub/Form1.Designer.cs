@@ -40,7 +40,6 @@
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.importMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.exportMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pluginMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -61,8 +60,9 @@
             this.NWEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MPCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.timingModMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.effectsModeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.normalModeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.effectsModeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.paramsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -169,20 +169,10 @@
             // 
             // exportMenuItem
             // 
-            this.exportMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.pluginMenuItem});
             this.exportMenuItem.Name = "exportMenuItem";
             this.exportMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
             this.exportMenuItem.Size = new System.Drawing.Size(207, 22);
             this.exportMenuItem.Text = "导出(&E)";
-            this.exportMenuItem.MouseEnter += new System.EventHandler(this.exportMenuItem_MouseEnter);
-            // 
-            // pluginMenuItem
-            // 
-            this.pluginMenuItem.Enabled = false;
-            this.pluginMenuItem.Name = "pluginMenuItem";
-            this.pluginMenuItem.Size = new System.Drawing.Size(172, 22);
-            this.pluginMenuItem.Text = "(正在扫描插件...)";
             // 
             // toolStripSeparator1
             // 
@@ -277,7 +267,8 @@
             this.optionsMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.offsetMenuItem,
             this.captureTargetMenuItem,
-            this.timingModMenuItem});
+            this.timingModMenuItem,
+            this.paramsToolStripMenuItem});
             this.optionsMenuItem.Name = "optionsMenuItem";
             this.optionsMenuItem.Size = new System.Drawing.Size(59, 20);
             this.optionsMenuItem.Text = "选项(&O)";
@@ -296,14 +287,14 @@
             // offsetOneMenuItem
             // 
             this.offsetOneMenuItem.Name = "offsetOneMenuItem";
-            this.offsetOneMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.offsetOneMenuItem.Size = new System.Drawing.Size(152, 22);
             this.offsetOneMenuItem.Text = "1 格";
             this.offsetOneMenuItem.Click += new System.EventHandler(this.offsetOneMenuItem_Click);
             // 
             // offsetTwoMenuItem
             // 
             this.offsetTwoMenuItem.Name = "offsetTwoMenuItem";
-            this.offsetTwoMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.offsetTwoMenuItem.Size = new System.Drawing.Size(152, 22);
             this.offsetTwoMenuItem.Text = "2 格";
             this.offsetTwoMenuItem.Click += new System.EventHandler(this.offsetTwoMenuItem_Click);
             // 
@@ -312,7 +303,7 @@
             this.offsetBySpaceMenuItem.Checked = true;
             this.offsetBySpaceMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.offsetBySpaceMenuItem.Name = "offsetBySpaceMenuItem";
-            this.offsetBySpaceMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.offsetBySpaceMenuItem.Size = new System.Drawing.Size(152, 22);
             this.offsetBySpaceMenuItem.Text = "根据空格";
             this.offsetBySpaceMenuItem.Click += new System.EventHandler(this.offsetBySpaceMenuItem_Click);
             // 
@@ -350,21 +341,27 @@
             this.timingModMenuItem.Size = new System.Drawing.Size(152, 22);
             this.timingModMenuItem.Text = "计时方式";
             // 
-            // effectsModeMenuItem
-            // 
-            this.effectsModeMenuItem.Name = "effectsModeMenuItem";
-            this.effectsModeMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.effectsModeMenuItem.Text = "特效模式";
-            this.effectsModeMenuItem.Click += new System.EventHandler(this.effectsModeMenuItem_Click);
-            // 
             // normalModeMenuItem
             // 
             this.normalModeMenuItem.Checked = true;
             this.normalModeMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.normalModeMenuItem.Name = "normalModeMenuItem";
-            this.normalModeMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.normalModeMenuItem.Size = new System.Drawing.Size(118, 22);
             this.normalModeMenuItem.Text = "正常模式";
             this.normalModeMenuItem.Click += new System.EventHandler(this.normalModeMenuItem_Click);
+            // 
+            // effectsModeMenuItem
+            // 
+            this.effectsModeMenuItem.Name = "effectsModeMenuItem";
+            this.effectsModeMenuItem.Size = new System.Drawing.Size(118, 22);
+            this.effectsModeMenuItem.Text = "特效模式";
+            this.effectsModeMenuItem.Click += new System.EventHandler(this.effectsModeMenuItem_Click);
+            // 
+            // paramsToolStripMenuItem
+            // 
+            this.paramsToolStripMenuItem.Name = "paramsToolStripMenuItem";
+            this.paramsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.paramsToolStripMenuItem.Text = "参数设置";
             // 
             // helpMenuItem
             // 
@@ -568,13 +565,13 @@
         private System.Windows.Forms.ToolStripMenuItem insertNewLineMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator9;
         private System.Windows.Forms.ToolStripMenuItem contextInsertNewline;
-        private System.Windows.Forms.ToolStripMenuItem pluginMenuItem;
         private System.Windows.Forms.ToolStripMenuItem captureTargetMenuItem;
         private System.Windows.Forms.ToolStripMenuItem NWEToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem timingModMenuItem;
         private System.Windows.Forms.ToolStripMenuItem effectsModeMenuItem;
         private System.Windows.Forms.ToolStripMenuItem normalModeMenuItem;
         private System.Windows.Forms.ToolStripMenuItem MPCToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem paramsToolStripMenuItem;
     }
 }
 

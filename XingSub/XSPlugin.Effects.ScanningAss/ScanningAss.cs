@@ -3,7 +3,6 @@ using System.IO;
 using System.Reflection;
 using System.Xml;
 using XingSub;
-using System.Collections.Generic;
 
 namespace XSPlugin.Effects.ScanningAss
 {
