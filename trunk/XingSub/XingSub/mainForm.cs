@@ -9,7 +9,7 @@ using System.Windows.Forms;
 
 namespace XingSub
 {
-    public partial class Form1 : Form
+    public partial class mainForm : Form
     {
         #region 声明 Win32 API
         //FindWindow
@@ -50,7 +50,7 @@ namespace XingSub
         private aboutForm aboutForm = new aboutForm();
         private paramsForm paramsForm = new paramsForm();
 
-        public Form1()
+        public mainForm()
         {
             InitializeComponent();
         }
