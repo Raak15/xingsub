@@ -62,6 +62,12 @@
     <Compile Include="Form1.Designer.cs">
       <DependentUpon>Form1.cs</DependentUpon>
     </Compile>
+    <Compile Include="headerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="headerForm.Designer.cs">
+      <DependentUpon>headerForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="IPlugin.cs" />
     <Compile Include="paramsForm.cs">
       <SubType>Form</SubType>
@@ -77,6 +83,10 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Form1.resx">
       <DependentUpon>Form1.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
+    <EmbeddedResource Include="headerForm.resx">
+      <DependentUpon>headerForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="paramsForm.resx">

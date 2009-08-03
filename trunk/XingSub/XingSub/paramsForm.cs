@@ -20,6 +20,7 @@ namespace XingSub
 
         public string paramsFile = "";
 
+        private headerForm headerForm = new headerForm();
         private XmlDocument xml = new XmlDocument();
         private XmlNode ps;
 
@@ -35,6 +36,7 @@ namespace XingSub
             ps = xml.DocumentElement["params"];
             if (ps.HasChildNodes)
             {
+                listView1.Enabled = true;
                 foreach (XmlNode x in ps.ChildNodes)
                 {
                     ListViewItem item = listView1.Items.Add(x.Attributes["description"].FirstChild.Value);
@@ -42,13 +44,22 @@ namespace XingSub
                     item.SubItems.Add(x.FirstChild.Value);
                 }
             }
+            else
+            {
+                listView1.Enabled = false;
+            }
         }
 
         private void listView1_ItemSelectionChanged(object sender, ListViewItemSelectionChangedEventArgs e)
         {
             if (e.IsSelected)
             {
+                textBox1.Enabled = true;
                 textBox1.Text = e.Item.SubItems[1].Text;
+            }
+            else
+            {
+                textBox1.Enabled = false;
             }
         }
 
@@ -70,6 +81,23 @@ namespace XingSub
         private void canButton_Click(object sender, EventArgs e)
         {
             this.Close();
+        }
+
+        private void headerButton_Click(object sender, EventArgs e)
+        {
+            if (!headerForm.Created)
+            {
+                headerForm = new headerForm();
+            }
+            headerForm.textBox1.Text = xml.DocumentElement["head"].FirstChild.Value;
+            headerForm.okButton.Click += new EventHandler(saveHeader);
+            headerForm.Show();
+        }
+
+        private void saveHeader(object sender, EventArgs e)
+        {
+            xml.DocumentElement["head"].FirstChild.Value = headerForm.textBox1.Text;
+            headerForm.Close();
         }
     }
 }

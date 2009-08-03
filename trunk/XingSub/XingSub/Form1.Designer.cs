@@ -166,6 +166,7 @@
             this.importMenuItem.Name = "importMenuItem";
             this.importMenuItem.Size = new System.Drawing.Size(207, 22);
             this.importMenuItem.Text = "导入(&I)";
+            this.importMenuItem.Visible = false;
             // 
             // exportMenuItem
             // 
@@ -287,14 +288,14 @@
             // offsetOneMenuItem
             // 
             this.offsetOneMenuItem.Name = "offsetOneMenuItem";
-            this.offsetOneMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.offsetOneMenuItem.Size = new System.Drawing.Size(118, 22);
             this.offsetOneMenuItem.Text = "1 格";
             this.offsetOneMenuItem.Click += new System.EventHandler(this.offsetOneMenuItem_Click);
             // 
             // offsetTwoMenuItem
             // 
             this.offsetTwoMenuItem.Name = "offsetTwoMenuItem";
-            this.offsetTwoMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.offsetTwoMenuItem.Size = new System.Drawing.Size(118, 22);
             this.offsetTwoMenuItem.Text = "2 格";
             this.offsetTwoMenuItem.Click += new System.EventHandler(this.offsetTwoMenuItem_Click);
             // 
@@ -303,7 +304,7 @@
             this.offsetBySpaceMenuItem.Checked = true;
             this.offsetBySpaceMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.offsetBySpaceMenuItem.Name = "offsetBySpaceMenuItem";
-            this.offsetBySpaceMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.offsetBySpaceMenuItem.Size = new System.Drawing.Size(118, 22);
             this.offsetBySpaceMenuItem.Text = "根据空格";
             this.offsetBySpaceMenuItem.Click += new System.EventHandler(this.offsetBySpaceMenuItem_Click);
             // 
