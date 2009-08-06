@@ -184,11 +184,11 @@ namespace XingSub
                 isSaved = true;
                 if (effectMode)
                 {
-                    this.Text = "XingSub - 特效模式 [新文件]";
+                    this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, Localizable.NewFile);
                 }
                 else
                 {
-                    this.Text = "XingSub - 正常模式 [新文件]";
+                    this.Text = String.Format(Localizable.Title, Localizable.NormalMode, Localizable.NewFile);
                 }
             }
         }
@@ -213,11 +213,11 @@ namespace XingSub
 
                 if (effectMode)
                 {
-                    this.Text = "XingSub - 特效模式 [" + fileName + "]";
+                    this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName);
                 }
                 else
                 {
-                    this.Text = "XingSub - 正常模式 [" + fileName + "]";
+                    this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
                 }
             }
         }
@@ -229,22 +229,22 @@ namespace XingSub
             {
                 if (effectMode)
                 {
-                    this.Text = "XingSub - 特效模式 [新文件*]";
+                    this.Text = String.Format(Localizable.Title, Localizable.NormalMode, Localizable.NewFile + "*");
                 }
                 else
                 {
-                    this.Text = "XingSub - 正常模式 [新文件*]";
+                    this.Text = String.Format(Localizable.Title, Localizable.NormalMode, Localizable.NewFile + "*");
                 }
             }
             else
             {
                 if (effectMode)
                 {
-                    this.Text = "XingSub - 特效模式 [" + fileName + "*]";
+                    this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName + "*");
                 }
                 else
                 {
-                    this.Text = "XingSub - 正常模式 [" + fileName + "*]";
+                    this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName + "*");
                 }
             }
         }
@@ -285,15 +285,15 @@ namespace XingSub
             saveFileDialog1.Reset();
             if (effectMode)
             {
-                saveFileDialog1.Filter = "XingSub 特效时间轴(*.xse)|*.xse|XingSub 字幕时间轴(*.xss)|*.xss|所有文件(*.*)|*.*";
+                saveFileDialog1.Filter = Localizable.SaveAsFileType;
                 saveFileDialog1.DefaultExt = "xse";
-                saveFileDialog1.Title = "保存 XingSub 特效时间轴";
+                saveFileDialog1.Title = Localizable.SaveEffectsTitle;
             }
             else
             {
-                saveFileDialog1.Filter = "XingSub 字幕时间轴(*.xss)|*.xss|XingSub 特效时间轴(*.xse)|*.xse|所有文件(*.*)|*.*";
+                saveFileDialog1.Filter = Localizable.SaveAsFileType;
                 saveFileDialog1.DefaultExt = "xss";
-                saveFileDialog1.Title = "保存 XingSub 字幕时间轴";
+                saveFileDialog1.Title = Localizable.SaveSubtitlesTitle;
             }
             saveFileDialog1.ShowDialog();
             if (saveFileDialog1.FileName.Length == 0) return;
@@ -307,14 +307,14 @@ namespace XingSub
             effectMode = (Path.GetExtension(fileName) == ".xse");
             if (effectMode)
             {
-                this.Text = "XingSub - 特效模式 [" + fileName + "]";
+                this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName);
                 normalModeMenuItem.Checked = false;
                 effectsModeMenuItem.Checked = true;
                 offsetMenuItem.Enabled = true;
             }
             else
             {
-                this.Text = "XingSub - 正常模式 [" + fileName + "]";
+                this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
                 normalModeMenuItem.Checked = true;
                 effectsModeMenuItem.Checked = false;
                 offsetMenuItem.Enabled = false;
@@ -370,7 +370,7 @@ namespace XingSub
                 fileWriter.Write(textBox1.Text);
                 fileWriter.Flush();
                 fileWriter.Close();
-                toolStripStatusLabel1.Text = "已自动保存: " + autoSaveTime.ToString();
+                toolStripStatusLabel1.Text = String.Format(Localizable.AutoSaved, autoSaveTime.ToString());
             }
         }
 
@@ -425,6 +425,20 @@ namespace XingSub
             timeOffset = 0;
         }
 
+        private void NWEToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NWEToolStripMenuItem.Checked = true;
+            MPCToolStripMenuItem.Checked = false;
+            timeSource = 0;
+        }
+
+        private void MPCToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NWEToolStripMenuItem.Checked = false;
+            MPCToolStripMenuItem.Checked = true;
+            timeSource = 1;
+        }
+
         private void Form1_Load(object sender, EventArgs e)
         {
             string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
@@ -461,7 +475,7 @@ namespace XingSub
                 }
                 else
                 {
-                    MessageBox.Show("该插件的主版本号与本程序的主版本号不一致。\n为了避免接口升级带来的错误，插件的主版本号必须与本程序主版本号一致。\n\n当前程序版本号: " + Assembly.GetEntryAssembly().GetName().Version.ToString(), "已跳过加载插件 " + Path.GetFileName(ase.Location), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(String.Format(Localizable.FailedToLoadPluginMessage, Assembly.GetEntryAssembly().GetName().Version.ToString()), String.Format(Localizable.FailedToLoadPluginTitle, Path.GetFileName(ase.Location)), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
         }
@@ -486,15 +500,15 @@ namespace XingSub
             IPlugin obj = (IPlugin)Activator.CreateInstance(plug);
 
             saveFileDialog1.Reset();
-            saveFileDialog1.Filter = obj.Descriptions() + "|*." + obj.Extension() + "|所有文件(*.*)|*.*";
+            saveFileDialog1.Filter = String.Format(Localizable.ExportFileType, obj.Descriptions(), obj.Extension());
             saveFileDialog1.DefaultExt = obj.Extension();
-            saveFileDialog1.Title = "导出字幕";
+            saveFileDialog1.Title = Localizable.ExportTitle;
             saveFileDialog1.ShowDialog();
             if (saveFileDialog1.FileName.Length == 0) return;
 
             if (obj.Convert(textBox1.Text, saveFileDialog1.FileName) == 0)
             {
-                MessageBox.Show("字幕导出成功", "导出字幕", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                MessageBox.Show(Localizable.ExportSussessMessage, Localizable.ExportTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
         }
 
@@ -505,15 +519,15 @@ namespace XingSub
                 saveFileDialog1.Reset();
                 if (effectMode)
                 {
-                    saveFileDialog1.Filter = "XingSub 特效时间轴(*.xse)|*.xse|所有文件(*.*)|*.*";
+                    saveFileDialog1.Filter = Localizable.SaveEffectsFileType;
                     saveFileDialog1.DefaultExt = "xse";
-                    saveFileDialog1.Title = "保存 XingSub 特效时间轴";
+                    saveFileDialog1.Title = Localizable.SaveEffectsTitle;
                 }
                 else
                 {
-                    saveFileDialog1.Filter = "XingSub 字幕时间轴(*.xss)|*.xss|所有文件(*.*)|*.*";
+                    saveFileDialog1.Filter = Localizable.SaveSubtitlesFileType;
                     saveFileDialog1.DefaultExt = "xss";
-                    saveFileDialog1.Title = "保存 XingSub 字幕时间轴";
+                    saveFileDialog1.Title = Localizable.SaveSubtitlesTitle;
                 }
                 saveFileDialog1.ShowDialog();
                 if (saveFileDialog1.FileName.Length == 0) return false;
@@ -526,11 +540,11 @@ namespace XingSub
             isSaved = true;
             if (effectMode)
             {
-                this.Text = "XingSub - 特效模式 [" + fileName + "]";
+                this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName);
             }
             else
             {
-                this.Text = "XingSub - 正常模式 [" + fileName + "]";
+                this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
             }
 
             string autoSavePath = fileName + ".AutoSaved";
@@ -549,7 +563,7 @@ namespace XingSub
             }
             else
             {
-                DialogResult result = MessageBox.Show("文件已更改，您需要保存吗？", "保存文件", MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
+                DialogResult result = MessageBox.Show(Localizable.AskToSaveMessage, Localizable.AskToSaveTitle, MessageBoxButtons.YesNoCancel, MessageBoxIcon.Question);
                 switch (result)
                 {
                     case DialogResult.Yes:
@@ -629,7 +643,7 @@ namespace XingSub
                         textBox1.SelectionStart += (nextNewline + 2);
                     }
                 }
-                toolStripStatusLabel1.Text = "已插入时间标记: " + timeString.Substring(0, 1) + ":" + timeString.Substring(1, 2) + ":" + timeString.Substring(3, 2) + "." + timeString.Substring(5, 2);
+                toolStripStatusLabel1.Text = String.Format(Localizable.InsertedTimeStamp, stringToStamp(timeString));
             }
             getCount = 0;
             lastString = timeString;
@@ -653,11 +667,11 @@ namespace XingSub
 
                 if (fileName.Length == 0)
                 {
-                    this.Text = "XingSub - 特效模式 [新文件*]";
+                    this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, Localizable.NewFile + "*");
                 }
                 else
                 {
-                    this.Text = "XingSub - 特效模式 [" + fileName + "*]";
+                    this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName + "*");
                 }
             }
             else
@@ -670,11 +684,11 @@ namespace XingSub
 
                 if (fileName.Length == 0)
                 {
-                    this.Text = "XingSub - 正常模式 [新文件*]";
+                    this.Text = String.Format(Localizable.Title, Localizable.NormalMode, Localizable.NewFile + "*");
                 }
                 else
                 {
-                    this.Text = "XingSub - 正常模式 [" + fileName + "*]";
+                    this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName + "*");
                 }
             }
 
@@ -685,18 +699,55 @@ namespace XingSub
             }
         }
 
-        private void NWEToolStripMenuItem_Click(object sender, EventArgs e)
+        private string msecondsToString(int mseconds)
         {
-            NWEToolStripMenuItem.Checked = true;
-            MPCToolStripMenuItem.Checked = false;
-            timeSource = 0;
+            int left = mseconds;
+
+            int ms = left % 100;
+            left = (left - ms) / 100;
+
+            int seconds = left % 60;
+            left = (left - seconds) / 60;
+
+            int minutes = left % 60;
+            left = (left - minutes) / 60;
+
+            int hours = left;
+
+            string result = "";
+            result += hours.ToString();
+            if (minutes < 10) result += "0";
+            result += minutes.ToString();
+            if (seconds < 10) result += "0";
+            result += seconds.ToString();
+            if (ms < 10) result += "0";
+            result += ms.ToString();
+
+            return result;
         }
 
-        private void MPCToolStripMenuItem_Click(object sender, EventArgs e)
+        private int stringToMsecond(string time)
         {
-            NWEToolStripMenuItem.Checked = false;
-            MPCToolStripMenuItem.Checked = true;
-            timeSource = 1;
+            int hours = int.Parse(time.Substring(0, 1));
+            int minutes = int.Parse(time.Substring(1, 2));
+            int seconds = int.Parse(time.Substring(3, 2));
+            int ms = int.Parse(time.Substring(5, 2));
+
+            int result = ((hours * 60 + minutes) * 60 + seconds) * 100 + ms;
+
+            return result;
+        }
+
+        private string stringToStamp(string time)
+        {
+            string hours = time.Substring(0, 1);
+            string minutes = time.Substring(1, 2);
+            string seconds = time.Substring(3, 2);
+            string ms = time.Substring(5, 2);
+
+            string result = hours + ":" + minutes + ":" + seconds + "." + ms;
+
+            return result;
         }
     }
 }

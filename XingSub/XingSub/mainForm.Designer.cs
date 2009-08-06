@@ -33,9 +33,6 @@
             this.timerCapture = new System.Windows.Forms.Timer(this.components);
             this.menuStrip1 = new System.Windows.Forms.MenuStrip();
             this.fileMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.newMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.openMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveAsMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.importMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -43,10 +40,6 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.exitMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.editMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.cutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.copyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.pasteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.selectAllMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator6 = new System.Windows.Forms.ToolStripSeparator();
@@ -59,7 +52,7 @@
             this.captureTargetMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.NWEToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.MPCToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.timingModMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.timingModeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.normalModeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.effectsModeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.paramsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -69,10 +62,6 @@
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
             this.textBox1 = new System.Windows.Forms.TextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.contextCut = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextCopy = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextPaste = new System.Windows.Forms.ToolStripMenuItem();
-            this.contextDelete = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator7 = new System.Windows.Forms.ToolStripSeparator();
             this.contextSelectAll = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator9 = new System.Windows.Forms.ToolStripSeparator();
@@ -80,6 +69,17 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.timerAutoSave = new System.Windows.Forms.Timer(this.components);
+            this.contextCut = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextCopy = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextPaste = new System.Windows.Forms.ToolStripMenuItem();
+            this.contextDelete = new System.Windows.Forms.ToolStripMenuItem();
+            this.newMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.openMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.copyMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.pasteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -92,20 +92,25 @@
             // 
             // menuStrip1
             // 
+            this.menuStrip1.AccessibleDescription = null;
+            this.menuStrip1.AccessibleName = null;
+            resources.ApplyResources(this.menuStrip1, "menuStrip1");
+            this.menuStrip1.BackgroundImage = null;
+            this.menuStrip1.Font = null;
             this.menuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.fileMenuItem,
             this.editMenuItem,
             this.optionsMenuItem,
             this.helpMenuItem});
-            this.menuStrip1.Location = new System.Drawing.Point(0, 0);
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.menuStrip1.Size = new System.Drawing.Size(559, 24);
-            this.menuStrip1.TabIndex = 1;
-            this.menuStrip1.Text = "menuStrip1";
             // 
             // fileMenuItem
             // 
+            this.fileMenuItem.AccessibleDescription = null;
+            this.fileMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.fileMenuItem, "fileMenuItem");
+            this.fileMenuItem.BackgroundImage = null;
             this.fileMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.newMenuItem,
             this.openMenuItem,
@@ -117,78 +122,66 @@
             this.toolStripSeparator1,
             this.exitMenuItem});
             this.fileMenuItem.Name = "fileMenuItem";
-            this.fileMenuItem.Size = new System.Drawing.Size(59, 20);
-            this.fileMenuItem.Text = "文件(&F)";
-            // 
-            // newMenuItem
-            // 
-            this.newMenuItem.Image = global::XingSub.Properties.Resources._49_48_;
-            this.newMenuItem.Name = "newMenuItem";
-            this.newMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.N)));
-            this.newMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.newMenuItem.Text = "新建(&N)";
-            this.newMenuItem.Click += new System.EventHandler(this.newMenuItem_Click);
-            // 
-            // openMenuItem
-            // 
-            this.openMenuItem.Image = global::XingSub.Properties.Resources._01_34_;
-            this.openMenuItem.Name = "openMenuItem";
-            this.openMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.openMenuItem.Text = "打开(&O)";
-            this.openMenuItem.Click += new System.EventHandler(this.openMenuItem_Click);
-            // 
-            // saveMenuItem
-            // 
-            this.saveMenuItem.Image = global::XingSub.Properties.Resources._01_00_;
-            this.saveMenuItem.Name = "saveMenuItem";
-            this.saveMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.saveMenuItem.Text = "保存(&S)";
-            this.saveMenuItem.Click += new System.EventHandler(this.saveMenuItem_Click);
+            this.fileMenuItem.ShortcutKeyDisplayString = null;
             // 
             // saveAsMenuItem
             // 
+            this.saveAsMenuItem.AccessibleDescription = null;
+            this.saveAsMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.saveAsMenuItem, "saveAsMenuItem");
+            this.saveAsMenuItem.BackgroundImage = null;
             this.saveAsMenuItem.Name = "saveAsMenuItem";
-            this.saveAsMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)(((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.Alt)
-                        | System.Windows.Forms.Keys.S)));
-            this.saveAsMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.saveAsMenuItem.Text = "另存为(&A)...";
+            this.saveAsMenuItem.ShortcutKeyDisplayString = null;
             this.saveAsMenuItem.Click += new System.EventHandler(this.saveAsMenuItem_Click);
             // 
             // toolStripSeparator3
             // 
+            this.toolStripSeparator3.AccessibleDescription = null;
+            this.toolStripSeparator3.AccessibleName = null;
+            resources.ApplyResources(this.toolStripSeparator3, "toolStripSeparator3");
             this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(204, 6);
             // 
             // importMenuItem
             // 
+            this.importMenuItem.AccessibleDescription = null;
+            this.importMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.importMenuItem, "importMenuItem");
+            this.importMenuItem.BackgroundImage = null;
             this.importMenuItem.Name = "importMenuItem";
-            this.importMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.importMenuItem.Text = "导入(&I)";
-            this.importMenuItem.Visible = false;
+            this.importMenuItem.ShortcutKeyDisplayString = null;
             // 
             // exportMenuItem
             // 
+            this.exportMenuItem.AccessibleDescription = null;
+            this.exportMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.exportMenuItem, "exportMenuItem");
+            this.exportMenuItem.BackgroundImage = null;
             this.exportMenuItem.Name = "exportMenuItem";
-            this.exportMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.E)));
-            this.exportMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.exportMenuItem.Text = "导出(&E)";
+            this.exportMenuItem.ShortcutKeyDisplayString = null;
             // 
             // toolStripSeparator1
             // 
+            this.toolStripSeparator1.AccessibleDescription = null;
+            this.toolStripSeparator1.AccessibleName = null;
+            resources.ApplyResources(this.toolStripSeparator1, "toolStripSeparator1");
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(204, 6);
             // 
             // exitMenuItem
             // 
+            this.exitMenuItem.AccessibleDescription = null;
+            this.exitMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.exitMenuItem, "exitMenuItem");
+            this.exitMenuItem.BackgroundImage = null;
             this.exitMenuItem.Name = "exitMenuItem";
-            this.exitMenuItem.Size = new System.Drawing.Size(207, 22);
-            this.exitMenuItem.Text = "退出(&X)";
+            this.exitMenuItem.ShortcutKeyDisplayString = null;
             this.exitMenuItem.Click += new System.EventHandler(this.editMenuItem_Click);
             // 
             // editMenuItem
             // 
+            this.editMenuItem.AccessibleDescription = null;
+            this.editMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.editMenuItem, "editMenuItem");
+            this.editMenuItem.BackgroundImage = null;
             this.editMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.cutMenuItem,
             this.copyMenuItem,
@@ -199,223 +192,242 @@
             this.toolStripSeparator6,
             this.insertNewLineMenuItem});
             this.editMenuItem.Name = "editMenuItem";
-            this.editMenuItem.Size = new System.Drawing.Size(59, 20);
-            this.editMenuItem.Text = "编辑(&E)";
-            // 
-            // cutMenuItem
-            // 
-            this.cutMenuItem.Image = global::XingSub.Properties.Resources._18_00_;
-            this.cutMenuItem.Name = "cutMenuItem";
-            this.cutMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.X)));
-            this.cutMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.cutMenuItem.Text = "剪切(&T)";
-            this.cutMenuItem.Click += new System.EventHandler(this.cutMenuItem_Click);
-            // 
-            // copyMenuItem
-            // 
-            this.copyMenuItem.Image = global::XingSub.Properties.Resources._17_00_;
-            this.copyMenuItem.Name = "copyMenuItem";
-            this.copyMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.C)));
-            this.copyMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.copyMenuItem.Text = "复制(&C)";
-            this.copyMenuItem.Click += new System.EventHandler(this.copyMenuItem_Click);
-            // 
-            // pasteMenuItem
-            // 
-            this.pasteMenuItem.Image = global::XingSub.Properties.Resources._06_42_;
-            this.pasteMenuItem.Name = "pasteMenuItem";
-            this.pasteMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.V)));
-            this.pasteMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.pasteMenuItem.Text = "粘贴(&P)";
-            this.pasteMenuItem.Click += new System.EventHandler(this.pasteMenuItem_Click);
-            // 
-            // deleteMenuItem
-            // 
-            this.deleteMenuItem.Name = "deleteMenuItem";
-            this.deleteMenuItem.ShortcutKeys = System.Windows.Forms.Keys.Delete;
-            this.deleteMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.deleteMenuItem.Text = "删除(&P)";
-            this.deleteMenuItem.Click += new System.EventHandler(this.deleteMenuItem_Click);
+            this.editMenuItem.ShortcutKeyDisplayString = null;
             // 
             // toolStripSeparator5
             // 
+            this.toolStripSeparator5.AccessibleDescription = null;
+            this.toolStripSeparator5.AccessibleName = null;
+            resources.ApplyResources(this.toolStripSeparator5, "toolStripSeparator5");
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(174, 6);
             // 
             // selectAllMenuItem
             // 
+            this.selectAllMenuItem.AccessibleDescription = null;
+            this.selectAllMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.selectAllMenuItem, "selectAllMenuItem");
+            this.selectAllMenuItem.BackgroundImage = null;
             this.selectAllMenuItem.Name = "selectAllMenuItem";
-            this.selectAllMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-            this.selectAllMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.selectAllMenuItem.Text = "全选(&A)";
+            this.selectAllMenuItem.ShortcutKeyDisplayString = null;
             this.selectAllMenuItem.Click += new System.EventHandler(this.selectAllMenuItem_Click);
             // 
             // toolStripSeparator6
             // 
+            this.toolStripSeparator6.AccessibleDescription = null;
+            this.toolStripSeparator6.AccessibleName = null;
+            resources.ApplyResources(this.toolStripSeparator6, "toolStripSeparator6");
             this.toolStripSeparator6.Name = "toolStripSeparator6";
-            this.toolStripSeparator6.Size = new System.Drawing.Size(174, 6);
             // 
             // insertNewLineMenuItem
             // 
+            this.insertNewLineMenuItem.AccessibleDescription = null;
+            this.insertNewLineMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.insertNewLineMenuItem, "insertNewLineMenuItem");
+            this.insertNewLineMenuItem.BackgroundImage = null;
             this.insertNewLineMenuItem.Name = "insertNewLineMenuItem";
-            this.insertNewLineMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.R)));
-            this.insertNewLineMenuItem.Size = new System.Drawing.Size(177, 22);
-            this.insertNewLineMenuItem.Text = "插入空行(&I)";
+            this.insertNewLineMenuItem.ShortcutKeyDisplayString = null;
             this.insertNewLineMenuItem.Click += new System.EventHandler(this.insertNewLineMenuItem_Click);
             // 
             // optionsMenuItem
             // 
+            this.optionsMenuItem.AccessibleDescription = null;
+            this.optionsMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.optionsMenuItem, "optionsMenuItem");
+            this.optionsMenuItem.BackgroundImage = null;
             this.optionsMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.offsetMenuItem,
             this.captureTargetMenuItem,
-            this.timingModMenuItem,
+            this.timingModeMenuItem,
             this.paramsToolStripMenuItem});
             this.optionsMenuItem.Name = "optionsMenuItem";
-            this.optionsMenuItem.Size = new System.Drawing.Size(59, 20);
-            this.optionsMenuItem.Text = "选项(&O)";
+            this.optionsMenuItem.ShortcutKeyDisplayString = null;
             // 
             // offsetMenuItem
             // 
+            this.offsetMenuItem.AccessibleDescription = null;
+            this.offsetMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.offsetMenuItem, "offsetMenuItem");
+            this.offsetMenuItem.BackgroundImage = null;
             this.offsetMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.offsetOneMenuItem,
             this.offsetTwoMenuItem,
             this.offsetBySpaceMenuItem});
-            this.offsetMenuItem.Enabled = false;
             this.offsetMenuItem.Name = "offsetMenuItem";
-            this.offsetMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.offsetMenuItem.Text = "光标偏移";
+            this.offsetMenuItem.ShortcutKeyDisplayString = null;
             // 
             // offsetOneMenuItem
             // 
+            this.offsetOneMenuItem.AccessibleDescription = null;
+            this.offsetOneMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.offsetOneMenuItem, "offsetOneMenuItem");
+            this.offsetOneMenuItem.BackgroundImage = null;
             this.offsetOneMenuItem.Name = "offsetOneMenuItem";
-            this.offsetOneMenuItem.Size = new System.Drawing.Size(118, 22);
-            this.offsetOneMenuItem.Text = "1 格";
+            this.offsetOneMenuItem.ShortcutKeyDisplayString = null;
             this.offsetOneMenuItem.Click += new System.EventHandler(this.offsetOneMenuItem_Click);
             // 
             // offsetTwoMenuItem
             // 
+            this.offsetTwoMenuItem.AccessibleDescription = null;
+            this.offsetTwoMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.offsetTwoMenuItem, "offsetTwoMenuItem");
+            this.offsetTwoMenuItem.BackgroundImage = null;
             this.offsetTwoMenuItem.Name = "offsetTwoMenuItem";
-            this.offsetTwoMenuItem.Size = new System.Drawing.Size(118, 22);
-            this.offsetTwoMenuItem.Text = "2 格";
+            this.offsetTwoMenuItem.ShortcutKeyDisplayString = null;
             this.offsetTwoMenuItem.Click += new System.EventHandler(this.offsetTwoMenuItem_Click);
             // 
             // offsetBySpaceMenuItem
             // 
+            this.offsetBySpaceMenuItem.AccessibleDescription = null;
+            this.offsetBySpaceMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.offsetBySpaceMenuItem, "offsetBySpaceMenuItem");
+            this.offsetBySpaceMenuItem.BackgroundImage = null;
             this.offsetBySpaceMenuItem.Checked = true;
             this.offsetBySpaceMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.offsetBySpaceMenuItem.Name = "offsetBySpaceMenuItem";
-            this.offsetBySpaceMenuItem.Size = new System.Drawing.Size(118, 22);
-            this.offsetBySpaceMenuItem.Text = "根据空格";
+            this.offsetBySpaceMenuItem.ShortcutKeyDisplayString = null;
             this.offsetBySpaceMenuItem.Click += new System.EventHandler(this.offsetBySpaceMenuItem_Click);
             // 
             // captureTargetMenuItem
             // 
+            this.captureTargetMenuItem.AccessibleDescription = null;
+            this.captureTargetMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.captureTargetMenuItem, "captureTargetMenuItem");
+            this.captureTargetMenuItem.BackgroundImage = null;
             this.captureTargetMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.NWEToolStripMenuItem,
             this.MPCToolStripMenuItem});
             this.captureTargetMenuItem.Name = "captureTargetMenuItem";
-            this.captureTargetMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.captureTargetMenuItem.Text = "捕捉目标";
+            this.captureTargetMenuItem.ShortcutKeyDisplayString = null;
             // 
             // NWEToolStripMenuItem
             // 
+            this.NWEToolStripMenuItem.AccessibleDescription = null;
+            this.NWEToolStripMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.NWEToolStripMenuItem, "NWEToolStripMenuItem");
+            this.NWEToolStripMenuItem.BackgroundImage = null;
             this.NWEToolStripMenuItem.Checked = true;
             this.NWEToolStripMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.NWEToolStripMenuItem.Name = "NWEToolStripMenuItem";
-            this.NWEToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
-            this.NWEToolStripMenuItem.Text = "[波形] Nero WaveEditor";
+            this.NWEToolStripMenuItem.ShortcutKeyDisplayString = null;
             this.NWEToolStripMenuItem.Click += new System.EventHandler(this.NWEToolStripMenuItem_Click);
             // 
             // MPCToolStripMenuItem
             // 
+            this.MPCToolStripMenuItem.AccessibleDescription = null;
+            this.MPCToolStripMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.MPCToolStripMenuItem, "MPCToolStripMenuItem");
+            this.MPCToolStripMenuItem.BackgroundImage = null;
             this.MPCToolStripMenuItem.Name = "MPCToolStripMenuItem";
-            this.MPCToolStripMenuItem.Size = new System.Drawing.Size(232, 22);
-            this.MPCToolStripMenuItem.Text = "[画面] Media Player Classic";
+            this.MPCToolStripMenuItem.ShortcutKeyDisplayString = null;
             this.MPCToolStripMenuItem.Click += new System.EventHandler(this.MPCToolStripMenuItem_Click);
             // 
-            // timingModMenuItem
+            // timingModeMenuItem
             // 
-            this.timingModMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.timingModeMenuItem.AccessibleDescription = null;
+            this.timingModeMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.timingModeMenuItem, "timingModeMenuItem");
+            this.timingModeMenuItem.BackgroundImage = null;
+            this.timingModeMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.normalModeMenuItem,
             this.effectsModeMenuItem});
-            this.timingModMenuItem.Name = "timingModMenuItem";
-            this.timingModMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.timingModMenuItem.Text = "计时方式";
+            this.timingModeMenuItem.Name = "timingModeMenuItem";
+            this.timingModeMenuItem.ShortcutKeyDisplayString = null;
             // 
             // normalModeMenuItem
             // 
+            this.normalModeMenuItem.AccessibleDescription = null;
+            this.normalModeMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.normalModeMenuItem, "normalModeMenuItem");
+            this.normalModeMenuItem.BackgroundImage = null;
             this.normalModeMenuItem.Checked = true;
             this.normalModeMenuItem.CheckState = System.Windows.Forms.CheckState.Checked;
             this.normalModeMenuItem.Name = "normalModeMenuItem";
-            this.normalModeMenuItem.Size = new System.Drawing.Size(118, 22);
-            this.normalModeMenuItem.Text = "正常模式";
+            this.normalModeMenuItem.ShortcutKeyDisplayString = null;
             this.normalModeMenuItem.Click += new System.EventHandler(this.normalModeMenuItem_Click);
             // 
             // effectsModeMenuItem
             // 
+            this.effectsModeMenuItem.AccessibleDescription = null;
+            this.effectsModeMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.effectsModeMenuItem, "effectsModeMenuItem");
+            this.effectsModeMenuItem.BackgroundImage = null;
             this.effectsModeMenuItem.Name = "effectsModeMenuItem";
-            this.effectsModeMenuItem.Size = new System.Drawing.Size(118, 22);
-            this.effectsModeMenuItem.Text = "特效模式";
+            this.effectsModeMenuItem.ShortcutKeyDisplayString = null;
             this.effectsModeMenuItem.Click += new System.EventHandler(this.effectsModeMenuItem_Click);
             // 
             // paramsToolStripMenuItem
             // 
+            this.paramsToolStripMenuItem.AccessibleDescription = null;
+            this.paramsToolStripMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.paramsToolStripMenuItem, "paramsToolStripMenuItem");
+            this.paramsToolStripMenuItem.BackgroundImage = null;
             this.paramsToolStripMenuItem.Name = "paramsToolStripMenuItem";
-            this.paramsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
-            this.paramsToolStripMenuItem.Text = "参数设置";
+            this.paramsToolStripMenuItem.ShortcutKeyDisplayString = null;
             // 
             // helpMenuItem
             // 
+            this.helpMenuItem.AccessibleDescription = null;
+            this.helpMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.helpMenuItem, "helpMenuItem");
+            this.helpMenuItem.BackgroundImage = null;
             this.helpMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.aboutMenuItem});
             this.helpMenuItem.Name = "helpMenuItem";
-            this.helpMenuItem.Size = new System.Drawing.Size(59, 20);
-            this.helpMenuItem.Text = "帮助(&H)";
+            this.helpMenuItem.ShortcutKeyDisplayString = null;
             // 
             // aboutMenuItem
             // 
+            this.aboutMenuItem.AccessibleDescription = null;
+            this.aboutMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.aboutMenuItem, "aboutMenuItem");
+            this.aboutMenuItem.BackgroundImage = null;
             this.aboutMenuItem.Name = "aboutMenuItem";
-            this.aboutMenuItem.Size = new System.Drawing.Size(112, 22);
-            this.aboutMenuItem.Text = "关于(&A)";
+            this.aboutMenuItem.ShortcutKeyDisplayString = null;
             this.aboutMenuItem.Click += new System.EventHandler(this.aboutMenuItem_Click);
             // 
             // statusStrip1
             // 
+            this.statusStrip1.AccessibleDescription = null;
+            this.statusStrip1.AccessibleName = null;
+            resources.ApplyResources(this.statusStrip1, "statusStrip1");
+            this.statusStrip1.BackgroundImage = null;
+            this.statusStrip1.Font = null;
             this.statusStrip1.GripStyle = System.Windows.Forms.ToolStripGripStyle.Visible;
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.toolStripStatusLabel1});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 243);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.statusStrip1.Size = new System.Drawing.Size(559, 22);
-            this.statusStrip1.TabIndex = 2;
-            this.statusStrip1.Text = "statusStrip1";
             // 
             // toolStripStatusLabel1
             // 
+            this.toolStripStatusLabel1.AccessibleDescription = null;
+            this.toolStripStatusLabel1.AccessibleName = null;
+            resources.ApplyResources(this.toolStripStatusLabel1, "toolStripStatusLabel1");
+            this.toolStripStatusLabel1.BackgroundImage = null;
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
-            this.toolStripStatusLabel1.Size = new System.Drawing.Size(0, 17);
             // 
             // textBox1
             // 
             this.textBox1.AcceptsReturn = true;
             this.textBox1.AcceptsTab = true;
+            this.textBox1.AccessibleDescription = null;
+            this.textBox1.AccessibleName = null;
             this.textBox1.AllowDrop = true;
+            resources.ApplyResources(this.textBox1, "textBox1");
+            this.textBox1.BackgroundImage = null;
             this.textBox1.ContextMenuStrip = this.contextMenuStrip1;
-            this.textBox1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.textBox1.Font = null;
             this.textBox1.HideSelection = false;
-            this.textBox1.Location = new System.Drawing.Point(0, 24);
-            this.textBox1.MaxLength = 2147483647;
-            this.textBox1.Multiline = true;
             this.textBox1.Name = "textBox1";
-            this.textBox1.ScrollBars = System.Windows.Forms.ScrollBars.Both;
-            this.textBox1.Size = new System.Drawing.Size(559, 219);
-            this.textBox1.TabIndex = 3;
-            this.textBox1.WordWrap = false;
             this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
             // 
             // contextMenuStrip1
             // 
+            this.contextMenuStrip1.AccessibleDescription = null;
+            this.contextMenuStrip1.AccessibleName = null;
+            resources.ApplyResources(this.contextMenuStrip1, "contextMenuStrip1");
+            this.contextMenuStrip1.BackgroundImage = null;
+            this.contextMenuStrip1.Font = null;
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.contextCut,
             this.contextCopy,
@@ -427,69 +439,48 @@
             this.contextInsertNewline});
             this.contextMenuStrip1.Name = "contextMenuStrip1";
             this.contextMenuStrip1.RenderMode = System.Windows.Forms.ToolStripRenderMode.Professional;
-            this.contextMenuStrip1.Size = new System.Drawing.Size(137, 148);
-            // 
-            // contextCut
-            // 
-            this.contextCut.Image = global::XingSub.Properties.Resources._18_00_;
-            this.contextCut.Name = "contextCut";
-            this.contextCut.Size = new System.Drawing.Size(136, 22);
-            this.contextCut.Text = "剪切(&T)";
-            this.contextCut.Click += new System.EventHandler(this.cutMenuItem_Click);
-            // 
-            // contextCopy
-            // 
-            this.contextCopy.Image = global::XingSub.Properties.Resources._17_00_;
-            this.contextCopy.Name = "contextCopy";
-            this.contextCopy.Size = new System.Drawing.Size(136, 22);
-            this.contextCopy.Text = "复制(&C)";
-            this.contextCopy.Click += new System.EventHandler(this.copyMenuItem_Click);
-            // 
-            // contextPaste
-            // 
-            this.contextPaste.Image = global::XingSub.Properties.Resources._06_42_;
-            this.contextPaste.Name = "contextPaste";
-            this.contextPaste.Size = new System.Drawing.Size(136, 22);
-            this.contextPaste.Text = "粘贴(&P)";
-            this.contextPaste.Click += new System.EventHandler(this.pasteMenuItem_Click);
-            // 
-            // contextDelete
-            // 
-            this.contextDelete.Image = global::XingSub.Properties.Resources._00_04_;
-            this.contextDelete.Name = "contextDelete";
-            this.contextDelete.Size = new System.Drawing.Size(136, 22);
-            this.contextDelete.Text = "删除(&D)";
-            this.contextDelete.Click += new System.EventHandler(this.deleteMenuItem_Click);
             // 
             // toolStripSeparator7
             // 
+            this.toolStripSeparator7.AccessibleDescription = null;
+            this.toolStripSeparator7.AccessibleName = null;
+            resources.ApplyResources(this.toolStripSeparator7, "toolStripSeparator7");
             this.toolStripSeparator7.Name = "toolStripSeparator7";
-            this.toolStripSeparator7.Size = new System.Drawing.Size(133, 6);
             // 
             // contextSelectAll
             // 
+            this.contextSelectAll.AccessibleDescription = null;
+            this.contextSelectAll.AccessibleName = null;
+            resources.ApplyResources(this.contextSelectAll, "contextSelectAll");
+            this.contextSelectAll.BackgroundImage = null;
             this.contextSelectAll.Name = "contextSelectAll";
-            this.contextSelectAll.Size = new System.Drawing.Size(136, 22);
-            this.contextSelectAll.Text = "全选(&A)";
+            this.contextSelectAll.ShortcutKeyDisplayString = null;
             this.contextSelectAll.Click += new System.EventHandler(this.selectAllMenuItem_Click);
             // 
             // toolStripSeparator9
             // 
+            this.toolStripSeparator9.AccessibleDescription = null;
+            this.toolStripSeparator9.AccessibleName = null;
+            resources.ApplyResources(this.toolStripSeparator9, "toolStripSeparator9");
             this.toolStripSeparator9.Name = "toolStripSeparator9";
-            this.toolStripSeparator9.Size = new System.Drawing.Size(133, 6);
             // 
             // contextInsertNewline
             // 
+            this.contextInsertNewline.AccessibleDescription = null;
+            this.contextInsertNewline.AccessibleName = null;
+            resources.ApplyResources(this.contextInsertNewline, "contextInsertNewline");
+            this.contextInsertNewline.BackgroundImage = null;
             this.contextInsertNewline.Name = "contextInsertNewline";
-            this.contextInsertNewline.Size = new System.Drawing.Size(136, 22);
-            this.contextInsertNewline.Text = "插入空行(&I)";
+            this.contextInsertNewline.ShortcutKeyDisplayString = null;
             this.contextInsertNewline.Click += new System.EventHandler(this.insertNewLineMenuItem_Click);
+            // 
+            // saveFileDialog1
+            // 
+            resources.ApplyResources(this.saveFileDialog1, "saveFileDialog1");
             // 
             // openFileDialog1
             // 
-            this.openFileDialog1.Filter = "支持的文件类型(*.xss;*.xse;*.txt)|*.xss;*.xse;*.txt|XingSub 字幕时间轴(*.xss)|*.xss|XingSub 特" +
-                "效时间轴(*.xse)|*.xse|文本文件(*.txt)|*.txt|所有文件(*.*)|*.*";
-            this.openFileDialog1.Title = "打开文件";
+            resources.ApplyResources(this.openFileDialog1, "openFileDialog1");
             // 
             // timerAutoSave
             // 
@@ -497,18 +488,140 @@
             this.timerAutoSave.Interval = 120000;
             this.timerAutoSave.Tick += new System.EventHandler(this.timerAutoSave_Tick);
             // 
-            // Form1
+            // contextCut
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
+            this.contextCut.AccessibleDescription = null;
+            this.contextCut.AccessibleName = null;
+            resources.ApplyResources(this.contextCut, "contextCut");
+            this.contextCut.BackgroundImage = null;
+            this.contextCut.Image = global::XingSub.Properties.Resources._18_00_;
+            this.contextCut.Name = "contextCut";
+            this.contextCut.ShortcutKeyDisplayString = null;
+            this.contextCut.Click += new System.EventHandler(this.cutMenuItem_Click);
+            // 
+            // contextCopy
+            // 
+            this.contextCopy.AccessibleDescription = null;
+            this.contextCopy.AccessibleName = null;
+            resources.ApplyResources(this.contextCopy, "contextCopy");
+            this.contextCopy.BackgroundImage = null;
+            this.contextCopy.Image = global::XingSub.Properties.Resources._17_00_;
+            this.contextCopy.Name = "contextCopy";
+            this.contextCopy.ShortcutKeyDisplayString = null;
+            this.contextCopy.Click += new System.EventHandler(this.copyMenuItem_Click);
+            // 
+            // contextPaste
+            // 
+            this.contextPaste.AccessibleDescription = null;
+            this.contextPaste.AccessibleName = null;
+            resources.ApplyResources(this.contextPaste, "contextPaste");
+            this.contextPaste.BackgroundImage = null;
+            this.contextPaste.Image = global::XingSub.Properties.Resources._06_42_;
+            this.contextPaste.Name = "contextPaste";
+            this.contextPaste.ShortcutKeyDisplayString = null;
+            this.contextPaste.Click += new System.EventHandler(this.pasteMenuItem_Click);
+            // 
+            // contextDelete
+            // 
+            this.contextDelete.AccessibleDescription = null;
+            this.contextDelete.AccessibleName = null;
+            resources.ApplyResources(this.contextDelete, "contextDelete");
+            this.contextDelete.BackgroundImage = null;
+            this.contextDelete.Image = global::XingSub.Properties.Resources._00_04_;
+            this.contextDelete.Name = "contextDelete";
+            this.contextDelete.ShortcutKeyDisplayString = null;
+            this.contextDelete.Click += new System.EventHandler(this.deleteMenuItem_Click);
+            // 
+            // newMenuItem
+            // 
+            this.newMenuItem.AccessibleDescription = null;
+            this.newMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.newMenuItem, "newMenuItem");
+            this.newMenuItem.BackgroundImage = null;
+            this.newMenuItem.Image = global::XingSub.Properties.Resources._49_48_;
+            this.newMenuItem.Name = "newMenuItem";
+            this.newMenuItem.ShortcutKeyDisplayString = null;
+            this.newMenuItem.Click += new System.EventHandler(this.newMenuItem_Click);
+            // 
+            // openMenuItem
+            // 
+            this.openMenuItem.AccessibleDescription = null;
+            this.openMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.openMenuItem, "openMenuItem");
+            this.openMenuItem.BackgroundImage = null;
+            this.openMenuItem.Image = global::XingSub.Properties.Resources._01_34_;
+            this.openMenuItem.Name = "openMenuItem";
+            this.openMenuItem.ShortcutKeyDisplayString = null;
+            this.openMenuItem.Click += new System.EventHandler(this.openMenuItem_Click);
+            // 
+            // saveMenuItem
+            // 
+            this.saveMenuItem.AccessibleDescription = null;
+            this.saveMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.saveMenuItem, "saveMenuItem");
+            this.saveMenuItem.BackgroundImage = null;
+            this.saveMenuItem.Image = global::XingSub.Properties.Resources._01_00_;
+            this.saveMenuItem.Name = "saveMenuItem";
+            this.saveMenuItem.ShortcutKeyDisplayString = null;
+            this.saveMenuItem.Click += new System.EventHandler(this.saveMenuItem_Click);
+            // 
+            // cutMenuItem
+            // 
+            this.cutMenuItem.AccessibleDescription = null;
+            this.cutMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.cutMenuItem, "cutMenuItem");
+            this.cutMenuItem.BackgroundImage = null;
+            this.cutMenuItem.Image = global::XingSub.Properties.Resources._18_00_;
+            this.cutMenuItem.Name = "cutMenuItem";
+            this.cutMenuItem.ShortcutKeyDisplayString = null;
+            this.cutMenuItem.Click += new System.EventHandler(this.cutMenuItem_Click);
+            // 
+            // copyMenuItem
+            // 
+            this.copyMenuItem.AccessibleDescription = null;
+            this.copyMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.copyMenuItem, "copyMenuItem");
+            this.copyMenuItem.BackgroundImage = null;
+            this.copyMenuItem.Image = global::XingSub.Properties.Resources._17_00_;
+            this.copyMenuItem.Name = "copyMenuItem";
+            this.copyMenuItem.ShortcutKeyDisplayString = null;
+            this.copyMenuItem.Click += new System.EventHandler(this.copyMenuItem_Click);
+            // 
+            // pasteMenuItem
+            // 
+            this.pasteMenuItem.AccessibleDescription = null;
+            this.pasteMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.pasteMenuItem, "pasteMenuItem");
+            this.pasteMenuItem.BackgroundImage = null;
+            this.pasteMenuItem.Image = global::XingSub.Properties.Resources._06_42_;
+            this.pasteMenuItem.Name = "pasteMenuItem";
+            this.pasteMenuItem.ShortcutKeyDisplayString = null;
+            this.pasteMenuItem.Click += new System.EventHandler(this.pasteMenuItem_Click);
+            // 
+            // deleteMenuItem
+            // 
+            this.deleteMenuItem.AccessibleDescription = null;
+            this.deleteMenuItem.AccessibleName = null;
+            resources.ApplyResources(this.deleteMenuItem, "deleteMenuItem");
+            this.deleteMenuItem.BackgroundImage = null;
+            this.deleteMenuItem.Image = global::XingSub.Properties.Resources._00_04_;
+            this.deleteMenuItem.Name = "deleteMenuItem";
+            this.deleteMenuItem.ShortcutKeyDisplayString = null;
+            this.deleteMenuItem.Click += new System.EventHandler(this.deleteMenuItem_Click);
+            // 
+            // mainForm
+            // 
+            this.AccessibleDescription = null;
+            this.AccessibleName = null;
+            resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(559, 265);
+            this.BackgroundImage = null;
             this.Controls.Add(this.textBox1);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
-            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.Font = null;
             this.MainMenuStrip = this.menuStrip1;
-            this.Name = "Form1";
-            this.Text = "XingSub - 正常模式 [新文件]";
+            this.Name = "mainForm";
             this.Load += new System.EventHandler(this.Form1_Load);
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Form1_FormClosing);
             this.menuStrip1.ResumeLayout(false);
@@ -568,7 +681,7 @@
         private System.Windows.Forms.ToolStripMenuItem contextInsertNewline;
         private System.Windows.Forms.ToolStripMenuItem captureTargetMenuItem;
         private System.Windows.Forms.ToolStripMenuItem NWEToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem timingModMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem timingModeMenuItem;
         private System.Windows.Forms.ToolStripMenuItem effectsModeMenuItem;
         private System.Windows.Forms.ToolStripMenuItem normalModeMenuItem;
         private System.Windows.Forms.ToolStripMenuItem MPCToolStripMenuItem;
