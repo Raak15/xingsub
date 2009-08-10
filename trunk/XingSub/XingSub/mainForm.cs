@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using System.Reflection;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
+using System.Xml.Serialization;
 
 namespace XingSub
 {
@@ -29,7 +31,12 @@ namespace XingSub
         [DllImport("user32.dll", CharSet = CharSet.Auto)]
         private static extern IntPtr SendMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, StringBuilder lParam);
 
+        [return: MarshalAs(UnmanagedType.Bool)]
+        [DllImport("user32.dll", SetLastError = true)]
+        static extern bool PostMessage(IntPtr hWnd, UInt32 Msg, IntPtr wParam, IntPtr lParam);
+
         private const UInt32 WM_GETTEXT = 0x000D;
+        private const UInt32 WM_CLOSE = 0x0010;
 
         private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
         private static EnumWindowsProc callbackEnumChildWindows = new EnumWindowsProc(ChildWindowProc);
@@ -38,18 +45,22 @@ namespace XingSub
         private static int getCount = 0;
         private static string timeString = "";
         private static string lastString = "";
-        private static int timeSource = 0; //0=Nero; 1=MPC
 
+        private static int timeSource = 0; //0=Nero; 1=MPC
         private bool isSaved = true;
         private string fileName = "";
         private bool effectMode = false;
         private int timeOffset = 0;
+        private bool autoClose = true;
 
         private List<Type> pluginsList;
         private List<Type> readersList;
 
         private aboutForm aboutForm = new aboutForm();
         private paramsForm paramsForm = new paramsForm();
+
+        private string configFile = Path.Combine(Environment.CurrentDirectory, "config.dat");
+        private XSConfig config;
 
         public mainForm()
         {
@@ -142,12 +153,13 @@ namespace XingSub
 
         private void timerCapture_Tick(object sender, EventArgs e)
         {
+            IntPtr h;
             switch (timeSource)
             {
                 case 0:
-                    if (getCount < 4)   //未取够4次则继续
+                    h = FindWindow(null, "手动定义标记");
+                    if (getCount == 0)   //未取则继续
                     {
-                        IntPtr h = FindWindow(null, "手动定义标记");
                         if (h.ToInt32() > 0)
                         {
                             EnumChildWindows(h, callbackEnumChildWindows, this.Handle);
@@ -155,13 +167,22 @@ namespace XingSub
                     }
                     else if (getCount == 4) //取够4次，插入时间
                     {
+                        if (autoClose)
+                        {
+                            PostMessage(h, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                        }
                         insertTime();
+                    }
+                    else
+                    {
+                        getCount = 0;
+                        timeString = "";
                     }
                     break;
                 case 1:
-                    if (getCount < 1)   //未取够1次则继续
+                    h = FindWindow(null, "转到...");
+                    if (getCount == 0)   //未取够1次则继续
                     {
-                        IntPtr h = FindWindow(null, "转到...");
                         if (h.ToInt32() > 0)
                         {
                             EnumChildWindows(h, callbackEnumChildWindows, this.Handle);
@@ -170,6 +191,11 @@ namespace XingSub
                     else if (getCount == 1) //取够1次，插入时间
                     {
                         insertTime();
+                    }
+                    else
+                    {
+                        getCount = 0;
+                        timeString = "";
                     }
                     break;
             }
@@ -257,7 +283,23 @@ namespace XingSub
 
         private void Form1_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (!askToSave()) e.Cancel = true;
+            if (!askToSave())
+            {
+                e.Cancel = true;
+            }
+            else
+            {
+                config.AutoClose = autoClose;
+                config.DesktopBounds = this.DesktopBounds;
+                config.EffectMode = effectMode;
+                config.TimeOffset = timeOffset;
+                config.TimeSource = timeSource;
+
+                FileStream fs = new FileStream(configFile, FileMode.Create);
+                XmlSerializer xs = new XmlSerializer(typeof(XSConfig));
+                xs.Serialize(fs, config);
+                fs.Close();
+            }
         }
 
         private void aboutMenuItem_Click(object sender, EventArgs e)
@@ -442,6 +484,69 @@ namespace XingSub
 
         private void Form1_Load(object sender, EventArgs e)
         {
+            // 读取配置文件
+            if (File.Exists(configFile))
+            {
+                FileStream fs = new FileStream(configFile, FileMode.Open);
+                XmlSerializer xs = new XmlSerializer(typeof(XSConfig));
+                try
+                {
+                    config = (XSConfig)xs.Deserialize(fs);
+                }
+                catch (InvalidOperationException)
+                {
+                    config = new XSConfig();
+                    MessageBox.Show(Localizable.ConfigWarningMessage, Localizable.Warning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+                fs.Close();
+            }
+            else
+            {
+                config = new XSConfig();
+            }
+
+            // 设置窗口大小和位置
+            if (config.DesktopBounds.Equals(new Rectangle(-1, -1, -1, -1)))
+            {
+                config.DesktopBounds = this.DesktopBounds;
+            }
+            else
+            {
+                this.DesktopBounds = config.DesktopBounds;
+            }
+
+            // 应用自动关闭设置
+            autoClose = config.AutoClose;
+            autocloseTimeWindowToolStripMenuItem.Checked = autoClose;
+
+            // 应用特效模式设置
+            effectMode = config.EffectMode;
+            offsetMenuItem.Enabled = effectMode;
+            normalModeMenuItem.Checked = !effectMode;
+            effectsModeMenuItem.Checked = effectMode;
+
+            if (effectMode)
+            {
+                this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, Localizable.NewFile);
+            }
+            else
+            {
+                this.Text = String.Format(Localizable.Title, Localizable.NormalMode, Localizable.NewFile);
+            }
+
+            // 应用偏移设置
+            timeOffset = config.TimeOffset;
+            offsetBySpaceMenuItem.Checked = (timeOffset == 0);
+            offsetOneMenuItem.Checked = (timeOffset == 1);
+            offsetTwoMenuItem.Checked = (timeOffset == 2);
+
+            // 应用捕获目标设置
+            timeSource = config.TimeSource;
+            NWEToolStripMenuItem.Checked = (timeSource == 0);
+            MPCToolStripMenuItem.Checked = (timeSource == 1);
+
+            scanPlugin();
+            scanReader();
         }
 
         private void pluginParams_Click(object sender, EventArgs e)
@@ -815,6 +920,12 @@ namespace XingSub
             string result = hours + ":" + minutes + ":" + seconds + "." + ms;
 
             return result;
+        }
+
+        private void autocloseTimeWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            autoClose = !autoClose;
+            autocloseTimeWindowToolStripMenuItem.Checked = autoClose;
         }
     }
 }

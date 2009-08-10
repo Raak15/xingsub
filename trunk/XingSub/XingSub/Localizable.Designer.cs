@@ -88,6 +88,15 @@ namespace XingSub {
         }
         
         /// <summary>
+        ///   查找类似 Configuration file may be damage. Restored. 的本地化字符串。
+        /// </summary>
+        internal static string ConfigWarningMessage {
+            get {
+                return ResourceManager.GetString("ConfigWarningMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 Effects mode 的本地化字符串。
         /// </summary>
         internal static string EffectsMode {
@@ -219,6 +228,15 @@ namespace XingSub {
         internal static string Title {
             get {
                 return ResourceManager.GetString("Title", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Warning 的本地化字符串。
+        /// </summary>
+        internal static string Warning {
+            get {
+                return ResourceManager.GetString("Warning", resourceCulture);
             }
         }
     }
