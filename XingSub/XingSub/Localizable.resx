@@ -126,6 +126,9 @@
   <data name="AutoSaved" xml:space="preserve">
     <value>Auto saved: {0}</value>
   </data>
+  <data name="ConfigWarningMessage" xml:space="preserve">
+    <value>Configuration file may be damage. Restored.</value>
+  </data>
   <data name="EffectsMode" xml:space="preserve">
     <value>Effects mode</value>
   </data>
@@ -170,5 +173,8 @@
   </data>
   <data name="Title" xml:space="preserve">
     <value>XingSub - {0} [{1}]</value>
+  </data>
+  <data name="Warning" xml:space="preserve">
+    <value>Warning</value>
   </data>
 </root>
