@@ -46,6 +46,7 @@ namespace XingSub
         private int timeOffset = 0;
 
         private List<Type> pluginsList;
+        private List<Type> readersList;
 
         private aboutForm aboutForm = new aboutForm();
         private paramsForm paramsForm = new paramsForm();
@@ -441,43 +442,6 @@ namespace XingSub
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            string[] pathstr = Directory.GetFiles(location, "*.dll");
-            pluginsList = new List<Type>();
-
-            foreach (string p in pathstr)
-            {
-                Assembly ase = Assembly.LoadFrom(p);
-                if (ase.GetName().Version.Major == Assembly.GetEntryAssembly().GetName().Version.Major)
-                {
-                    Type[] types = ase.GetExportedTypes();
-                    for (int i = 0; i < types.Length; i++)
-                    {
-                        if (types[i].IsClass && typeof(IPlugin).IsAssignableFrom(types[i]))
-                        {
-                            pluginsList.Add(types[i]);
-
-                            IPlugin obj = (IPlugin)Activator.CreateInstance(types[i]);
-                            ToolStripItem item = exportMenuItem.DropDownItems.Add(obj.Descriptions());
-                            item.Click += new EventHandler(item_Click);
-                            item.Visible = (obj.IsEffects() == effectMode);
-
-                            string pluginFile = types[i].Assembly.Location;
-                            string config = Path.Combine(Path.GetDirectoryName(pluginFile), Path.GetFileNameWithoutExtension(pluginFile) + ".header");
-                            if (File.Exists(config))
-                            {
-                                ToolStripItem pluginParams = paramsToolStripMenuItem.DropDownItems.Add(obj.Descriptions());
-                                pluginParams.Name = pluginsList.IndexOf(types[i]).ToString();
-                                pluginParams.Click += new EventHandler(pluginParams_Click);
-                            }
-                        }
-                    }
-                }
-                else
-                {
-                    MessageBox.Show(String.Format(Localizable.FailedToLoadPluginMessage, Assembly.GetEntryAssembly().GetName().Version.ToString()), String.Format(Localizable.FailedToLoadPluginTitle, Path.GetFileName(ase.Location)), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
         }
 
         private void pluginParams_Click(object sender, EventArgs e)
@@ -493,7 +457,7 @@ namespace XingSub
             paramsForm.Show();
         }
 
-        private void item_Click(object sender, EventArgs e)
+        private void plugin_Click(object sender, EventArgs e)
         {
             ToolStripItem menu = (ToolStripItem)sender;
             Type plug = pluginsList[exportMenuItem.DropDownItems.IndexOf(menu)];
@@ -510,6 +474,36 @@ namespace XingSub
             {
                 MessageBox.Show(Localizable.ExportSussessMessage, Localizable.ExportTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
+        }
+
+        private void reader_Click(object sender, EventArgs e)
+        {
+            ToolStripItem menu = (ToolStripItem)sender;
+            Type type = readersList[importMenuItem.DropDownItems.IndexOf(menu)];
+            IReader obj = (IReader)Activator.CreateInstance(type);
+
+            string pathToSaveHeader = "";
+
+            if (obj.HasHeader())
+            {
+                DialogResult msg = MessageBox.Show("The format of this file has headers. If you import it you will lose the header, but you have chance to save it as a header file so that you can include it in exporting.\nDo you want to save the header?", "Save Header", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
+                if (msg == DialogResult.Yes)
+                {
+                    saveFileDialog1.Reset();
+                    saveFileDialog1.Filter = "XingSub Header File(*.header)|*.header|All Files(*.*)|*.*";
+                    saveFileDialog1.DefaultExt = "header";
+                    saveFileDialog1.Title = "Save Header";
+                    saveFileDialog1.ShowDialog();
+                    pathToSaveHeader = saveFileDialog1.FileName;
+                }
+            }
+
+            openFileDialog1.Reset();
+            openFileDialog1.Filter = String.Format(Localizable.ExportFileType, obj.Descriptions(), obj.Extension());
+            saveFileDialog1.DefaultExt = obj.Extension();
+            saveFileDialog1.Title = "Save Header";
+            saveFileDialog1.ShowDialog();
+            if (saveFileDialog1.FileName.Length == 0) return;
         }
 
         private bool saveToFile()
@@ -696,6 +690,79 @@ namespace XingSub
             {
                 IPlugin obj = (IPlugin)Activator.CreateInstance(pluginsList[i]);
                 exportMenuItem.DropDownItems[i].Visible = (obj.IsEffects() == mode);
+            }
+        }
+
+        private void scanPlugin()
+        {
+            string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            string[] pathstr = Directory.GetFiles(location, "XSPlugin.*.*.dll");
+            pluginsList = new List<Type>();
+
+            foreach (string p in pathstr)
+            {
+                Assembly ase = Assembly.LoadFrom(p);
+                if (ase.GetName().Version.Major == Assembly.GetEntryAssembly().GetName().Version.Major)
+                {
+                    Type[] types = ase.GetExportedTypes();
+                    for (int i = 0; i < types.Length; i++)
+                    {
+                        if (types[i].IsClass && typeof(IPlugin).IsAssignableFrom(types[i]))
+                        {
+                            pluginsList.Add(types[i]);
+
+                            IPlugin obj = (IPlugin)Activator.CreateInstance(types[i]);
+                            ToolStripItem item = exportMenuItem.DropDownItems.Add(obj.Descriptions());
+                            item.Click += new EventHandler(plugin_Click);
+                            item.Visible = (obj.IsEffects() == effectMode);
+
+                            string pluginFile = types[i].Assembly.Location;
+                            string config = Path.Combine(Path.GetDirectoryName(pluginFile), Path.GetFileNameWithoutExtension(pluginFile) + ".header");
+                            if (File.Exists(config))
+                            {
+                                ToolStripItem pluginParams = paramsToolStripMenuItem.DropDownItems.Add(obj.Descriptions());
+                                pluginParams.Name = pluginsList.IndexOf(types[i]).ToString();
+                                pluginParams.Click += new EventHandler(pluginParams_Click);
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(String.Format(Localizable.FailedToLoadPluginMessage, Assembly.GetEntryAssembly().GetName().Version.ToString()), String.Format(Localizable.FailedToLoadPluginTitle, Path.GetFileName(ase.Location)), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
+            }
+        }
+
+        private void scanReader()
+        {
+            string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
+            string[] pathstr = Directory.GetFiles(location, "XSReader.*.*.dll");
+            readersList = new List<Type>();
+
+            foreach (string p in pathstr)
+            {
+                Assembly ase = Assembly.LoadFrom(p);
+                if (ase.GetName().Version.Major == Assembly.GetEntryAssembly().GetName().Version.Major)
+                {
+                    Type[] types = ase.GetExportedTypes();
+                    for (int i = 0; i < types.Length; i++)
+                    {
+                        if (types[i].IsClass && typeof(IReader).IsAssignableFrom(types[i]))
+                        {
+                            readersList.Add(types[i]);
+
+                            IReader obj = (IReader)Activator.CreateInstance(types[i]);
+                            ToolStripItem item = importMenuItem.DropDownItems.Add(obj.Descriptions());
+                            item.Click += new EventHandler(reader_Click);
+                            item.Visible = (obj.IsEffects() == effectMode);
+                        }
+                    }
+                }
+                else
+                {
+                    MessageBox.Show(String.Format(Localizable.FailedToLoadPluginMessage, Assembly.GetEntryAssembly().GetName().Version.ToString()), String.Format(Localizable.FailedToLoadPluginTitle, Path.GetFileName(ase.Location)), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                }
             }
         }
 

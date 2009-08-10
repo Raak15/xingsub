@@ -59,6 +59,7 @@
     <Compile Include="aboutForm.Designer.cs">
       <DependentUpon>aboutForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="IReader.cs" />
     <Compile Include="Localizable.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
