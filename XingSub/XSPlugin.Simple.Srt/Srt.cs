@@ -28,6 +28,7 @@ namespace XSPlugin.Simple.Srt
                     writer.WriteLine(count.ToString());
                     writer.WriteLine(startTime + " --> " + endTime);
                     writer.WriteLine(subtitle);
+                    writer.WriteLine();
                     count++;
                 }
             }
