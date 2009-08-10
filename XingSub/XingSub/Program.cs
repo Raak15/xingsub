@@ -16,4 +16,10 @@ namespace XingSub
             Application.Run(new mainForm());
         }
     }
+
+    public enum TimingApp
+    {
+        NeroWaveEditor,
+        MediaPlayerClassic
+    }
 }

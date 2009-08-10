@@ -7,7 +7,7 @@ namespace XingSub
         private bool effectMode = false;
         private bool autoClose = true;
         private int timeOffset = 0;
-        private int timeSource = 0;
+        private TimingApp timeSource = TimingApp.NeroWaveEditor;
         private Rectangle desktopBounds = new Rectangle(-1, -1, -1, -1);
 
         public bool EffectMode
@@ -28,7 +28,7 @@ namespace XingSub
             set { timeOffset = value; }
         }
 
-        public int TimeSource
+        public TimingApp TimeSource
         {
             get { return timeSource; }
             set { timeSource = value; }
