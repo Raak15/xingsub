@@ -39,19 +39,16 @@ namespace XingSub
         private const UInt32 WM_CLOSE = 0x0010;
 
         private delegate bool EnumWindowsProc(IntPtr hWnd, IntPtr lParam);
-        private static EnumWindowsProc callbackEnumChildWindows = new EnumWindowsProc(ChildWindowProc);
+        private static EnumWindowsProc callbackEnumNWEChild = new EnumWindowsProc(WaveEditorProc);
+        private static EnumWindowsProc callbackEnumMPCChild = new EnumWindowsProc(MediaPlayerProc);
         #endregion
 
         private static int getCount = 0;
         private static string timeString = "";
         private static string lastString = "";
 
-        private static int timeSource = 0; //0=Nero; 1=MPC
         private bool isSaved = true;
         private string fileName = "";
-        private bool effectMode = false;
-        private int timeOffset = 0;
-        private bool autoClose = true;
 
         private List<Type> pluginsList;
         private List<Type> readersList;
@@ -60,146 +57,153 @@ namespace XingSub
         private paramsForm paramsForm = new paramsForm();
 
         private string configFile = Path.Combine(Environment.CurrentDirectory, "config.dat");
-        private XSConfig config;
+        private XSConfig appConfig;
 
         public mainForm()
         {
             InitializeComponent();
         }
 
-        private static bool ChildWindowProc(IntPtr hWnd, IntPtr lParam)
+        private static bool WaveEditorProc(IntPtr hWnd, IntPtr lParam)
         {
-            switch (timeSource)
+            if (getCount < 4)
             {
-                case 0:
-                    if (getCount < 4)
+                StringBuilder className = new StringBuilder(200);
+                GetClassName(hWnd, className, 200);
+                if (className.ToString() == "Edit")
+                {
+                    StringBuilder buffer = new StringBuilder(255);
+                    SendMessage(hWnd, WM_GETTEXT, new IntPtr(255), buffer);
+                    if (buffer.Length == 0)
                     {
-                        StringBuilder className = new StringBuilder(200);
-                        GetClassName(hWnd, className, 200);
-                        if (className.ToString() == "Edit")
-                        {
-                            StringBuilder buffer = new StringBuilder(255);
-                            SendMessage(hWnd, WM_GETTEXT, new IntPtr(255), buffer);
-                            if (buffer.Length == 0)
-                            {
-                                timeString = "";
-                                getCount = 0;
-                            }
-                            else
-                            {
-                                switch (getCount)
-                                {
-                                    case 0: //时
-                                        timeString += buffer.ToString();
-                                        getCount++;
-                                        break;
-                                    case 1: //分
-                                        if (buffer.Length == 1)
-                                        {
-                                            timeString += "0";
-                                        }
-                                        timeString += buffer.ToString();
-                                        getCount++;
-                                        break;
-                                    case 2: //秒
-                                        if (buffer.Length == 1)
-                                        {
-                                            timeString += "0";
-                                        }
-                                        timeString += buffer.ToString();
-                                        getCount++;
-                                        break;
-                                    case 3: //秒后两位小数
-                                        if (buffer.Length == 2)
-                                        {
-                                            timeString += "0";
-                                        }
-                                        timeString += Math.Round(float.Parse(buffer.ToString()) / 10, 0).ToString();
-                                        getCount++;
-                                        break;
-                                }
-                            }
-                        }
+                        timeString = "";
+                        getCount = 0;
                     }
-                    break;
-                case 1:
-                    if (getCount < 1)
+                    else
                     {
-                        StringBuilder className = new StringBuilder(200);
-                        GetClassName(hWnd, className, 200);
-                        if (className.ToString() == "Edit")
+                        switch (getCount)
                         {
-                            StringBuilder buffer = new StringBuilder(255);
-                            SendMessage(hWnd, WM_GETTEXT, new IntPtr(255), buffer);
-
-                            Regex reg = new Regex(@"(\d{2}):(\d{2}):(\d{2}).(\d{3})");
-
-                            if (reg.IsMatch(buffer.ToString()))
-                            {
-                                Match matchTime = reg.Match(buffer.ToString());
-                                string hours = matchTime.Groups[1].Value.Substring(1);
-                                string minutes = matchTime.Groups[2].Value;
-                                string seconds = matchTime.Groups[3].Value;
-                                string ms = Math.Round(float.Parse(matchTime.Groups[4].Value) / 10, 0).ToString();
-                                timeString = hours + minutes + seconds + ms;
+                            case 0: //时
+                                timeString += buffer.ToString();
                                 getCount++;
-                            }
+                                break;
+                            case 1: //分
+                                if (buffer.Length == 1)
+                                {
+                                    timeString += "0";
+                                }
+                                timeString += buffer.ToString();
+                                getCount++;
+                                break;
+                            case 2: //秒
+                                if (buffer.Length == 1)
+                                {
+                                    timeString += "0";
+                                }
+                                timeString += buffer.ToString();
+                                getCount++;
+                                break;
+                            case 3: //秒后两位小数
+                                if (buffer.Length == 2)
+                                {
+                                    timeString += "0";
+                                }
+                                timeString += Math.Round(float.Parse(buffer.ToString()) / 10, 0).ToString();
+                                getCount++;
+                                break;
                         }
                     }
-                    break;
+                }
+            }
+            return true;
+        }
+            
+        private static bool MediaPlayerProc(IntPtr hWnd, IntPtr lParam)
+        {
+            if (getCount == 0)
+            {
+                StringBuilder className = new StringBuilder(200);
+                GetClassName(hWnd, className, 200);
+                if (className.ToString() == "Edit")
+                {
+                    StringBuilder buffer = new StringBuilder(255);
+                    SendMessage(hWnd, WM_GETTEXT, new IntPtr(255), buffer);
+
+                    Regex reg = new Regex(@"(\d{2}):(\d{2}):(\d{2}).(\d{3})");
+
+                    if (reg.IsMatch(buffer.ToString()))
+                    {
+                        Match matchTime = reg.Match(buffer.ToString());
+                        string hours = matchTime.Groups[1].Value.Substring(1);
+                        string minutes = matchTime.Groups[2].Value;
+                        string seconds = matchTime.Groups[3].Value;
+                        string ms = Math.Round(float.Parse(matchTime.Groups[4].Value) / 10, 0).ToString();
+                        timeString = hours + minutes + seconds + ms;
+                        getCount++;
+                    }
+                }
             }
             return true;
         }
 
         private void timerCapture_Tick(object sender, EventArgs e)
         {
-            IntPtr h;
-            switch (timeSource)
+            switch (appConfig.TimeSource)
             {
-                case 0:
-                    h = FindWindow(null, "手动定义标记");
-                    if (getCount == 0)   //未取则继续
-                    {
-                        if (h.ToInt32() > 0)
-                        {
-                            EnumChildWindows(h, callbackEnumChildWindows, this.Handle);
-                        }
-                    }
-                    else if (getCount == 4) //取够4次，插入时间
-                    {
-                        if (autoClose)
-                        {
-                            PostMessage(h, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
-                        }
-                        insertTime();
-                    }
-                    else
-                    {
-                        getCount = 0;
-                        timeString = "";
-                    }
+                case TimingApp.NeroWaveEditor:
+                    captureWaveEditor();
                     break;
-                case 1:
-                    h = FindWindow(null, "转到...");
-                    if (getCount == 0)   //未取够1次则继续
-                    {
-                        if (h.ToInt32() > 0)
-                        {
-                            EnumChildWindows(h, callbackEnumChildWindows, this.Handle);
-                        }
-                    }
-                    else if (getCount == 1) //取够1次，插入时间
-                    {
-                        insertTime();
-                    }
-                    else
-                    {
-                        getCount = 0;
-                        timeString = "";
-                    }
+                case TimingApp.MediaPlayerClassic:
+                    captureMediaPlayer();
                     break;
             }
             
+        }
+
+        private void captureWaveEditor()
+        {
+            IntPtr h = FindWindow(null, "手动定义标记");
+            if (getCount == 0)   //未取则继续
+            {
+                if (h.ToInt32() > 0)
+                {
+                    EnumChildWindows(h, callbackEnumNWEChild, this.Handle);
+                }
+            }
+            else if (getCount == 4) //取够4次，插入时间
+            {
+                if (appConfig.AutoClose)
+                {
+                    PostMessage(h, WM_CLOSE, IntPtr.Zero, IntPtr.Zero);
+                }
+                insertTime();
+            }
+            else
+            {
+                getCount = 0;
+                timeString = "";
+            }
+        }
+
+        private void captureMediaPlayer()
+        {
+            IntPtr h = FindWindow(null, "转到...");
+            if (getCount == 0)   //未取够1次则继续
+            {
+                if (h.ToInt32() > 0)
+                {
+                    EnumChildWindows(h, callbackEnumMPCChild, this.Handle);
+                }
+            }
+            else if (getCount == 1) //取够1次，插入时间
+            {
+                insertTime();
+            }
+            else
+            {
+                getCount = 0;
+                timeString = "";
+            }
         }
 
         private void newMenuItem_Click(object sender, EventArgs e)
@@ -209,7 +213,7 @@ namespace XingSub
                 textBox1.Text = "";
                 fileName = "";
                 isSaved = true;
-                if (effectMode)
+                if (appConfig.EffectMode)
                 {
                     this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, Localizable.NewFile);
                 }
@@ -238,7 +242,7 @@ namespace XingSub
 
                 changeEffectsMode(Path.GetExtension(fileName) == ".xse");
 
-                if (effectMode)
+                if (appConfig.EffectMode)
                 {
                     this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName);
                 }
@@ -254,7 +258,7 @@ namespace XingSub
             isSaved = false;
             if (fileName.Length == 0)
             {
-                if (effectMode)
+                if (appConfig.EffectMode)
                 {
                     this.Text = String.Format(Localizable.Title, Localizable.NormalMode, Localizable.NewFile + "*");
                 }
@@ -265,7 +269,7 @@ namespace XingSub
             }
             else
             {
-                if (effectMode)
+                if (appConfig.EffectMode)
                 {
                     this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName + "*");
                 }
@@ -289,15 +293,9 @@ namespace XingSub
             }
             else
             {
-                config.AutoClose = autoClose;
-                config.DesktopBounds = this.DesktopBounds;
-                config.EffectMode = effectMode;
-                config.TimeOffset = timeOffset;
-                config.TimeSource = timeSource;
-
                 FileStream fs = new FileStream(configFile, FileMode.Create);
                 XmlSerializer xs = new XmlSerializer(typeof(XSConfig));
-                xs.Serialize(fs, config);
+                xs.Serialize(fs, appConfig);
                 fs.Close();
             }
         }
@@ -326,7 +324,7 @@ namespace XingSub
         private void saveAsMenuItem_Click(object sender, EventArgs e)
         {
             saveFileDialog1.Reset();
-            if (effectMode)
+            if (appConfig.EffectMode)
             {
                 saveFileDialog1.Filter = Localizable.SaveAsFileType;
                 saveFileDialog1.DefaultExt = "xse";
@@ -347,8 +345,8 @@ namespace XingSub
             fileWriter.Close();
             isSaved = true;
 
-            effectMode = (Path.GetExtension(fileName) == ".xse");
-            if (effectMode)
+            appConfig.EffectMode = (Path.GetExtension(fileName) == ".xse");
+            if (appConfig.EffectMode)
             {
                 this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName);
                 normalModeMenuItem.Checked = false;
@@ -449,7 +447,7 @@ namespace XingSub
             offsetOneMenuItem.Checked = true;
             offsetTwoMenuItem.Checked = false;
             offsetBySpaceMenuItem.Checked = false;
-            timeOffset = 1;
+            appConfig.TimeOffset = 1;
         }
 
         private void offsetTwoMenuItem_Click(object sender, EventArgs e)
@@ -457,7 +455,7 @@ namespace XingSub
             offsetOneMenuItem.Checked = false;
             offsetTwoMenuItem.Checked = true;
             offsetBySpaceMenuItem.Checked = false;
-            timeOffset = 2;
+            appConfig.TimeOffset = 2;
         }
 
         private void offsetBySpaceMenuItem_Click(object sender, EventArgs e)
@@ -465,21 +463,21 @@ namespace XingSub
             offsetOneMenuItem.Checked = false;
             offsetTwoMenuItem.Checked = false;
             offsetBySpaceMenuItem.Checked = true;
-            timeOffset = 0;
+            appConfig.TimeOffset = 0;
         }
 
         private void NWEToolStripMenuItem_Click(object sender, EventArgs e)
         {
             NWEToolStripMenuItem.Checked = true;
             MPCToolStripMenuItem.Checked = false;
-            timeSource = 0;
+            appConfig.TimeSource = TimingApp.NeroWaveEditor;
         }
 
         private void MPCToolStripMenuItem_Click(object sender, EventArgs e)
         {
             NWEToolStripMenuItem.Checked = false;
             MPCToolStripMenuItem.Checked = true;
-            timeSource = 1;
+            appConfig.TimeSource = TimingApp.MediaPlayerClassic;
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -491,41 +489,39 @@ namespace XingSub
                 XmlSerializer xs = new XmlSerializer(typeof(XSConfig));
                 try
                 {
-                    config = (XSConfig)xs.Deserialize(fs);
+                    appConfig = (XSConfig)xs.Deserialize(fs);
                 }
                 catch (InvalidOperationException)
                 {
-                    config = new XSConfig();
+                    appConfig = new XSConfig();
                     MessageBox.Show(Localizable.ConfigWarningMessage, Localizable.Warning, MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
                 fs.Close();
             }
             else
             {
-                config = new XSConfig();
+                appConfig = new XSConfig();
             }
 
             // 设置窗口大小和位置
-            if (config.DesktopBounds.Equals(new Rectangle(-1, -1, -1, -1)))
+            if (appConfig.DesktopBounds.Equals(new Rectangle(-1, -1, -1, -1)))
             {
-                config.DesktopBounds = this.DesktopBounds;
+                appConfig.DesktopBounds = this.DesktopBounds;
             }
             else
             {
-                this.DesktopBounds = config.DesktopBounds;
+                this.DesktopBounds = appConfig.DesktopBounds;
             }
 
             // 应用自动关闭设置
-            autoClose = config.AutoClose;
-            autocloseTimeWindowToolStripMenuItem.Checked = autoClose;
+            autocloseTimeWindowToolStripMenuItem.Checked = appConfig.AutoClose;
 
             // 应用特效模式设置
-            effectMode = config.EffectMode;
-            offsetMenuItem.Enabled = effectMode;
-            normalModeMenuItem.Checked = !effectMode;
-            effectsModeMenuItem.Checked = effectMode;
+            offsetMenuItem.Enabled = appConfig.EffectMode;
+            normalModeMenuItem.Checked = !appConfig.EffectMode;
+            effectsModeMenuItem.Checked = appConfig.EffectMode;
 
-            if (effectMode)
+            if (appConfig.EffectMode)
             {
                 this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, Localizable.NewFile);
             }
@@ -535,15 +531,13 @@ namespace XingSub
             }
 
             // 应用偏移设置
-            timeOffset = config.TimeOffset;
-            offsetBySpaceMenuItem.Checked = (timeOffset == 0);
-            offsetOneMenuItem.Checked = (timeOffset == 1);
-            offsetTwoMenuItem.Checked = (timeOffset == 2);
+            offsetBySpaceMenuItem.Checked = (appConfig.TimeOffset == 0);
+            offsetOneMenuItem.Checked = (appConfig.TimeOffset == 1);
+            offsetTwoMenuItem.Checked = (appConfig.TimeOffset == 2);
 
             // 应用捕获目标设置
-            timeSource = config.TimeSource;
-            NWEToolStripMenuItem.Checked = (timeSource == 0);
-            MPCToolStripMenuItem.Checked = (timeSource == 1);
+            NWEToolStripMenuItem.Checked = (appConfig.TimeSource == TimingApp.NeroWaveEditor);
+            MPCToolStripMenuItem.Checked = (appConfig.TimeSource == TimingApp.MediaPlayerClassic);
 
             scanPlugin();
             scanReader();
@@ -616,7 +610,7 @@ namespace XingSub
             if (fileName.Length == 0)
             {
                 saveFileDialog1.Reset();
-                if (effectMode)
+                if (appConfig.EffectMode)
                 {
                     saveFileDialog1.Filter = Localizable.SaveEffectsFileType;
                     saveFileDialog1.DefaultExt = "xse";
@@ -637,7 +631,7 @@ namespace XingSub
             fileWriter.Flush();
             fileWriter.Close();
             isSaved = true;
-            if (effectMode)
+            if (appConfig.EffectMode)
             {
                 this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName);
             }
@@ -679,7 +673,7 @@ namespace XingSub
         {
             if (timeString.Length == 7 && timeString != lastString && timeString != "0000000")
             {
-                if (effectMode) //特效模式
+                if (appConfig.EffectMode) //特效模式
                 {
                     //插入时间
                     textBox1.SelectedText = "+" + timeString;
@@ -691,13 +685,13 @@ namespace XingSub
                         endOfLine = textBox1.Text.Length - textBox1.SelectionStart;
                     }
                     int nextWord;   //寻找下一音节
-                    if (timeOffset == 0)    //自动偏移
+                    if (appConfig.TimeOffset == 0)    //自动偏移
                     {
                         nextWord = textBox1.Text.Substring(textBox1.SelectionStart).IndexOf(" ") + 1;   //下一空格
                     }
                     else
                     {
-                        nextWord = timeOffset;
+                        nextWord = appConfig.TimeOffset;
                     }
 
                     if (nextWord > endOfLine || nextWord == 0)   //如果超过行尾
@@ -742,6 +736,9 @@ namespace XingSub
                         textBox1.SelectionStart += (nextNewline + 2);
                     }
                 }
+
+                textBox1.ScrollToCaret();
+
                 toolStripStatusLabel1.Text = String.Format(Localizable.InsertedTimeStamp, stringToStamp(timeString));
             }
             getCount = 0;
@@ -751,7 +748,7 @@ namespace XingSub
 
         private void changeEffectsMode(bool mode)
         {
-            effectMode = mode;
+            appConfig.EffectMode = mode;
             offsetMenuItem.Enabled = mode;
             normalModeMenuItem.Checked = !mode;
             effectsModeMenuItem.Checked = mode;
@@ -819,7 +816,7 @@ namespace XingSub
                             IPlugin obj = (IPlugin)Activator.CreateInstance(types[i]);
                             ToolStripItem item = exportMenuItem.DropDownItems.Add(obj.Descriptions());
                             item.Click += new EventHandler(plugin_Click);
-                            item.Visible = (obj.IsEffects() == effectMode);
+                            item.Visible = (obj.IsEffects() == appConfig.EffectMode);
 
                             string pluginFile = types[i].Assembly.Location;
                             string config = Path.Combine(Path.GetDirectoryName(pluginFile), Path.GetFileNameWithoutExtension(pluginFile) + ".header");
@@ -860,7 +857,7 @@ namespace XingSub
                             IReader obj = (IReader)Activator.CreateInstance(types[i]);
                             ToolStripItem item = importMenuItem.DropDownItems.Add(obj.Descriptions());
                             item.Click += new EventHandler(reader_Click);
-                            item.Visible = (obj.IsEffects() == effectMode);
+                            item.Visible = (obj.IsEffects() == appConfig.EffectMode);
                         }
                     }
                 }
@@ -924,8 +921,8 @@ namespace XingSub
 
         private void autocloseTimeWindowToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            autoClose = !autoClose;
-            autocloseTimeWindowToolStripMenuItem.Checked = autoClose;
+            appConfig.AutoClose = !appConfig.AutoClose;
+            autocloseTimeWindowToolStripMenuItem.Checked = appConfig.AutoClose;
         }
     }
 }
