@@ -434,10 +434,6 @@
             resources.ApplyResources(this.contextInsertNewline, "contextInsertNewline");
             this.contextInsertNewline.Click += new System.EventHandler(this.insertNewLineMenuItem_Click);
             // 
-            // openFileDialog1
-            // 
-            resources.ApplyResources(this.openFileDialog1, "openFileDialog1");
-            // 
             // timerAutoSave
             // 
             this.timerAutoSave.Enabled = true;

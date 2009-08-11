@@ -178,6 +178,24 @@ namespace XingSub {
         }
         
         /// <summary>
+        ///   查找类似 Supports Files(*.xss;*.xse;*.txt)|*.xss;*.xse;*.txt|XingSub Subtitles Timeline(*.xss)|*.xss|XingSub Effects Timeline(*.xse)|*.xse|Text File(*.txt)|*.txt|All Files(*.*)|*.* 的本地化字符串。
+        /// </summary>
+        internal static string OpenFileType {
+            get {
+                return ResourceManager.GetString("OpenFileType", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Open File 的本地化字符串。
+        /// </summary>
+        internal static string OpenTitle {
+            get {
+                return ResourceManager.GetString("OpenTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 XingSub Subtitles Timeline(*.xss)|*.xss|XingSub Effects Timeline(*.xse)|*.xse|All Files(*.*)|*.* 的本地化字符串。
         /// </summary>
         internal static string SaveAsFileType {

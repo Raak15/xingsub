@@ -156,6 +156,12 @@
   <data name="NormalMode" xml:space="preserve">
     <value>Normal mode</value>
   </data>
+  <data name="OpenFileType" xml:space="preserve">
+    <value>Supports Files(*.xss;*.xse;*.txt)|*.xss;*.xse;*.txt|XingSub Subtitles Timeline(*.xss)|*.xss|XingSub Effects Timeline(*.xse)|*.xse|Text File(*.txt)|*.txt|All Files(*.*)|*.*</value>
+  </data>
+  <data name="OpenTitle" xml:space="preserve">
+    <value>Open File</value>
+  </data>
   <data name="SaveAsFileType" xml:space="preserve">
     <value>XingSub Subtitles Timeline(*.xss)|*.xss|XingSub Effects Timeline(*.xse)|*.xse|All Files(*.*)|*.*</value>
   </data>
