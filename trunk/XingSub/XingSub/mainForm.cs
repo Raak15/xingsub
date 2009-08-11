@@ -228,6 +228,9 @@ namespace XingSub
         {
             if (askToSave())
             {
+                openFileDialog1.Reset();
+                openFileDialog1.Filter = Localizable.OpenFileType;
+                openFileDialog1.Title = Localizable.OpenTitle;
                 openFileDialog1.ShowDialog();
 
                 if (openFileDialog1.FileName.Length == 0) return;
