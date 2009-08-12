@@ -158,6 +158,7 @@
             // 
             this.exportMenuItem.Name = "exportMenuItem";
             resources.ApplyResources(this.exportMenuItem, "exportMenuItem");
+            this.exportMenuItem.Click += new System.EventHandler(this.exportMenuItem_Click);
             // 
             // toolStripSeparator1
             // 

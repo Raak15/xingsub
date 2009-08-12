@@ -53,6 +53,8 @@ namespace XingSub
         private List<Type> pluginsList;
         private List<Type> readersList;
 
+        private List<int> pluginsId;
+
         private aboutForm aboutForm = new aboutForm();
         private paramsForm paramsForm = new paramsForm();
 
@@ -559,20 +561,50 @@ namespace XingSub
             paramsForm.Show();
         }
 
-        private void plugin_Click(object sender, EventArgs e)
+        //private void plugin_Click(object sender, EventArgs e)
+        //{
+        //    ToolStripItem menu = (ToolStripItem)sender;
+        //    Type plug = pluginsList[exportMenuItem.DropDownItems.IndexOf(menu)];
+        //    IPlugin obj = (IPlugin)Activator.CreateInstance(plug);
+
+        //    saveFileDialog1.Reset();
+        //    saveFileDialog1.Filter = String.Format(Localizable.ExportFileType, obj.Descriptions(), obj.Extension());
+        //    saveFileDialog1.DefaultExt = obj.Extension();
+        //    saveFileDialog1.Title = Localizable.ExportTitle;
+        //    saveFileDialog1.ShowDialog();
+        //    if (saveFileDialog1.FileName.Length == 0) return;
+
+        //    if (obj.Convert(textBox1.Text, saveFileDialog1.FileName) == 0)
+        //    {
+        //        MessageBox.Show(Localizable.ExportSussessMessage, Localizable.ExportTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        //    }
+        //}
+
+        private void exportMenuItem_Click(object sender, EventArgs e)
         {
-            ToolStripItem menu = (ToolStripItem)sender;
-            Type plug = pluginsList[exportMenuItem.DropDownItems.IndexOf(menu)];
-            IPlugin obj = (IPlugin)Activator.CreateInstance(plug);
+            pluginsId = new List<int>();
+            string filter = "";
+            for (int i = 0; i < pluginsList.Count; i++)
+            {
+                IPlugin obj = (IPlugin)Activator.CreateInstance(pluginsList[i]);
+                if (obj.IsEffects() == appConfig.EffectMode)
+                {
+                    pluginsId.Add(i);
+                    filter += String.Format("{0}|*.{1}|", obj.Descriptions(), obj.Extension());
+                }
+            }
+            filter = filter.Substring(0, filter.Length - 1);
 
             saveFileDialog1.Reset();
-            saveFileDialog1.Filter = String.Format(Localizable.ExportFileType, obj.Descriptions(), obj.Extension());
-            saveFileDialog1.DefaultExt = obj.Extension();
+            saveFileDialog1.Filter = filter;
             saveFileDialog1.Title = Localizable.ExportTitle;
             saveFileDialog1.ShowDialog();
             if (saveFileDialog1.FileName.Length == 0) return;
 
-            if (obj.Convert(textBox1.Text, saveFileDialog1.FileName) == 0)
+            int index = pluginsId[saveFileDialog1.FilterIndex - 1];
+            IPlugin plugin = (IPlugin)Activator.CreateInstance(pluginsList[index]);
+
+            if (plugin.Convert(textBox1.Text, saveFileDialog1.FileName) == 0)
             {
                 MessageBox.Show(Localizable.ExportSussessMessage, Localizable.ExportTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -791,11 +823,11 @@ namespace XingSub
                 }
             }
 
-            for (int i = 0; i < pluginsList.Count; i++)
-            {
-                IPlugin obj = (IPlugin)Activator.CreateInstance(pluginsList[i]);
-                exportMenuItem.DropDownItems[i].Visible = (obj.IsEffects() == mode);
-            }
+            //for (int i = 0; i < pluginsList.Count; i++)
+            //{
+            //    IPlugin obj = (IPlugin)Activator.CreateInstance(pluginsList[i]);
+            //    exportMenuItem.DropDownItems[i].Visible = (obj.IsEffects() == mode);
+            //}
         }
 
         private void scanPlugin()
@@ -817,9 +849,9 @@ namespace XingSub
                             pluginsList.Add(types[i]);
 
                             IPlugin obj = (IPlugin)Activator.CreateInstance(types[i]);
-                            ToolStripItem item = exportMenuItem.DropDownItems.Add(obj.Descriptions());
-                            item.Click += new EventHandler(plugin_Click);
-                            item.Visible = (obj.IsEffects() == appConfig.EffectMode);
+                            //ToolStripItem item = exportMenuItem.DropDownItems.Add(obj.Descriptions());
+                            //item.Click += new EventHandler(plugin_Click);
+                            //item.Visible = (obj.IsEffects() == appConfig.EffectMode);
 
                             string pluginFile = types[i].Assembly.Location;
                             string config = Path.Combine(Path.GetDirectoryName(pluginFile), Path.GetFileNameWithoutExtension(pluginFile) + ".header");
