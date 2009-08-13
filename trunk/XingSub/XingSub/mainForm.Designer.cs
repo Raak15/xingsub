@@ -153,6 +153,7 @@
             // 
             this.importMenuItem.Name = "importMenuItem";
             resources.ApplyResources(this.importMenuItem, "importMenuItem");
+            this.importMenuItem.Click += new System.EventHandler(this.importMenuItem_Click);
             // 
             // exportMenuItem
             // 
