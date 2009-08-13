@@ -55,6 +55,8 @@ namespace XingSub
 
         private List<int> pluginsId;
 
+        private AdvancedSubStationAlpha subtitles;
+
         private aboutForm aboutForm = new aboutForm();
         private paramsForm paramsForm = new paramsForm();
 
@@ -561,24 +563,10 @@ namespace XingSub
             paramsForm.Show();
         }
 
-        //private void plugin_Click(object sender, EventArgs e)
-        //{
-        //    ToolStripItem menu = (ToolStripItem)sender;
-        //    Type plug = pluginsList[exportMenuItem.DropDownItems.IndexOf(menu)];
-        //    IPlugin obj = (IPlugin)Activator.CreateInstance(plug);
+        private void importMenuItem_Click(object sender, EventArgs e)
+        {
 
-        //    saveFileDialog1.Reset();
-        //    saveFileDialog1.Filter = String.Format(Localizable.ExportFileType, obj.Descriptions(), obj.Extension());
-        //    saveFileDialog1.DefaultExt = obj.Extension();
-        //    saveFileDialog1.Title = Localizable.ExportTitle;
-        //    saveFileDialog1.ShowDialog();
-        //    if (saveFileDialog1.FileName.Length == 0) return;
-
-        //    if (obj.Convert(textBox1.Text, saveFileDialog1.FileName) == 0)
-        //    {
-        //        MessageBox.Show(Localizable.ExportSussessMessage, Localizable.ExportTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
-        //    }
-        //}
+        }
 
         private void exportMenuItem_Click(object sender, EventArgs e)
         {
@@ -950,7 +938,7 @@ namespace XingSub
             string ms = time.Substring(5, 2);
 
             string result = hours + ":" + minutes + ":" + seconds + "." + ms;
-
+            
             return result;
         }
 

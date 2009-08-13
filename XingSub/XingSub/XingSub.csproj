@@ -59,6 +59,7 @@
     <Compile Include="aboutForm.Designer.cs">
       <DependentUpon>aboutForm.cs</DependentUpon>
     </Compile>
+    <Compile Include="AdvancedSubStationAlpha.cs" />
     <Compile Include="IReader.cs" />
     <Compile Include="Localizable.Designer.cs">
       <AutoGen>True</AutoGen>
@@ -137,6 +138,9 @@
       <DependentUpon>Settings.settings</DependentUpon>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
     </Compile>
+    <Compile Include="SubStationInfo.cs" />
+    <Compile Include="SubStationEvent.cs" />
+    <Compile Include="SubStationStyle.cs" />
     <Compile Include="XSConfig.cs" />
   </ItemGroup>
   <ItemGroup>
