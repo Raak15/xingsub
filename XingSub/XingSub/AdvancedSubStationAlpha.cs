@@ -62,7 +62,8 @@ namespace XingSub
             {
                 result.AppendLine(_event.ToString());
             }
-            return base.ToString();
+
+            return result.ToString();
         }
 
         /// <summary>
