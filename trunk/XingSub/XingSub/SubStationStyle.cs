@@ -273,12 +273,12 @@ namespace XingSub
                 }
                 else
                 {
-                    throw InvalidCastException;
+                    throw new InvalidCastException();
                 }
             }
             else
             {
-                throw InvalidCastException;
+                throw new InvalidCastException();
             }
         }
 

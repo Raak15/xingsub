@@ -242,21 +242,39 @@ namespace XingSub
                 fileName = openFileDialog1.FileName;
 
                 StreamReader fileReader = File.OpenText(fileName);
-                textBox1.Text = fileReader.ReadToEnd();
+                string fileContent = fileReader.ReadToEnd();
                 fileReader.Close();
 
+                subtitles = new AdvancedSubStationAlpha();
+
+                System.Diagnostics.Debug.WriteLine(isSaved);
+                switch (Path.GetExtension(fileName))
+                {
+                    case ".xss":
+                        subtitles.LoadXss(fileContent);
+                        textBox1.Text = fileContent;
+                        changeEffectsMode(false, true);
+                        this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
+                        break;
+                    case ".ass":
+                        subtitles.LoadAss(fileContent);
+                        textBox1.Text = subtitles.ToXingSub();
+                        changeEffectsMode(false, true);
+                        this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
+                        break;
+                    case ".xse":
+                        textBox1.Text = fileContent;
+                        changeEffectsMode(true, true);
+                        this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName);
+                        break;
+                    default:
+                        textBox1.Text = fileContent;
+                        changeEffectsMode(false, true);
+                        this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
+                        break;
+                }
+
                 isSaved = true;
-
-                changeEffectsMode(Path.GetExtension(fileName) == ".xse");
-
-                if (appConfig.EffectMode)
-                {
-                    this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName);
-                }
-                else
-                {
-                    this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
-                }
             }
         }
 
@@ -546,8 +564,8 @@ namespace XingSub
             NWEToolStripMenuItem.Checked = (appConfig.TimeSource == TimingApp.NeroWaveEditor);
             MPCToolStripMenuItem.Checked = (appConfig.TimeSource == TimingApp.MediaPlayerClassic);
 
-            scanPlugin();
-            scanReader();
+            //scanPlugin(); //扫描插件
+            //scanReader(); //扫描导入
         }
 
         private void pluginParams_Click(object sender, EventArgs e)
@@ -630,7 +648,7 @@ namespace XingSub
 
         private bool saveToFile()
         {
-            if (fileName.Length == 0)
+            if (fileName.Length == 0 || (Path.GetExtension(fileName) != ".xse" && Path.GetExtension(fileName) != ".xss" && Path.GetExtension(fileName) != ".ass"))
             {
                 saveFileDialog1.Reset();
                 if (appConfig.EffectMode)
@@ -649,25 +667,41 @@ namespace XingSub
                 if (saveFileDialog1.FileName.Length == 0) return false;
                 fileName = saveFileDialog1.FileName;
             }
+
             StreamWriter fileWriter = File.CreateText(fileName);
-            fileWriter.Write(textBox1.Text);
-            fileWriter.Flush();
-            fileWriter.Close();
-            isSaved = true;
+
             if (appConfig.EffectMode)
             {
+                fileWriter.Write(textBox1.Text);
                 this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName);
             }
             else
             {
+                subtitles.LoadXss(textBox1.Text);
+
+                switch (Path.GetExtension(fileName))
+                {
+                    case ".xss":
+                        fileWriter.Write(textBox1.Text);
+                        break;
+                    case ".ass":
+                        fileWriter.Write(subtitles.ToString());
+                        break;
+                }
+
                 this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
             }
+
+            fileWriter.Flush();
+            fileWriter.Close();
+            isSaved = true;
 
             string autoSavePath = fileName + ".AutoSaved";
             if (Directory.Exists(autoSavePath))
             {
                 Directory.Delete(autoSavePath, true);
             }
+
             return true;
         }
 
@@ -795,7 +829,7 @@ namespace XingSub
             }
             else
             {
-                if (Path.GetExtension(fileName) != ".xss")  //如果扩展名不符，要求另存。
+                if (Path.GetExtension(fileName) != ".xss" && Path.GetExtension(fileName) != ".ass")  //如果扩展名不符，要求另存。
                 {
                     fileName = "";
                     isSaved = false;
@@ -810,12 +844,26 @@ namespace XingSub
                     this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName + "*");
                 }
             }
+        }
 
-            //for (int i = 0; i < pluginsList.Count; i++)
-            //{
-            //    IPlugin obj = (IPlugin)Activator.CreateInstance(pluginsList[i]);
-            //    exportMenuItem.DropDownItems[i].Visible = (obj.IsEffects() == mode);
-            //}
+        private void changeEffectsMode(bool mode, bool open)
+        {
+            if (open)
+            {
+                appConfig.EffectMode = mode;
+                offsetMenuItem.Enabled = mode;
+                normalModeMenuItem.Checked = !mode;
+                effectsModeMenuItem.Checked = mode;
+
+                if (mode)
+                {
+                    this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName);
+                }
+                else
+                {
+                    this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
+                }
+            }
         }
 
         private void scanPlugin()

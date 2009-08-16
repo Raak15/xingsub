@@ -2,22 +2,23 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 
 namespace XingSub
 {
     public class SubStationEvent
     {
         #region 私有变量声明
-        private int _layer;
-        private string _start;
-        private string _end;
-        private string _style;
-        private string _actor;
-        private int _marginL;
-        private int _marginR;
-        private int _marginV;
-        private string _effect;
-        private string _text;
+        private int _layer = 0;
+        private string _start = "0:00:00.00";
+        private string _end = "0:00:00.00";
+        private string _style = "Default";
+        private string _actor = "";
+        private int _marginL = 0;
+        private int _marginR = 0;
+        private int _marginV = 0;
+        private string _effect = "";
+        private string _text = "";
         #endregion
 
         #region 字段声明
@@ -110,37 +111,53 @@ namespace XingSub
         }
 
         /// <summary>
+        /// 使用部分参数创建一条字幕
+        /// </summary>
+        /// <param name="start">开始时间</param>
+        /// <param name="end">结束时间</param>
+        /// <param name="text">文本</param>
+        public SubStationEvent(string start, string end, string text)
+        {
+            _start = start;
+            _end = end;
+            _text = text;
+        }
+
+        /// <summary>
         /// 创建一条字幕
         /// </summary>
         /// <param name="dialogue">Events 字符串</param>
         public SubStationEvent(string dialogue)
         {
-            if (style.Substring(0, 9) == "Dialogue:")
+            if (dialogue.Substring(0, 9) == "Dialogue:")
             {
-                string styleString = style.Substring(9).Trim();
-                string[] prms = styleString.Split(",".ToCharArray());
+                string dialogueString = dialogue.Substring(9).Trim();
 
-                if (prms.Length == 10)
+                Regex reg = new Regex(@"(\d+),(\d{1}:\d{2}:\d{2}\.\d{2}),(\d{1}:\d{2}:\d{2}\.\d{2}),(.+?),(.*?),(.+?),(.+?),(.+?),(.*?),(.*)");
+
+                if (reg.IsMatch(dialogueString))
                 {
-                    _layer = int.Parse(prms[0]);
-                    _start = prms[1];
-                    _end = prms[2];
-                    _style = prms[3];
-                    _actor = prms[4];
-                    _marginL = int.Parse(prms[5]);
-                    _marginR = int.Parse(prms[6]);
-                    _marginV = int.Parse(prms[7]);
-                    _effect = prms[8];
-                    _text = prms[9];
+                    GroupCollection prms = reg.Match(dialogueString).Groups;
+
+                    _layer = int.Parse(prms[1].Value);
+                    _start = prms[2].Value;
+                    _end = prms[3].Value;
+                    _style = prms[4].Value;
+                    _actor = prms[5].Value;
+                    _marginL = int.Parse(prms[6].Value);
+                    _marginR = int.Parse(prms[7].Value);
+                    _marginV = int.Parse(prms[8].Value);
+                    _effect = prms[9].Value;
+                    _text = prms[10].Value;
                 }
                 else
                 {
-                    throw InvalidCastException;
+                    throw new InvalidCastException();
                 }
             }
             else
             {
-                throw InvalidCastException;
+                throw new InvalidCastException();
             }
         }
 

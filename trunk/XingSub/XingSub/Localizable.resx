@@ -157,7 +157,7 @@
     <value>Normal mode</value>
   </data>
   <data name="OpenFileType" xml:space="preserve">
-    <value>Supports Files(*.xss;*.xse;*.txt)|*.xss;*.xse;*.txt|XingSub Subtitles Timeline(*.xss)|*.xss|XingSub Effects Timeline(*.xse)|*.xse|Text File(*.txt)|*.txt|All Files(*.*)|*.*</value>
+    <value>Supports Files(*.xss;*.xse;*.ass;*.txt)|*.xss;*.xse;*.ass;*.txt|XingSub Subtitles Timeline(*.xss)|*.xss|XingSub Effects Timeline(*.xse)|*.xse|Advanced SubStation Alpha(*.ass)|*.ass|Text File(*.txt)|*.txt|All Files(*.*)|*.*</value>
   </data>
   <data name="OpenTitle" xml:space="preserve">
     <value>Open File</value>
