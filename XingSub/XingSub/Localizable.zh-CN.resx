@@ -157,7 +157,7 @@
     <value>正常模式</value>
   </data>
   <data name="OpenFileType" xml:space="preserve">
-    <value>支持的文件类型(*.xss;*.xse;*.txt)|*.xss;*.xse;*.txt|XingSub 字幕时间轴(*.xss)|*.xss|XingSub 特效时间轴(*.xse)|*.xse|文本文件(*.txt)|*.txt|所有文件(*.*)|*.*</value>
+    <value>支持的文件类型(*.xss;*.xse;*.ass;*.txt)|*.xss;*.xse;*.ass;*.txt|XingSub 字幕时间轴(*.xss)|*.xss|XingSub 特效时间轴(*.xse)|*.xse|高级 SubStation Alpha 字幕文件(*.ass)|*.ass|文本文件(*.txt)|*.txt|所有文件(*.*)|*.*</value>
   </data>
   <data name="OpenTitle" xml:space="preserve">
     <value>打开文件</value>

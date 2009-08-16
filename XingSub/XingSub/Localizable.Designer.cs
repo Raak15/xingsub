@@ -178,7 +178,7 @@ namespace XingSub {
         }
         
         /// <summary>
-        ///   查找类似 Supports Files(*.xss;*.xse;*.txt)|*.xss;*.xse;*.txt|XingSub Subtitles Timeline(*.xss)|*.xss|XingSub Effects Timeline(*.xse)|*.xse|Text File(*.txt)|*.txt|All Files(*.*)|*.* 的本地化字符串。
+        ///   查找类似 Supports Files(*.xss;*.xse;*.ass;*.txt)|*.xss;*.xse;*.ass;*.txt|XingSub Subtitles Timeline(*.xss)|*.xss|XingSub Effects Timeline(*.xse)|*.xse|Advanced SubStation Alpha(*.ass)|*.ass|Text File(*.txt)|*.txt|All Files(*.*)|*.* 的本地化字符串。
         /// </summary>
         internal static string OpenFileType {
             get {
