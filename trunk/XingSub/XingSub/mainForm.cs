@@ -55,10 +55,11 @@ namespace XingSub
 
         private List<int> pluginsId;
 
-        private AdvancedSubStationAlpha subtitles;
+        public AdvancedSubStationAlpha subtitles;
 
         private aboutForm aboutForm = new aboutForm();
         private paramsForm paramsForm = new paramsForm();
+        private SubInfoForm subInfoForm = new SubInfoForm();
 
         private string configFile = Path.Combine(Environment.CurrentDirectory, "config.dat");
         private XSConfig appConfig;
@@ -214,7 +215,7 @@ namespace XingSub
         {
             if (askToSave())
             {
-                textBox1.Text = "";
+                ScriptTextBox.Text = "";
                 fileName = "";
                 isSaved = true;
                 if (appConfig.EffectMode)
@@ -252,23 +253,23 @@ namespace XingSub
                 {
                     case ".xss":
                         subtitles.LoadXss(fileContent);
-                        textBox1.Text = fileContent;
+                        ScriptTextBox.Text = fileContent;
                         changeEffectsMode(false, true);
                         this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
                         break;
                     case ".ass":
                         subtitles.LoadAss(fileContent);
-                        textBox1.Text = subtitles.ToXingSub();
+                        ScriptTextBox.Text = subtitles.ToXingSub();
                         changeEffectsMode(false, true);
                         this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
                         break;
                     case ".xse":
-                        textBox1.Text = fileContent;
+                        ScriptTextBox.Text = fileContent;
                         changeEffectsMode(true, true);
                         this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName);
                         break;
                     default:
-                        textBox1.Text = fileContent;
+                        ScriptTextBox.Text = fileContent;
                         changeEffectsMode(false, true);
                         this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
                         break;
@@ -278,7 +279,7 @@ namespace XingSub
             }
         }
 
-        private void textBox1_TextChanged(object sender, EventArgs e)
+        private void ScriptTextBox_TextChanged(object sender, EventArgs e)
         {
             isSaved = false;
             if (fileName.Length == 0)
@@ -365,7 +366,7 @@ namespace XingSub
             if (saveFileDialog1.FileName.Length == 0) return;
             fileName = saveFileDialog1.FileName;
             StreamWriter fileWriter = File.CreateText(fileName);
-            fileWriter.Write(textBox1.Text);
+            fileWriter.Write(ScriptTextBox.Text);
             fileWriter.Flush();
             fileWriter.Close();
             isSaved = true;
@@ -389,17 +390,17 @@ namespace XingSub
 
         private void cutMenuItem_Click(object sender, EventArgs e)
         {
-            if (textBox1.SelectionLength > 0)
+            if (ScriptTextBox.SelectionLength > 0)
             {
-                textBox1.Cut();
+                ScriptTextBox.Cut();
             }
         }
 
         private void copyMenuItem_Click(object sender, EventArgs e)
         {
-            if (textBox1.SelectionLength > 0)
+            if (ScriptTextBox.SelectionLength > 0)
             {
-                textBox1.Copy();
+                ScriptTextBox.Copy();
             }
         }
 
@@ -407,18 +408,18 @@ namespace XingSub
         {
             if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text))
             {
-                textBox1.Paste();
+                ScriptTextBox.Paste();
             }
         }
 
         private void selectAllMenuItem_Click(object sender, EventArgs e)
         {
-            textBox1.SelectAll();
+            ScriptTextBox.SelectAll();
         }
 
         private void deleteMenuItem_Click(object sender, EventArgs e)
         {
-            textBox1.SelectedText = "";
+            ScriptTextBox.SelectedText = "";
         }
 
         private void timerAutoSave_Tick(object sender, EventArgs e)
@@ -433,7 +434,7 @@ namespace XingSub
                     Directory.CreateDirectory(autoSavePath);
                 }
                 StreamWriter fileWriter = File.CreateText(autoSaveFile);
-                fileWriter.Write(textBox1.Text);
+                fileWriter.Write(ScriptTextBox.Text);
                 fileWriter.Flush();
                 fileWriter.Close();
                 toolStripStatusLabel1.Text = String.Format(Localizable.AutoSaved, autoSaveTime.ToString());
@@ -442,16 +443,16 @@ namespace XingSub
 
         private void insertNewLineMenuItem_Click(object sender, EventArgs e)
         {
-            int nextNewline = textBox1.Text.Substring(textBox1.SelectionStart).IndexOf(Environment.NewLine);
+            int nextNewline = ScriptTextBox.Text.Substring(ScriptTextBox.SelectionStart).IndexOf(Environment.NewLine);
             if (nextNewline == -1)
             {
-                textBox1.Text += Environment.NewLine;
-                textBox1.SelectionStart = textBox1.Text.Length;
+                ScriptTextBox.Text += Environment.NewLine;
+                ScriptTextBox.SelectionStart = ScriptTextBox.Text.Length;
             }
             else
             {
-                textBox1.SelectionStart += nextNewline;
-                textBox1.SelectedText = Environment.NewLine;
+                ScriptTextBox.SelectionStart += nextNewline;
+                ScriptTextBox.SelectedText = Environment.NewLine;
             }
         }
 
@@ -610,7 +611,7 @@ namespace XingSub
             int index = pluginsId[saveFileDialog1.FilterIndex - 1];
             IPlugin plugin = (IPlugin)Activator.CreateInstance(pluginsList[index]);
 
-            if (plugin.Convert(textBox1.Text, saveFileDialog1.FileName) == 0)
+            if (plugin.Convert(ScriptTextBox.Text, saveFileDialog1.FileName) == 0)
             {
                 MessageBox.Show(Localizable.ExportSussessMessage, Localizable.ExportTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
@@ -672,17 +673,17 @@ namespace XingSub
 
             if (appConfig.EffectMode)
             {
-                fileWriter.Write(textBox1.Text);
+                fileWriter.Write(ScriptTextBox.Text);
                 this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName);
             }
             else
             {
-                subtitles.LoadXss(textBox1.Text);
+                subtitles.LoadXss(ScriptTextBox.Text);
 
                 switch (Path.GetExtension(fileName))
                 {
                     case ".xss":
-                        fileWriter.Write(textBox1.Text);
+                        fileWriter.Write(ScriptTextBox.Text);
                         break;
                     case ".ass":
                         fileWriter.Write(subtitles.ToString());
@@ -733,18 +734,18 @@ namespace XingSub
                 if (appConfig.EffectMode) //特效模式
                 {
                     //插入时间
-                    textBox1.SelectedText = "+" + timeString;
+                    ScriptTextBox.SelectedText = "+" + timeString;
 
                     //定位到下一音节
-                    int endOfLine = textBox1.Text.Substring(textBox1.SelectionStart).IndexOf(Environment.NewLine);
+                    int endOfLine = ScriptTextBox.Text.Substring(ScriptTextBox.SelectionStart).IndexOf(Environment.NewLine);
                     if (endOfLine == -1)
                     {
-                        endOfLine = textBox1.Text.Length - textBox1.SelectionStart;
+                        endOfLine = ScriptTextBox.Text.Length - ScriptTextBox.SelectionStart;
                     }
                     int nextWord;   //寻找下一音节
                     if (appConfig.TimeOffset == 0)    //自动偏移
                     {
-                        nextWord = textBox1.Text.Substring(textBox1.SelectionStart).IndexOf(" ") + 1;   //下一空格
+                        nextWord = ScriptTextBox.Text.Substring(ScriptTextBox.SelectionStart).IndexOf(" ") + 1;   //下一空格
                     }
                     else
                     {
@@ -753,48 +754,48 @@ namespace XingSub
 
                     if (nextWord > endOfLine || nextWord == 0)   //如果超过行尾
                     {
-                        textBox1.SelectionStart += endOfLine;
+                        ScriptTextBox.SelectionStart += endOfLine;
                     }
                     else
                     {
-                        textBox1.SelectionStart += nextWord;
+                        ScriptTextBox.SelectionStart += nextWord;
                     }
 
                     if (endOfLine == 0)   //如果已到达行尾
                     {
-                        textBox1.SelectionStart += 2;   //定位到下一行
+                        ScriptTextBox.SelectionStart += 2;   //定位到下一行
                     }
                 }
                 else
                 {
                     //定位到行首
-                    int lastNewline = textBox1.Text.Substring(0, textBox1.SelectionStart).LastIndexOf(Environment.NewLine);
+                    int lastNewline = ScriptTextBox.Text.Substring(0, ScriptTextBox.SelectionStart).LastIndexOf(Environment.NewLine);
                     if (lastNewline == -1)
                     {
-                        textBox1.SelectionStart = 0;
+                        ScriptTextBox.SelectionStart = 0;
                     }
                     else
                     {
-                        textBox1.SelectionStart = lastNewline + 2;
+                        ScriptTextBox.SelectionStart = lastNewline + 2;
                     }
 
                     //插入时间
-                    textBox1.SelectedText = timeString;
+                    ScriptTextBox.SelectedText = timeString;
 
                     //定位到下一行首
-                    int nextNewline = textBox1.Text.Substring(textBox1.SelectionStart).IndexOf(Environment.NewLine);
+                    int nextNewline = ScriptTextBox.Text.Substring(ScriptTextBox.SelectionStart).IndexOf(Environment.NewLine);
                     if (nextNewline == -1)
                     {
-                        textBox1.Text += Environment.NewLine;
-                        textBox1.SelectionStart = textBox1.Text.Length;
+                        ScriptTextBox.Text += Environment.NewLine;
+                        ScriptTextBox.SelectionStart = ScriptTextBox.Text.Length;
                     }
                     else
                     {
-                        textBox1.SelectionStart += (nextNewline + 2);
+                        ScriptTextBox.SelectionStart += (nextNewline + 2);
                     }
                 }
 
-                textBox1.ScrollToCaret();
+                ScriptTextBox.ScrollToCaret();
 
                 toolStripStatusLabel1.Text = String.Format(Localizable.InsertedTimeStamp, stringToStamp(timeString));
             }
@@ -994,6 +995,15 @@ namespace XingSub
         {
             appConfig.AutoClose = !appConfig.AutoClose;
             autocloseTimeWindowToolStripMenuItem.Checked = appConfig.AutoClose;
+        }
+
+        private void PreferancesMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!subInfoForm.Created)
+            {
+                subInfoForm = new SubInfoForm();
+            }
+            subInfoForm.Show();
         }
     }
 }
