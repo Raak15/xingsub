@@ -68,7 +68,6 @@
             this.aboutMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel1 = new System.Windows.Forms.ToolStripStatusLabel();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.contextMenuStrip1 = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.contextCut = new System.Windows.Forms.ToolStripMenuItem();
             this.contextCopy = new System.Windows.Forms.ToolStripMenuItem();
@@ -81,6 +80,9 @@
             this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.timerAutoSave = new System.Windows.Forms.Timer(this.components);
+            this.ScriptTextBox = new System.Windows.Forms.TextBox();
+            this.PreferancesMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -113,6 +115,8 @@
             this.importMenuItem,
             this.exportMenuItem,
             this.toolStripSeparator1,
+            this.PreferancesMenuItem,
+            this.toolStripSeparator2,
             this.exitMenuItem});
             this.fileMenuItem.Name = "fileMenuItem";
             resources.ApplyResources(this.fileMenuItem, "fileMenuItem");
@@ -360,17 +364,6 @@
             this.toolStripStatusLabel1.Name = "toolStripStatusLabel1";
             resources.ApplyResources(this.toolStripStatusLabel1, "toolStripStatusLabel1");
             // 
-            // textBox1
-            // 
-            this.textBox1.AcceptsReturn = true;
-            this.textBox1.AcceptsTab = true;
-            this.textBox1.AllowDrop = true;
-            this.textBox1.ContextMenuStrip = this.contextMenuStrip1;
-            resources.ApplyResources(this.textBox1, "textBox1");
-            this.textBox1.HideSelection = false;
-            this.textBox1.Name = "textBox1";
-            this.textBox1.TextChanged += new System.EventHandler(this.textBox1_TextChanged);
-            // 
             // contextMenuStrip1
             // 
             this.contextMenuStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
@@ -442,11 +435,33 @@
             this.timerAutoSave.Interval = 120000;
             this.timerAutoSave.Tick += new System.EventHandler(this.timerAutoSave_Tick);
             // 
+            // ScriptTextBox
+            // 
+            this.ScriptTextBox.AcceptsReturn = true;
+            this.ScriptTextBox.AcceptsTab = true;
+            this.ScriptTextBox.AllowDrop = true;
+            this.ScriptTextBox.ContextMenuStrip = this.contextMenuStrip1;
+            resources.ApplyResources(this.ScriptTextBox, "ScriptTextBox");
+            this.ScriptTextBox.HideSelection = false;
+            this.ScriptTextBox.Name = "ScriptTextBox";
+            this.ScriptTextBox.TextChanged += new System.EventHandler(this.ScriptTextBox_TextChanged);
+            // 
+            // PreferancesMenuItem
+            // 
+            this.PreferancesMenuItem.Name = "PreferancesMenuItem";
+            resources.ApplyResources(this.PreferancesMenuItem, "PreferancesMenuItem");
+            this.PreferancesMenuItem.Click += new System.EventHandler(this.PreferancesMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
+            // 
             // mainForm
             // 
             resources.ApplyResources(this, "$this");
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.Controls.Add(this.textBox1);
+            this.Controls.Add(this.ScriptTextBox);
             this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.menuStrip1);
             this.MainMenuStrip = this.menuStrip1;
@@ -468,7 +483,6 @@
         private System.Windows.Forms.Timer timerCapture;
         private System.Windows.Forms.MenuStrip menuStrip1;
         private System.Windows.Forms.StatusStrip statusStrip1;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.ToolStripMenuItem fileMenuItem;
         private System.Windows.Forms.ToolStripMenuItem openMenuItem;
         private System.Windows.Forms.ToolStripMenuItem newMenuItem;
@@ -516,6 +530,9 @@
         private System.Windows.Forms.ToolStripMenuItem MPCToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem paramsToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem autocloseTimeWindowToolStripMenuItem;
+        private System.Windows.Forms.TextBox ScriptTextBox;
+        private System.Windows.Forms.ToolStripMenuItem PreferancesMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
     }
 }
 
