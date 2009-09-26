@@ -53,11 +53,11 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="aboutForm.cs">
+    <Compile Include="AboutForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="aboutForm.Designer.cs">
-      <DependentUpon>aboutForm.cs</DependentUpon>
+    <Compile Include="AboutForm.Designer.cs">
+      <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AdvancedSubStationAlpha.cs" />
     <Compile Include="IReader.cs" />
@@ -66,29 +66,29 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Localizable.resx</DependentUpon>
     </Compile>
-    <Compile Include="mainForm.cs">
+    <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="mainForm.Designer.cs">
-      <DependentUpon>mainForm.cs</DependentUpon>
+    <Compile Include="MainForm.Designer.cs">
+      <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="headerForm.cs">
+    <Compile Include="HeaderForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="headerForm.Designer.cs">
-      <DependentUpon>headerForm.cs</DependentUpon>
+    <Compile Include="HeaderForm.Designer.cs">
+      <DependentUpon>HeaderForm.cs</DependentUpon>
     </Compile>
     <Compile Include="IPlugin.cs" />
-    <Compile Include="paramsForm.cs">
+    <Compile Include="ParamsForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="paramsForm.Designer.cs">
-      <DependentUpon>paramsForm.cs</DependentUpon>
+    <Compile Include="ParamsForm.Designer.cs">
+      <DependentUpon>ParamsForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <EmbeddedResource Include="aboutForm.resx">
-      <DependentUpon>aboutForm.cs</DependentUpon>
+    <EmbeddedResource Include="AboutForm.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Localizable.resx">
@@ -99,24 +99,24 @@
     <EmbeddedResource Include="Localizable.zh-CN.resx">
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="mainForm.resx">
-      <DependentUpon>mainForm.cs</DependentUpon>
+    <EmbeddedResource Include="MainForm.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="headerForm.resx">
-      <DependentUpon>headerForm.cs</DependentUpon>
+    <EmbeddedResource Include="HeaderForm.resx">
+      <DependentUpon>HeaderForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="mainForm.zh-CN.resx">
-      <DependentUpon>mainForm.cs</DependentUpon>
+    <EmbeddedResource Include="MainForm.zh-CN.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="mainForm.zh-TW.resx">
-      <DependentUpon>mainForm.cs</DependentUpon>
+    <EmbeddedResource Include="MainForm.zh-TW.resx">
+      <DependentUpon>MainForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
-    <EmbeddedResource Include="paramsForm.resx">
-      <DependentUpon>paramsForm.cs</DependentUpon>
+    <EmbeddedResource Include="ParamsForm.resx">
+      <DependentUpon>ParamsForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
