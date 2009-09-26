@@ -8,7 +8,7 @@ namespace XingSub
     public class AdvancedSubStationAlpha
     {
         private SubStationInfo _scriptInfo;
-        private List<SubStationStyle> _styles ;
+        private List<SubStationStyle> _styles;
         private List<SubStationEvent> _events;
 
         /// <summary>
@@ -54,7 +54,7 @@ namespace XingSub
             _styles = new List<SubStationStyle>();
             _events = new List<SubStationEvent>();
 
-            string[] lines = text.Split("\n".ToCharArray());
+            string[] lines = text.Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
 
             int mode = 0;
 

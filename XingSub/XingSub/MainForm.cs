@@ -226,6 +226,8 @@ namespace XingSub
                 {
                     this.Text = String.Format(Localizable.Title, Localizable.NormalMode, Localizable.NewFile);
                 }
+                subtitles = new AdvancedSubStationAlpha();
+                subtitles.Styles.Add(new SubStationStyle());
             }
         }
 
@@ -564,6 +566,10 @@ namespace XingSub
             // 应用捕获目标设置
             NWEToolStripMenuItem.Checked = (appConfig.TimeSource == TimingApp.NeroWaveEditor);
             MPCToolStripMenuItem.Checked = (appConfig.TimeSource == TimingApp.MediaPlayerClassic);
+
+            //初始化字幕对象
+            subtitles = new AdvancedSubStationAlpha();
+            subtitles.Styles.Add(new SubStationStyle());
 
             //scanPlugin(); //扫描插件
             //scanReader(); //扫描导入
@@ -997,13 +1003,66 @@ namespace XingSub
             autocloseTimeWindowToolStripMenuItem.Checked = appConfig.AutoClose;
         }
 
-        private void PreferancesMenuItem_Click(object sender, EventArgs e)
+        private void stylesToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (!subInfoForm.Created)
             {
                 subInfoForm = new SubInfoForm();
             }
+
+            StringBuilder _stylesText = new StringBuilder(255);
+            _stylesText.AppendLine("Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding");
+            foreach (SubStationStyle _style in subtitles.Styles)
+            {
+                _stylesText.AppendLine(_style.ToString());
+            }
+
+            subInfoForm.stylesText.Text = _stylesText.ToString();
+            subInfoForm.resWidth.Text = subtitles.ScriptInfo.PlayResX.ToString();
+            subInfoForm.resHeight.Text = subtitles.ScriptInfo.PlayRexY.ToString();
+            subInfoForm.OKButton.Click += new EventHandler(OKButton_Click);
+
             subInfoForm.Show();
+        }
+
+        void OKButton_Click(object sender, EventArgs e)
+        {
+            List<SubStationStyle> _styles = new List<SubStationStyle>();
+            string[] lines =  subInfoForm.stylesText.Text.Split("\n".ToCharArray(), StringSplitOptions.RemoveEmptyEntries);
+            bool isStyle = false;
+
+            foreach (string s in lines)
+            {
+                string line = s.Trim();
+                if (line.Replace(" ", "") == "Format:Name,Fontname,Fontsize,PrimaryColour,SecondaryColour,OutlineColour,BackColour,Bold,Italic,Underline,StrikeOut,ScaleX,ScaleY,Spacing,Angle,BorderStyle,Outline,Shadow,Alignment,MarginL,MarginR,MarginV,Encoding")
+                {
+                    isStyle = true;
+                }
+
+                if (isStyle)
+                {
+                    if (line.Length > 6)
+                    {
+                        if (line.Substring(0, 6) == "Style:")
+                        {
+                            SubStationStyle _style = new SubStationStyle(line);
+                            _styles.Add(_style);
+                        }
+                    }
+                }
+            }
+
+            if (!isStyle || _styles.Count == 0)
+            {
+                MessageBox.Show(Localizable.InvaildStyles, Localizable.InvaildStylesTitle, MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
+
+            subtitles.Styles = _styles;
+            subtitles.ScriptInfo.PlayResX = int.Parse(subInfoForm.resWidth.Text);
+            subtitles.ScriptInfo.PlayRexY = int.Parse(subInfoForm.resHeight.Text);
+
+            subInfoForm.Close();
         }
     }
 }

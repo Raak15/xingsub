@@ -150,6 +150,14 @@
   <data name="InsertedTimeStamp" xml:space="preserve">
     <value>已插入时间点: {0}</value>
   </data>
+  <data name="InvaildStyles" xml:space="preserve">
+    <value>您刚才修改的样式文本可能存在错误。
+
+请更正并重试。</value>
+  </data>
+  <data name="InvaildStylesTitle" xml:space="preserve">
+    <value>无效样式</value>
+  </data>
   <data name="NewFile" xml:space="preserve">
     <value>新文件</value>
   </data>
