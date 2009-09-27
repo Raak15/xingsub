@@ -132,9 +132,6 @@
   <data name="EffectsMode" xml:space="preserve">
     <value>Effects mode</value>
   </data>
-  <data name="ExportFileType" xml:space="preserve">
-    <value>{0}|*.{1}|All Files(*.*)|*.*</value>
-  </data>
   <data name="ExportSussessMessage" xml:space="preserve">
     <value>Subtitles exported successfully.</value>
   </data>
@@ -142,13 +139,19 @@
     <value>Export subtitles</value>
   </data>
   <data name="FailedToLoadPluginMessage" xml:space="preserve">
-    <value>This plugin has a major version number different from its host.
-For avoiding errors leading by interface upgrade, plugin needs a major version number as same as its host program.
+    <value>This plugin has a major version number different from the plugin interface.
+For avoiding errors leading by interface upgrade, plugin needs a major version number as same as the plugin interface.
 
-Currect version: {0}</value>
+Currect interface version: {0}</value>
   </data>
   <data name="FailedToLoadPluginTitle" xml:space="preserve">
     <value>Skipped Loading Plugin: {0}</value>
+  </data>
+  <data name="ImportSussessMessage" xml:space="preserve">
+    <value>Subtitles imported successfully.</value>
+  </data>
+  <data name="ImportTitle" xml:space="preserve">
+    <value>Import subtitles</value>
   </data>
   <data name="InsertedTimeStamp" xml:space="preserve">
     <value>Inserted time stamp: {0}</value>
@@ -163,6 +166,12 @@ Please correct it then try again.</value>
   </data>
   <data name="NewFile" xml:space="preserve">
     <value>New File</value>
+  </data>
+  <data name="NoPluginAvailable" xml:space="preserve">
+    <value>Sorry, but there's no plugin available in this mode.</value>
+  </data>
+  <data name="NoPluginAvailableTitle" xml:space="preserve">
+    <value>No plugin available</value>
   </data>
   <data name="NormalMode" xml:space="preserve">
     <value>Normal mode</value>

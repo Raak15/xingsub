@@ -51,9 +51,6 @@ namespace XingSub
         private string fileName = "";
 
         private List<Type> pluginsList;
-        private List<Type> readersList;
-
-        private List<int> pluginsId;
 
         public AdvancedSubStationAlpha subtitles;
 
@@ -64,10 +61,253 @@ namespace XingSub
         private string configFile = Path.Combine(Environment.CurrentDirectory, "config.dat");
         private XSConfig appConfig;
 
+        private const int PluginVersion = 2;
+
         public MainForm()
         {
             InitializeComponent();
         }
+
+        #region 菜单事件
+        private void newMenuItem_Click(object sender, EventArgs e)
+        {
+            if (askToSave())
+            {
+                ScriptTextBox.Text = "";
+                fileName = "";
+                isSaved = true;
+                if (appConfig.EffectMode)
+                {
+                    this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, Localizable.NewFile);
+                }
+                else
+                {
+                    this.Text = String.Format(Localizable.Title, Localizable.NormalMode, Localizable.NewFile);
+                }
+                subtitles = new AdvancedSubStationAlpha();
+                subtitles.Styles.Add(new SubStationStyle());
+            }
+        }
+
+        private void openMenuItem_Click(object sender, EventArgs e)
+        {
+            if (askToSave())
+            {
+                openFileDialog1.Reset();
+                openFileDialog1.Filter = Localizable.OpenFileType;
+                openFileDialog1.Title = Localizable.OpenTitle;
+                openFileDialog1.ShowDialog();
+
+                if (openFileDialog1.FileName.Length == 0) return;
+
+                fileName = openFileDialog1.FileName;
+
+                StreamReader fileReader = File.OpenText(fileName);
+                string fileContent = fileReader.ReadToEnd();
+                fileReader.Close();
+
+                subtitles = new AdvancedSubStationAlpha();
+
+                System.Diagnostics.Debug.WriteLine(isSaved);
+                switch (Path.GetExtension(fileName))
+                {
+                    case ".xss":
+                        subtitles.LoadXss(fileContent);
+                        ScriptTextBox.Text = fileContent;
+                        changeEffectsMode(false, true);
+                        this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
+                        break;
+                    case ".ass":
+                        subtitles.LoadAss(fileContent);
+                        ScriptTextBox.Text = subtitles.ToXingSub();
+                        changeEffectsMode(false, true);
+                        this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
+                        break;
+                    case ".xse":
+                        ScriptTextBox.Text = fileContent;
+                        changeEffectsMode(true, true);
+                        this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName);
+                        break;
+                    default:
+                        ScriptTextBox.Text = fileContent;
+                        changeEffectsMode(false, true);
+                        this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
+                        break;
+                }
+
+                isSaved = true;
+            }
+        }
+
+        private void editMenuItem_Click(object sender, EventArgs e)
+        {
+            this.Close();
+        }
+
+        private void aboutMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!aboutForm.Created)
+            {
+                aboutForm = new aboutForm();
+            }
+            string text = "";
+            if (pluginsList.Count > 0)
+            {
+                foreach (Type plug in pluginsList)
+                {
+                    text += Path.GetFileName(plug.Assembly.Location) + "\r\n";
+                }
+            }
+            aboutForm.versionLabel.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            aboutForm.pluginsTextBox.Text = text;
+            aboutForm.Show();
+        }
+
+        private void saveMenuItem_Click(object sender, EventArgs e)
+        {
+            saveToFile();
+        }
+
+        private void saveAsMenuItem_Click(object sender, EventArgs e)
+        {
+            saveFileDialog1.Reset();
+            if (appConfig.EffectMode)
+            {
+                saveFileDialog1.Filter = Localizable.SaveAsFileType;
+                saveFileDialog1.DefaultExt = "xse";
+                saveFileDialog1.Title = Localizable.SaveEffectsTitle;
+            }
+            else
+            {
+                saveFileDialog1.Filter = Localizable.SaveAsFileType;
+                saveFileDialog1.DefaultExt = "xss";
+                saveFileDialog1.Title = Localizable.SaveSubtitlesTitle;
+            }
+            saveFileDialog1.ShowDialog();
+            if (saveFileDialog1.FileName.Length == 0) return;
+            fileName = saveFileDialog1.FileName;
+            StreamWriter fileWriter = File.CreateText(fileName);
+            fileWriter.Write(ScriptTextBox.Text);
+            fileWriter.Flush();
+            fileWriter.Close();
+            isSaved = true;
+
+            appConfig.EffectMode = (Path.GetExtension(fileName) == ".xse");
+            if (appConfig.EffectMode)
+            {
+                this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName);
+                normalModeMenuItem.Checked = false;
+                effectsModeMenuItem.Checked = true;
+                offsetMenuItem.Enabled = true;
+            }
+            else
+            {
+                this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
+                normalModeMenuItem.Checked = true;
+                effectsModeMenuItem.Checked = false;
+                offsetMenuItem.Enabled = false;
+            }
+        }
+
+        private void cutMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ScriptTextBox.SelectionLength > 0)
+            {
+                ScriptTextBox.Cut();
+            }
+        }
+
+        private void copyMenuItem_Click(object sender, EventArgs e)
+        {
+            if (ScriptTextBox.SelectionLength > 0)
+            {
+                ScriptTextBox.Copy();
+            }
+        }
+
+        private void pasteMenuItem_Click(object sender, EventArgs e)
+        {
+            if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text))
+            {
+                ScriptTextBox.Paste();
+            }
+        }
+
+        private void selectAllMenuItem_Click(object sender, EventArgs e)
+        {
+            ScriptTextBox.SelectAll();
+        }
+
+        private void deleteMenuItem_Click(object sender, EventArgs e)
+        {
+            ScriptTextBox.SelectedText = "";
+        }
+
+        private void insertNewLineMenuItem_Click(object sender, EventArgs e)
+        {
+            int nextNewline = ScriptTextBox.Text.Substring(ScriptTextBox.SelectionStart).IndexOf(Environment.NewLine);
+            if (nextNewline == -1)
+            {
+                ScriptTextBox.Text += Environment.NewLine;
+                ScriptTextBox.SelectionStart = ScriptTextBox.Text.Length;
+            }
+            else
+            {
+                ScriptTextBox.SelectionStart += nextNewline;
+                ScriptTextBox.SelectedText = Environment.NewLine;
+            }
+        }
+
+        private void normalModeMenuItem_Click(object sender, EventArgs e)
+        {
+            changeEffectsMode(false);
+            saveToFile();
+        }
+
+        private void effectsModeMenuItem_Click(object sender, EventArgs e)
+        {
+            changeEffectsMode(true);
+            saveToFile();
+        }
+
+        private void offsetOneMenuItem_Click(object sender, EventArgs e)
+        {
+            offsetOneMenuItem.Checked = true;
+            offsetTwoMenuItem.Checked = false;
+            offsetBySpaceMenuItem.Checked = false;
+            appConfig.TimeOffset = 1;
+        }
+
+        private void offsetTwoMenuItem_Click(object sender, EventArgs e)
+        {
+            offsetOneMenuItem.Checked = false;
+            offsetTwoMenuItem.Checked = true;
+            offsetBySpaceMenuItem.Checked = false;
+            appConfig.TimeOffset = 2;
+        }
+
+        private void offsetBySpaceMenuItem_Click(object sender, EventArgs e)
+        {
+            offsetOneMenuItem.Checked = false;
+            offsetTwoMenuItem.Checked = false;
+            offsetBySpaceMenuItem.Checked = true;
+            appConfig.TimeOffset = 0;
+        }
+
+        private void NWEToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NWEToolStripMenuItem.Checked = true;
+            MPCToolStripMenuItem.Checked = false;
+            appConfig.TimeSource = TimingApp.NeroWaveEditor;
+        }
+
+        private void MPCToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            NWEToolStripMenuItem.Checked = false;
+            MPCToolStripMenuItem.Checked = true;
+            appConfig.TimeSource = TimingApp.MediaPlayerClassic;
+        }
+        #endregion
 
         private static bool WaveEditorProc(IntPtr hWnd, IntPtr lParam)
         {
@@ -211,73 +451,22 @@ namespace XingSub
             }
         }
 
-        private void newMenuItem_Click(object sender, EventArgs e)
+        private void timerAutoSave_Tick(object sender, EventArgs e)
         {
-            if (askToSave())
+            if (!isSaved && fileName.Length > 0)
             {
-                ScriptTextBox.Text = "";
-                fileName = "";
-                isSaved = true;
-                if (appConfig.EffectMode)
+                DateTime autoSaveTime = DateTime.Now;
+                string autoSavePath = fileName + ".AutoSaved";
+                string autoSaveFile = Path.Combine(autoSavePath, Path.GetFileNameWithoutExtension(fileName) + "." + autoSaveTime.Year + autoSaveTime.Month + autoSaveTime.Day + autoSaveTime.Hour + autoSaveTime.Minute + autoSaveTime.Second + Path.GetExtension(fileName));
+                if (!Directory.Exists(autoSavePath))
                 {
-                    this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, Localizable.NewFile);
+                    Directory.CreateDirectory(autoSavePath);
                 }
-                else
-                {
-                    this.Text = String.Format(Localizable.Title, Localizable.NormalMode, Localizable.NewFile);
-                }
-                subtitles = new AdvancedSubStationAlpha();
-                subtitles.Styles.Add(new SubStationStyle());
-            }
-        }
-
-        private void openMenuItem_Click(object sender, EventArgs e)
-        {
-            if (askToSave())
-            {
-                openFileDialog1.Reset();
-                openFileDialog1.Filter = Localizable.OpenFileType;
-                openFileDialog1.Title = Localizable.OpenTitle;
-                openFileDialog1.ShowDialog();
-
-                if (openFileDialog1.FileName.Length == 0) return;
-
-                fileName = openFileDialog1.FileName;
-
-                StreamReader fileReader = File.OpenText(fileName);
-                string fileContent = fileReader.ReadToEnd();
-                fileReader.Close();
-
-                subtitles = new AdvancedSubStationAlpha();
-
-                System.Diagnostics.Debug.WriteLine(isSaved);
-                switch (Path.GetExtension(fileName))
-                {
-                    case ".xss":
-                        subtitles.LoadXss(fileContent);
-                        ScriptTextBox.Text = fileContent;
-                        changeEffectsMode(false, true);
-                        this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
-                        break;
-                    case ".ass":
-                        subtitles.LoadAss(fileContent);
-                        ScriptTextBox.Text = subtitles.ToXingSub();
-                        changeEffectsMode(false, true);
-                        this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
-                        break;
-                    case ".xse":
-                        ScriptTextBox.Text = fileContent;
-                        changeEffectsMode(true, true);
-                        this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName);
-                        break;
-                    default:
-                        ScriptTextBox.Text = fileContent;
-                        changeEffectsMode(false, true);
-                        this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
-                        break;
-                }
-
-                isSaved = true;
+                StreamWriter fileWriter = File.CreateText(autoSaveFile);
+                fileWriter.Write(ScriptTextBox.Text);
+                fileWriter.Flush();
+                fileWriter.Close();
+                toolStripStatusLabel1.Text = String.Format(Localizable.AutoSaved, autoSaveTime.ToString());
             }
         }
 
@@ -308,11 +497,6 @@ namespace XingSub
             }
         }
 
-        private void editMenuItem_Click(object sender, EventArgs e)
-        {
-            this.Close();
-        }
-
         private void MainForm_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (!askToSave())
@@ -326,186 +510,6 @@ namespace XingSub
                 xs.Serialize(fs, appConfig);
                 fs.Close();
             }
-        }
-
-        private void aboutMenuItem_Click(object sender, EventArgs e)
-        {
-            if (!aboutForm.Created)
-            {
-                aboutForm = new aboutForm();
-            }
-            string text = "";
-            foreach (Type plug in pluginsList)
-            {
-                text += Path.GetFileName(plug.Assembly.Location) + "\r\n";
-            }
-            aboutForm.versionLabel.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
-            aboutForm.pluginsTextBox.Text = text;
-            aboutForm.Show();
-        }
-
-        private void saveMenuItem_Click(object sender, EventArgs e)
-        {
-            saveToFile();
-        }
-
-        private void saveAsMenuItem_Click(object sender, EventArgs e)
-        {
-            saveFileDialog1.Reset();
-            if (appConfig.EffectMode)
-            {
-                saveFileDialog1.Filter = Localizable.SaveAsFileType;
-                saveFileDialog1.DefaultExt = "xse";
-                saveFileDialog1.Title = Localizable.SaveEffectsTitle;
-            }
-            else
-            {
-                saveFileDialog1.Filter = Localizable.SaveAsFileType;
-                saveFileDialog1.DefaultExt = "xss";
-                saveFileDialog1.Title = Localizable.SaveSubtitlesTitle;
-            }
-            saveFileDialog1.ShowDialog();
-            if (saveFileDialog1.FileName.Length == 0) return;
-            fileName = saveFileDialog1.FileName;
-            StreamWriter fileWriter = File.CreateText(fileName);
-            fileWriter.Write(ScriptTextBox.Text);
-            fileWriter.Flush();
-            fileWriter.Close();
-            isSaved = true;
-
-            appConfig.EffectMode = (Path.GetExtension(fileName) == ".xse");
-            if (appConfig.EffectMode)
-            {
-                this.Text = String.Format(Localizable.Title, Localizable.EffectsMode, fileName);
-                normalModeMenuItem.Checked = false;
-                effectsModeMenuItem.Checked = true;
-                offsetMenuItem.Enabled = true;
-            }
-            else
-            {
-                this.Text = String.Format(Localizable.Title, Localizable.NormalMode, fileName);
-                normalModeMenuItem.Checked = true;
-                effectsModeMenuItem.Checked = false;
-                offsetMenuItem.Enabled = false;
-            }
-        }
-
-        private void cutMenuItem_Click(object sender, EventArgs e)
-        {
-            if (ScriptTextBox.SelectionLength > 0)
-            {
-                ScriptTextBox.Cut();
-            }
-        }
-
-        private void copyMenuItem_Click(object sender, EventArgs e)
-        {
-            if (ScriptTextBox.SelectionLength > 0)
-            {
-                ScriptTextBox.Copy();
-            }
-        }
-
-        private void pasteMenuItem_Click(object sender, EventArgs e)
-        {
-            if (Clipboard.GetDataObject().GetDataPresent(DataFormats.Text))
-            {
-                ScriptTextBox.Paste();
-            }
-        }
-
-        private void selectAllMenuItem_Click(object sender, EventArgs e)
-        {
-            ScriptTextBox.SelectAll();
-        }
-
-        private void deleteMenuItem_Click(object sender, EventArgs e)
-        {
-            ScriptTextBox.SelectedText = "";
-        }
-
-        private void timerAutoSave_Tick(object sender, EventArgs e)
-        {
-            if (!isSaved && fileName.Length > 0)
-            {
-                DateTime autoSaveTime = DateTime.Now;
-                string autoSavePath = fileName + ".AutoSaved";
-                string autoSaveFile = Path.Combine(autoSavePath, Path.GetFileNameWithoutExtension(fileName) + "." + autoSaveTime.Year + autoSaveTime.Month + autoSaveTime.Day + autoSaveTime.Hour + autoSaveTime.Minute + autoSaveTime.Second + Path.GetExtension(fileName));
-                if (!Directory.Exists(autoSavePath))
-                {
-                    Directory.CreateDirectory(autoSavePath);
-                }
-                StreamWriter fileWriter = File.CreateText(autoSaveFile);
-                fileWriter.Write(ScriptTextBox.Text);
-                fileWriter.Flush();
-                fileWriter.Close();
-                toolStripStatusLabel1.Text = String.Format(Localizable.AutoSaved, autoSaveTime.ToString());
-            }
-        }
-
-        private void insertNewLineMenuItem_Click(object sender, EventArgs e)
-        {
-            int nextNewline = ScriptTextBox.Text.Substring(ScriptTextBox.SelectionStart).IndexOf(Environment.NewLine);
-            if (nextNewline == -1)
-            {
-                ScriptTextBox.Text += Environment.NewLine;
-                ScriptTextBox.SelectionStart = ScriptTextBox.Text.Length;
-            }
-            else
-            {
-                ScriptTextBox.SelectionStart += nextNewline;
-                ScriptTextBox.SelectedText = Environment.NewLine;
-            }
-        }
-
-        private void normalModeMenuItem_Click(object sender, EventArgs e)
-        {
-            changeEffectsMode(false);
-            saveToFile();
-        }
-
-        private void effectsModeMenuItem_Click(object sender, EventArgs e)
-        {
-            changeEffectsMode(true);
-            saveToFile();
-        }
-
-        private void offsetOneMenuItem_Click(object sender, EventArgs e)
-        {
-            offsetOneMenuItem.Checked = true;
-            offsetTwoMenuItem.Checked = false;
-            offsetBySpaceMenuItem.Checked = false;
-            appConfig.TimeOffset = 1;
-        }
-
-        private void offsetTwoMenuItem_Click(object sender, EventArgs e)
-        {
-            offsetOneMenuItem.Checked = false;
-            offsetTwoMenuItem.Checked = true;
-            offsetBySpaceMenuItem.Checked = false;
-            appConfig.TimeOffset = 2;
-        }
-
-        private void offsetBySpaceMenuItem_Click(object sender, EventArgs e)
-        {
-            offsetOneMenuItem.Checked = false;
-            offsetTwoMenuItem.Checked = false;
-            offsetBySpaceMenuItem.Checked = true;
-            appConfig.TimeOffset = 0;
-        }
-
-        private void NWEToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            NWEToolStripMenuItem.Checked = true;
-            MPCToolStripMenuItem.Checked = false;
-            appConfig.TimeSource = TimingApp.NeroWaveEditor;
-        }
-
-        private void MPCToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            NWEToolStripMenuItem.Checked = false;
-            MPCToolStripMenuItem.Checked = true;
-            appConfig.TimeSource = TimingApp.MediaPlayerClassic;
         }
 
         private void MainForm_Load(object sender, EventArgs e)
@@ -571,8 +575,7 @@ namespace XingSub
             subtitles = new AdvancedSubStationAlpha();
             subtitles.Styles.Add(new SubStationStyle());
 
-            //scanPlugin(); //扫描插件
-            //scanReader(); //扫描导入
+            LoadXSPlugins();
         }
 
         private void pluginParams_Click(object sender, EventArgs e)
@@ -590,67 +593,96 @@ namespace XingSub
 
         private void importMenuItem_Click(object sender, EventArgs e)
         {
+            List<int> pluginsId = new List<int>();
+            string filter = "";
+            for (int i = 0; i < pluginsList.Count; i++)
+            {
+                IXSPlugin plug = (IXSPlugin)Activator.CreateInstance(pluginsList[i]);
+                if (plug.GetPluginType() == 0)
+                {
+                    pluginsId.Add(i);
+                    filter += String.Format("{0}|*{1}|", plug.GetFileType(), plug.GetFileExt());
+                }
+            }
 
+            if (pluginsId.Count == 0)
+            {
+                MessageBox.Show(Localizable.NoPluginAvailable, Localizable.NoPluginAvailableTitle, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            openFileDialog1.Reset();
+            openFileDialog1.Filter = filter.Substring(0, filter.Length - 1);
+            openFileDialog1.Title = Localizable.ImportTitle;
+            openFileDialog1.ShowDialog();
+
+            if (openFileDialog1.FileName.Length == 0) return;
+
+            int index = pluginsId[openFileDialog1.FilterIndex - 1];
+            IXSPlugin plugin = (IXSPlugin)Activator.CreateInstance(pluginsList[index]);
+
+            subtitles = plugin.ReadAsSubtitle(openFileDialog1.FileName);
+            ScriptTextBox.Text = subtitles.ToXingSub();
+
+            MessageBox.Show(Localizable.ImportSussessMessage, Localizable.ImportTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void exportMenuItem_Click(object sender, EventArgs e)
         {
-            pluginsId = new List<int>();
+            List<int> pluginsId = new List<int>();
             string filter = "";
             for (int i = 0; i < pluginsList.Count; i++)
             {
-                IPlugin obj = (IPlugin)Activator.CreateInstance(pluginsList[i]);
-                if (obj.IsEffects() == appConfig.EffectMode)
+                IXSPlugin plug = (IXSPlugin)Activator.CreateInstance(pluginsList[i]);
+                if (appConfig.EffectMode)
                 {
-                    pluginsId.Add(i);
-                    filter += String.Format("{0}|*.{1}|", obj.Descriptions(), obj.Extension());
+                    if (plug.GetPluginType() == 2)
+                    {
+                        pluginsId.Add(i);
+                        filter += String.Format("{0}|*{1}|", plug.GetFileType(), plug.GetFileExt());
+                    }
+                }
+                else
+                {
+                    if (plug.GetPluginType() == 1)
+                    {
+                        pluginsId.Add(i);
+                        filter += String.Format("{0}|*{1}|", plug.GetFileType(), plug.GetFileExt());
+                    }
                 }
             }
-            filter = filter.Substring(0, filter.Length - 1);
+
+            if (pluginsId.Count == 0)
+            {
+                MessageBox.Show(Localizable.NoPluginAvailable, Localizable.NoPluginAvailableTitle, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
 
             saveFileDialog1.Reset();
-            saveFileDialog1.Filter = filter;
+            saveFileDialog1.Filter = filter.Substring(0, filter.Length - 1);
             saveFileDialog1.Title = Localizable.ExportTitle;
             saveFileDialog1.ShowDialog();
+
             if (saveFileDialog1.FileName.Length == 0) return;
 
             int index = pluginsId[saveFileDialog1.FilterIndex - 1];
-            IPlugin plugin = (IPlugin)Activator.CreateInstance(pluginsList[index]);
+            IXSPlugin plugin = (IXSPlugin)Activator.CreateInstance(pluginsList[index]);
 
-            if (plugin.Convert(ScriptTextBox.Text, saveFileDialog1.FileName) == 0)
+            int result = 0;
+            if (appConfig.EffectMode)
+            {
+                result = plugin.SaveFromText(saveFileDialog1.FileName, ScriptTextBox.Text);
+            }
+            else
+            {
+                subtitles.LoadXss(ScriptTextBox.Text);  //更新字幕对象
+                result = plugin.SaveFromSubtitle(saveFileDialog1.FileName, subtitles);
+            }
+
+            if (result == 0)
             {
                 MessageBox.Show(Localizable.ExportSussessMessage, Localizable.ExportTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
             }
-        }
-
-        private void reader_Click(object sender, EventArgs e)
-        {
-            ToolStripItem menu = (ToolStripItem)sender;
-            Type type = readersList[importMenuItem.DropDownItems.IndexOf(menu)];
-            IReader obj = (IReader)Activator.CreateInstance(type);
-
-            string pathToSaveHeader = "";
-
-            if (obj.HasHeader())
-            {
-                DialogResult msg = MessageBox.Show("The format of this file has headers. If you import it you will lose the header, but you have chance to save it as a header file so that you can include it in exporting.\nDo you want to save the header?", "Save Header", MessageBoxButtons.YesNo, MessageBoxIcon.Exclamation);
-                if (msg == DialogResult.Yes)
-                {
-                    saveFileDialog1.Reset();
-                    saveFileDialog1.Filter = "XingSub Header File(*.header)|*.header|All Files(*.*)|*.*";
-                    saveFileDialog1.DefaultExt = "header";
-                    saveFileDialog1.Title = "Save Header";
-                    saveFileDialog1.ShowDialog();
-                    pathToSaveHeader = saveFileDialog1.FileName;
-                }
-            }
-
-            openFileDialog1.Reset();
-            openFileDialog1.Filter = String.Format(Localizable.ExportFileType, obj.Descriptions(), obj.Extension());
-            saveFileDialog1.DefaultExt = obj.Extension();
-            saveFileDialog1.Title = "Save Header";
-            saveFileDialog1.ShowDialog();
-            if (saveFileDialog1.FileName.Length == 0) return;
         }
 
         private bool saveToFile()
@@ -803,7 +835,7 @@ namespace XingSub
 
                 ScriptTextBox.ScrollToCaret();
 
-                toolStripStatusLabel1.Text = String.Format(Localizable.InsertedTimeStamp, stringToStamp(timeString));
+                toolStripStatusLabel1.Text = String.Format(Localizable.InsertedTimeStamp, subtitles.TimeToStamp(timeString));
             }
             getCount = 0;
             lastString = timeString;
@@ -814,8 +846,12 @@ namespace XingSub
         {
             appConfig.EffectMode = mode;
             offsetMenuItem.Enabled = mode;
+            stylesToolStripMenuItem.Enabled = !mode;
+            importMenuItem.Enabled = !mode;
             normalModeMenuItem.Checked = !mode;
             effectsModeMenuItem.Checked = mode;
+
+            subtitles = new AdvancedSubStationAlpha();  //重置字幕对象
 
             if (mode)
             {
@@ -855,10 +891,14 @@ namespace XingSub
 
         private void changeEffectsMode(bool mode, bool open)
         {
+            subtitles = new AdvancedSubStationAlpha();  //重置字幕对象
+
             if (open)
             {
                 appConfig.EffectMode = mode;
                 offsetMenuItem.Enabled = mode;
+                stylesToolStripMenuItem.Enabled = !mode;
+                importMenuItem.Enabled = !mode;
                 normalModeMenuItem.Checked = !mode;
                 effectsModeMenuItem.Checked = mode;
 
@@ -873,7 +913,7 @@ namespace XingSub
             }
         }
 
-        private void scanPlugin()
+        private void LoadXSPlugins()
         {
             string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
             string[] pathstr = Directory.GetFiles(location, "XSPlugin.*.*.dll");
@@ -882,25 +922,21 @@ namespace XingSub
             foreach (string p in pathstr)
             {
                 Assembly ase = Assembly.LoadFrom(p);
-                if (ase.GetName().Version.Major == Assembly.GetEntryAssembly().GetName().Version.Major)
+                if (ase.GetName().Version.Major == PluginVersion)
                 {
                     Type[] types = ase.GetExportedTypes();
                     for (int i = 0; i < types.Length; i++)
                     {
-                        if (types[i].IsClass && typeof(IPlugin).IsAssignableFrom(types[i]))
+                        if (types[i].IsClass && typeof(IXSPlugin).IsAssignableFrom(types[i]))
                         {
                             pluginsList.Add(types[i]);
 
-                            IPlugin obj = (IPlugin)Activator.CreateInstance(types[i]);
-                            //ToolStripItem item = exportMenuItem.DropDownItems.Add(obj.Descriptions());
-                            //item.Click += new EventHandler(plugin_Click);
-                            //item.Visible = (obj.IsEffects() == appConfig.EffectMode);
-
-                            string pluginFile = types[i].Assembly.Location;
-                            string config = Path.Combine(Path.GetDirectoryName(pluginFile), Path.GetFileNameWithoutExtension(pluginFile) + ".header");
+                            string config = Path.Combine(Path.GetDirectoryName(p), Path.GetFileNameWithoutExtension(p) + ".xml");
                             if (File.Exists(config))
                             {
-                                ToolStripItem pluginParams = paramsToolStripMenuItem.DropDownItems.Add(obj.Descriptions());
+                                IXSPlugin plug = (IXSPlugin)Activator.CreateInstance(types[i]);
+
+                                ToolStripItem pluginParams = paramsToolStripMenuItem.DropDownItems.Add(plug.GetFileType());
                                 pluginParams.Name = pluginsList.IndexOf(types[i]).ToString();
                                 pluginParams.Click += new EventHandler(pluginParams_Click);
                             }
@@ -909,92 +945,9 @@ namespace XingSub
                 }
                 else
                 {
-                    MessageBox.Show(String.Format(Localizable.FailedToLoadPluginMessage, Assembly.GetEntryAssembly().GetName().Version.ToString()), String.Format(Localizable.FailedToLoadPluginTitle, Path.GetFileName(ase.Location)), MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                    MessageBox.Show(String.Format(Localizable.FailedToLoadPluginMessage, PluginVersion.ToString()), String.Format(Localizable.FailedToLoadPluginTitle, Path.GetFileName(ase.Location)), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
-        }
-
-        private void scanReader()
-        {
-            string location = Path.GetDirectoryName(Assembly.GetEntryAssembly().Location);
-            string[] pathstr = Directory.GetFiles(location, "XSReader.*.*.dll");
-            readersList = new List<Type>();
-
-            foreach (string p in pathstr)
-            {
-                Assembly ase = Assembly.LoadFrom(p);
-                if (ase.GetName().Version.Major == Assembly.GetEntryAssembly().GetName().Version.Major)
-                {
-                    Type[] types = ase.GetExportedTypes();
-                    for (int i = 0; i < types.Length; i++)
-                    {
-                        if (types[i].IsClass && typeof(IReader).IsAssignableFrom(types[i]))
-                        {
-                            readersList.Add(types[i]);
-
-                            IReader obj = (IReader)Activator.CreateInstance(types[i]);
-                            ToolStripItem item = importMenuItem.DropDownItems.Add(obj.Descriptions());
-                            item.Click += new EventHandler(reader_Click);
-                            item.Visible = (obj.IsEffects() == appConfig.EffectMode);
-                        }
-                    }
-                }
-                else
-                {
-                    MessageBox.Show(String.Format(Localizable.FailedToLoadPluginMessage, Assembly.GetEntryAssembly().GetName().Version.ToString()), String.Format(Localizable.FailedToLoadPluginTitle, Path.GetFileName(ase.Location)), MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                }
-            }
-        }
-
-        private string msecondsToString(int mseconds)
-        {
-            int left = mseconds;
-
-            int ms = left % 100;
-            left = (left - ms) / 100;
-
-            int seconds = left % 60;
-            left = (left - seconds) / 60;
-
-            int minutes = left % 60;
-            left = (left - minutes) / 60;
-
-            int hours = left;
-
-            string result = "";
-            result += hours.ToString();
-            if (minutes < 10) result += "0";
-            result += minutes.ToString();
-            if (seconds < 10) result += "0";
-            result += seconds.ToString();
-            if (ms < 10) result += "0";
-            result += ms.ToString();
-
-            return result;
-        }
-
-        private int stringToMsecond(string time)
-        {
-            int hours = int.Parse(time.Substring(0, 1));
-            int minutes = int.Parse(time.Substring(1, 2));
-            int seconds = int.Parse(time.Substring(3, 2));
-            int ms = int.Parse(time.Substring(5, 2));
-
-            int result = ((hours * 60 + minutes) * 60 + seconds) * 100 + ms;
-
-            return result;
-        }
-
-        private string stringToStamp(string time)
-        {
-            string hours = time.Substring(0, 1);
-            string minutes = time.Substring(1, 2);
-            string seconds = time.Substring(3, 2);
-            string ms = time.Substring(5, 2);
-
-            string result = hours + ":" + minutes + ":" + seconds + "." + ms;
-            
-            return result;
         }
 
         private void autocloseTimeWindowToolStripMenuItem_Click(object sender, EventArgs e)
