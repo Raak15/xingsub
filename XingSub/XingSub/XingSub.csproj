@@ -60,7 +60,7 @@
       <DependentUpon>AboutForm.cs</DependentUpon>
     </Compile>
     <Compile Include="AdvancedSubStationAlpha.cs" />
-    <Compile Include="IReader.cs" />
+    <Compile Include="IXSPlugin.cs" />
     <Compile Include="Localizable.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -78,7 +78,6 @@
     <Compile Include="HeaderForm.Designer.cs">
       <DependentUpon>HeaderForm.cs</DependentUpon>
     </Compile>
-    <Compile Include="IPlugin.cs" />
     <Compile Include="ParamsForm.cs">
       <SubType>Form</SubType>
     </Compile>

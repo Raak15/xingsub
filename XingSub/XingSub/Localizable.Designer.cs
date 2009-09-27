@@ -106,15 +106,6 @@ namespace XingSub {
         }
         
         /// <summary>
-        ///   查找类似 {0}|*.{1}|All Files(*.*)|*.* 的本地化字符串。
-        /// </summary>
-        internal static string ExportFileType {
-            get {
-                return ResourceManager.GetString("ExportFileType", resourceCulture);
-            }
-        }
-        
-        /// <summary>
         ///   查找类似 Subtitles exported successfully. 的本地化字符串。
         /// </summary>
         internal static string ExportSussessMessage {
@@ -133,10 +124,10 @@ namespace XingSub {
         }
         
         /// <summary>
-        ///   查找类似 This plugin has a major version number different from its host.
-        ///For avoiding errors leading by interface upgrade, plugin needs a major version number as same as its host program.
+        ///   查找类似 This plugin has a major version number different from the plugin interface.
+        ///For avoiding errors leading by interface upgrade, plugin needs a major version number as same as the plugin interface.
         ///
-        ///Currect version: {0} 的本地化字符串。
+        ///Currect interface version: {0} 的本地化字符串。
         /// </summary>
         internal static string FailedToLoadPluginMessage {
             get {
@@ -150,6 +141,24 @@ namespace XingSub {
         internal static string FailedToLoadPluginTitle {
             get {
                 return ResourceManager.GetString("FailedToLoadPluginTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Subtitles imported successfully. 的本地化字符串。
+        /// </summary>
+        internal static string ImportSussessMessage {
+            get {
+                return ResourceManager.GetString("ImportSussessMessage", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Import subtitles 的本地化字符串。
+        /// </summary>
+        internal static string ImportTitle {
+            get {
+                return ResourceManager.GetString("ImportTitle", resourceCulture);
             }
         }
         
@@ -188,6 +197,24 @@ namespace XingSub {
         internal static string NewFile {
             get {
                 return ResourceManager.GetString("NewFile", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Sorry, but there&apos;s no plugin available in this mode. 的本地化字符串。
+        /// </summary>
+        internal static string NoPluginAvailable {
+            get {
+                return ResourceManager.GetString("NoPluginAvailable", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 No plugin available 的本地化字符串。
+        /// </summary>
+        internal static string NoPluginAvailableTitle {
+            get {
+                return ResourceManager.GetString("NoPluginAvailableTitle", resourceCulture);
             }
         }
         
