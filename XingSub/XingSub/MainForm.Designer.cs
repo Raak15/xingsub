@@ -121,21 +121,21 @@
             // 
             // newMenuItem
             // 
-            this.newMenuItem.Image = global::XingSub.Properties.Resources._49_48_;
+            this.newMenuItem.Image = global::XingSub.Properties.Resources.New;
             this.newMenuItem.Name = "newMenuItem";
             resources.ApplyResources(this.newMenuItem, "newMenuItem");
             this.newMenuItem.Click += new System.EventHandler(this.newMenuItem_Click);
             // 
             // openMenuItem
             // 
-            this.openMenuItem.Image = global::XingSub.Properties.Resources._01_34_;
+            this.openMenuItem.Image = global::XingSub.Properties.Resources.Open;
             this.openMenuItem.Name = "openMenuItem";
             resources.ApplyResources(this.openMenuItem, "openMenuItem");
             this.openMenuItem.Click += new System.EventHandler(this.openMenuItem_Click);
             // 
             // saveMenuItem
             // 
-            this.saveMenuItem.Image = global::XingSub.Properties.Resources._01_00_;
+            this.saveMenuItem.Image = global::XingSub.Properties.Resources.Save;
             this.saveMenuItem.Name = "saveMenuItem";
             resources.ApplyResources(this.saveMenuItem, "saveMenuItem");
             this.saveMenuItem.Click += new System.EventHandler(this.saveMenuItem_Click);
@@ -190,28 +190,28 @@
             // 
             // cutMenuItem
             // 
-            this.cutMenuItem.Image = global::XingSub.Properties.Resources._18_00_;
+            this.cutMenuItem.Image = global::XingSub.Properties.Resources.Cut;
             this.cutMenuItem.Name = "cutMenuItem";
             resources.ApplyResources(this.cutMenuItem, "cutMenuItem");
             this.cutMenuItem.Click += new System.EventHandler(this.cutMenuItem_Click);
             // 
             // copyMenuItem
             // 
-            this.copyMenuItem.Image = global::XingSub.Properties.Resources._17_00_;
+            this.copyMenuItem.Image = global::XingSub.Properties.Resources.Copy;
             this.copyMenuItem.Name = "copyMenuItem";
             resources.ApplyResources(this.copyMenuItem, "copyMenuItem");
             this.copyMenuItem.Click += new System.EventHandler(this.copyMenuItem_Click);
             // 
             // pasteMenuItem
             // 
-            this.pasteMenuItem.Image = global::XingSub.Properties.Resources._06_42_;
+            this.pasteMenuItem.Image = global::XingSub.Properties.Resources.Paste;
             this.pasteMenuItem.Name = "pasteMenuItem";
             resources.ApplyResources(this.pasteMenuItem, "pasteMenuItem");
             this.pasteMenuItem.Click += new System.EventHandler(this.pasteMenuItem_Click);
             // 
             // deleteMenuItem
             // 
-            this.deleteMenuItem.Image = global::XingSub.Properties.Resources._00_04_;
+            this.deleteMenuItem.Image = global::XingSub.Properties.Resources.Delete;
             this.deleteMenuItem.Name = "deleteMenuItem";
             resources.ApplyResources(this.deleteMenuItem, "deleteMenuItem");
             this.deleteMenuItem.Click += new System.EventHandler(this.deleteMenuItem_Click);
@@ -387,28 +387,28 @@
             // 
             // contextCut
             // 
-            this.contextCut.Image = global::XingSub.Properties.Resources._18_00_;
+            this.contextCut.Image = global::XingSub.Properties.Resources.Cut;
             this.contextCut.Name = "contextCut";
             resources.ApplyResources(this.contextCut, "contextCut");
             this.contextCut.Click += new System.EventHandler(this.cutMenuItem_Click);
             // 
             // contextCopy
             // 
-            this.contextCopy.Image = global::XingSub.Properties.Resources._17_00_;
+            this.contextCopy.Image = global::XingSub.Properties.Resources.Copy;
             this.contextCopy.Name = "contextCopy";
             resources.ApplyResources(this.contextCopy, "contextCopy");
             this.contextCopy.Click += new System.EventHandler(this.copyMenuItem_Click);
             // 
             // contextPaste
             // 
-            this.contextPaste.Image = global::XingSub.Properties.Resources._06_42_;
+            this.contextPaste.Image = global::XingSub.Properties.Resources.Paste;
             this.contextPaste.Name = "contextPaste";
             resources.ApplyResources(this.contextPaste, "contextPaste");
             this.contextPaste.Click += new System.EventHandler(this.pasteMenuItem_Click);
             // 
             // contextDelete
             // 
-            this.contextDelete.Image = global::XingSub.Properties.Resources._00_04_;
+            this.contextDelete.Image = global::XingSub.Properties.Resources.Delete;
             this.contextDelete.Name = "contextDelete";
             resources.ApplyResources(this.contextDelete, "contextDelete");
             this.contextDelete.Click += new System.EventHandler(this.deleteMenuItem_Click);

@@ -145,11 +145,11 @@ namespace XingSub {
         }
         
         /// <summary>
-        ///   查找类似 Subtitles imported successfully. 的本地化字符串。
+        ///   查找类似 Advanced SubStation Alpha(*.ass)|*.ass| 的本地化字符串。
         /// </summary>
-        internal static string ImportSussessMessage {
+        internal static string FileTypeAss {
             get {
-                return ResourceManager.GetString("ImportSussessMessage", resourceCulture);
+                return ResourceManager.GetString("FileTypeAss", resourceCulture);
             }
         }
         

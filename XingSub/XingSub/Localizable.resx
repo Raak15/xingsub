@@ -147,8 +147,8 @@ Currect interface version: {0}</value>
   <data name="FailedToLoadPluginTitle" xml:space="preserve">
     <value>Skipped Loading Plugin: {0}</value>
   </data>
-  <data name="ImportSussessMessage" xml:space="preserve">
-    <value>Subtitles imported successfully.</value>
+  <data name="FileTypeAss" xml:space="preserve">
+    <value>Advanced SubStation Alpha(*.ass)|*.ass|</value>
   </data>
   <data name="ImportTitle" xml:space="preserve">
     <value>Import subtitles</value>

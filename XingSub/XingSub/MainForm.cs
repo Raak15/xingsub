@@ -99,16 +99,11 @@ namespace XingSub
                 openFileDialog1.ShowDialog();
 
                 if (openFileDialog1.FileName.Length == 0) return;
-
                 fileName = openFileDialog1.FileName;
 
-                StreamReader fileReader = File.OpenText(fileName);
-                string fileContent = fileReader.ReadToEnd();
-                fileReader.Close();
-
+                string fileContent = readFromFile(fileName);
                 subtitles = new AdvancedSubStationAlpha();
 
-                System.Diagnostics.Debug.WriteLine(isSaved);
                 switch (Path.GetExtension(fileName))
                 {
                     case ".xss":
@@ -593,96 +588,120 @@ namespace XingSub
 
         private void importMenuItem_Click(object sender, EventArgs e)
         {
-            List<int> pluginsId = new List<int>();
-            string filter = "";
-            for (int i = 0; i < pluginsList.Count; i++)
+            if (askToSave())
             {
-                IXSPlugin plug = (IXSPlugin)Activator.CreateInstance(pluginsList[i]);
-                if (plug.GetPluginType() == 0)
+                List<int> pluginsId = new List<int>();
+                StringBuilder filter = new StringBuilder(255);
+                filter.Append(Localizable.FileTypeAss);
+                for (int i = 0; i < pluginsList.Count; i++)
                 {
-                    pluginsId.Add(i);
-                    filter += String.Format("{0}|*{1}|", plug.GetFileType(), plug.GetFileExt());
+                    IXSPlugin plug = (IXSPlugin)Activator.CreateInstance(pluginsList[i]);
+                    if (plug.GetPluginType() == 0)
+                    {
+                        pluginsId.Add(i);
+                        filter.AppendFormat("{0}|*{1}|", plug.GetFileType(), plug.GetFileExt());
+                    }
                 }
+
+                openFileDialog1.Reset();
+                openFileDialog1.Filter = filter.ToString().TrimEnd("|".ToCharArray());
+                openFileDialog1.Title = Localizable.ImportTitle;
+                openFileDialog1.ShowDialog();
+
+                if (openFileDialog1.FileName.Length == 0) return;
+
+                if (openFileDialog1.FilterIndex == 1)
+                {
+                    subtitles.LoadAss(readFromFile(openFileDialog1.FileName));
+                }
+                else
+                {
+                    int index = pluginsId[openFileDialog1.FilterIndex - 2];
+                    IXSPlugin plugin = (IXSPlugin)Activator.CreateInstance(pluginsList[index]);
+                    subtitles = plugin.ReadAsSubtitle(openFileDialog1.FileName);
+                }
+                ScriptTextBox.Text = subtitles.ToXingSub();
             }
-
-            if (pluginsId.Count == 0)
-            {
-                MessageBox.Show(Localizable.NoPluginAvailable, Localizable.NoPluginAvailableTitle, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-
-            openFileDialog1.Reset();
-            openFileDialog1.Filter = filter.Substring(0, filter.Length - 1);
-            openFileDialog1.Title = Localizable.ImportTitle;
-            openFileDialog1.ShowDialog();
-
-            if (openFileDialog1.FileName.Length == 0) return;
-
-            int index = pluginsId[openFileDialog1.FilterIndex - 1];
-            IXSPlugin plugin = (IXSPlugin)Activator.CreateInstance(pluginsList[index]);
-
-            subtitles = plugin.ReadAsSubtitle(openFileDialog1.FileName);
-            ScriptTextBox.Text = subtitles.ToXingSub();
-
-            MessageBox.Show(Localizable.ImportSussessMessage, Localizable.ImportTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private void exportMenuItem_Click(object sender, EventArgs e)
         {
             List<int> pluginsId = new List<int>();
-            string filter = "";
-            for (int i = 0; i < pluginsList.Count; i++)
+            StringBuilder filter = new StringBuilder(255);
+            if (appConfig.EffectMode)
             {
-                IXSPlugin plug = (IXSPlugin)Activator.CreateInstance(pluginsList[i]);
-                if (appConfig.EffectMode)
+                for (int i = 0; i < pluginsList.Count; i++)
                 {
+                    IXSPlugin plug = (IXSPlugin)Activator.CreateInstance(pluginsList[i]);
                     if (plug.GetPluginType() == 2)
                     {
                         pluginsId.Add(i);
-                        filter += String.Format("{0}|*{1}|", plug.GetFileType(), plug.GetFileExt());
-                    }
-                }
-                else
-                {
-                    if (plug.GetPluginType() == 1)
-                    {
-                        pluginsId.Add(i);
-                        filter += String.Format("{0}|*{1}|", plug.GetFileType(), plug.GetFileExt());
+                        filter.AppendFormat("{0}|*{1}|", plug.GetFileType(), plug.GetFileExt());
                     }
                 }
             }
-
-            if (pluginsId.Count == 0)
+            else
+            {
+                filter.Append(Localizable.FileTypeAss);
+                for (int i = 0; i < pluginsList.Count; i++)
+                {
+                    IXSPlugin plug = (IXSPlugin)Activator.CreateInstance(pluginsList[i]);
+                    if (plug.GetPluginType() == 1)
+                    {
+                        pluginsId.Add(i);
+                        filter.AppendFormat("{0}|*{1}|", plug.GetFileType(), plug.GetFileExt());
+                    }
+                }
+            }
+            
+            if (appConfig.EffectMode && pluginsId.Count == 0)
             {
                 MessageBox.Show(Localizable.NoPluginAvailable, Localizable.NoPluginAvailableTitle, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
                 return;
             }
 
             saveFileDialog1.Reset();
-            saveFileDialog1.Filter = filter.Substring(0, filter.Length - 1);
+            saveFileDialog1.Filter = filter.ToString().TrimEnd("|".ToCharArray());
             saveFileDialog1.Title = Localizable.ExportTitle;
             saveFileDialog1.ShowDialog();
 
             if (saveFileDialog1.FileName.Length == 0) return;
 
-            int index = pluginsId[saveFileDialog1.FilterIndex - 1];
-            IXSPlugin plugin = (IXSPlugin)Activator.CreateInstance(pluginsList[index]);
-
-            int result = 0;
             if (appConfig.EffectMode)
             {
-                result = plugin.SaveFromText(saveFileDialog1.FileName, ScriptTextBox.Text);
+                int index = pluginsId[saveFileDialog1.FilterIndex - 1];
+                IXSPlugin plugin = (IXSPlugin)Activator.CreateInstance(pluginsList[index]);
+                plugin.SaveFromText(saveFileDialog1.FileName, ScriptTextBox.Text);
             }
             else
             {
                 subtitles.LoadXss(ScriptTextBox.Text);  //更新字幕对象
-                result = plugin.SaveFromSubtitle(saveFileDialog1.FileName, subtitles);
+                if (saveFileDialog1.FilterIndex == 1)
+                {
+                    StreamWriter fileWriter = File.CreateText(saveFileDialog1.FileName);
+                    fileWriter.Write(subtitles.ToString());
+                    fileWriter.Flush();
+                    fileWriter.Close();
+                }
+                else
+                {
+                    int index = pluginsId[saveFileDialog1.FilterIndex - 2];
+                    IXSPlugin plugin = (IXSPlugin)Activator.CreateInstance(pluginsList[index]);
+                    plugin.SaveFromSubtitle(saveFileDialog1.FileName, subtitles);
+                }
             }
 
-            if (result == 0)
-            {
-                MessageBox.Show(Localizable.ExportSussessMessage, Localizable.ExportTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
-            }
+            MessageBox.Show(Localizable.ExportSussessMessage, Localizable.ExportTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private string readFromFile(string fileName)
+        {
+            Encoding encode = Encoding.UTF8;
+            StreamReader fileReader = new StreamReader(fileName, encode);
+            string content;
+            content = fileReader.ReadToEnd();
+            fileReader.Close();
+            return content;
         }
 
         private bool saveToFile()

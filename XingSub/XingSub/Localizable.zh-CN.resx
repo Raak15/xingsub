@@ -147,8 +147,8 @@
   <data name="FailedToLoadPluginTitle" xml:space="preserve">
     <value>已跳过加载插件: {0}</value>
   </data>
-  <data name="ImportSussessMessage" xml:space="preserve">
-    <value>字幕导入成功</value>
+  <data name="FileTypeAss" xml:space="preserve">
+    <value>高级 SubStation Alpha(*.ass)|*.ass|</value>
   </data>
   <data name="ImportTitle" xml:space="preserve">
     <value>导入字幕</value>
