@@ -100,8 +100,7 @@ namespace XingSub
                                 
                                 if (playRexX > 0 && playRexY > 0)
                                 {
-                                    _scriptInfo = new SubStationInfo(playRexY, playRexY);
-                                    System.Diagnostics.Debug.WriteLine("Info:" + _scriptInfo.ToString());
+                                    _scriptInfo = new SubStationInfo(playRexX, playRexY);
                                 }
                             }
                             break;
@@ -147,6 +146,13 @@ namespace XingSub
                     }
                 }
             }
+
+            bool hasDefault = false;
+            foreach (SubStationStyle _style in _styles)
+            {
+                if (_style.Name == "Default") hasDefault = true;
+            }
+            if (!hasDefault) _styles.Insert(0, new SubStationStyle());
         }
 
         /// <summary>
