@@ -105,6 +105,10 @@
       <DependentUpon>AboutForm.cs</DependentUpon>
       <SubType>Designer</SubType>
     </EmbeddedResource>
+    <EmbeddedResource Include="AboutForm.zh-CN.resx">
+      <DependentUpon>AboutForm.cs</DependentUpon>
+      <SubType>Designer</SubType>
+    </EmbeddedResource>
     <EmbeddedResource Include="Localizable.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Localizable.Designer.cs</LastGenOutput>
