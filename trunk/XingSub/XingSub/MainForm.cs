@@ -153,7 +153,7 @@ namespace XingSub
                     text += Path.GetFileName(plug.Assembly.Location) + "\r\n";
                 }
             }
-            aboutForm.versionLabel.Text = Assembly.GetExecutingAssembly().GetName().Version.ToString();
+            aboutForm.VersionLabel.Text = aboutForm.VersionLabel.Text.Replace("{VERSION}", Assembly.GetExecutingAssembly().GetName().Version.ToString());
             aboutForm.pluginsTextBox.Text = text;
             aboutForm.Show();
         }
