@@ -192,6 +192,24 @@ namespace XingSub {
         }
         
         /// <summary>
+        ///   查找类似 Loading subtitles... {0} 的本地化字符串。
+        /// </summary>
+        internal static string LoadingSubtitleEvents {
+            get {
+                return ResourceManager.GetString("LoadingSubtitleEvents", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   查找类似 Loading styles... {0} 的本地化字符串。
+        /// </summary>
+        internal static string LoadingSubtitleStyles {
+            get {
+                return ResourceManager.GetString("LoadingSubtitleStyles", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   查找类似 New File 的本地化字符串。
         /// </summary>
         internal static string NewFile {

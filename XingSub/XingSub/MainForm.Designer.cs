@@ -63,6 +63,7 @@
             this.normalModeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.effectsModeMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.autocloseTimeWindowToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.paramsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.stylesToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.helpMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -82,7 +83,8 @@
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
             this.timerAutoSave = new System.Windows.Forms.Timer(this.components);
             this.ScriptTextBox = new System.Windows.Forms.TextBox();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.resyncToolToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
             this.menuStrip1.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.contextMenuStrip1.SuspendLayout();
@@ -114,6 +116,8 @@
             this.toolStripSeparator3,
             this.importMenuItem,
             this.exportMenuItem,
+            this.toolStripSeparator4,
+            this.resyncToolToolStripMenuItem,
             this.toolStripSeparator1,
             this.exitMenuItem});
             this.fileMenuItem.Name = "fileMenuItem";
@@ -332,6 +336,11 @@
             resources.ApplyResources(this.autocloseTimeWindowToolStripMenuItem, "autocloseTimeWindowToolStripMenuItem");
             this.autocloseTimeWindowToolStripMenuItem.Click += new System.EventHandler(this.autocloseTimeWindowToolStripMenuItem_Click);
             // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
+            // 
             // paramsToolStripMenuItem
             // 
             this.paramsToolStripMenuItem.Name = "paramsToolStripMenuItem";
@@ -452,10 +461,16 @@
             this.ScriptTextBox.Name = "ScriptTextBox";
             this.ScriptTextBox.TextChanged += new System.EventHandler(this.ScriptTextBox_TextChanged);
             // 
-            // toolStripSeparator2
+            // resyncToolToolStripMenuItem
             // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            resources.ApplyResources(this.toolStripSeparator2, "toolStripSeparator2");
+            this.resyncToolToolStripMenuItem.Name = "resyncToolToolStripMenuItem";
+            resources.ApplyResources(this.resyncToolToolStripMenuItem, "resyncToolToolStripMenuItem");
+            this.resyncToolToolStripMenuItem.Click += new System.EventHandler(this.resyncToolToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            resources.ApplyResources(this.toolStripSeparator4, "toolStripSeparator4");
             // 
             // MainForm
             // 
@@ -533,6 +548,8 @@
         private System.Windows.Forms.TextBox ScriptTextBox;
         private System.Windows.Forms.ToolStripMenuItem stylesToolStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem resyncToolToolStripMenuItem;
     }
 }
 

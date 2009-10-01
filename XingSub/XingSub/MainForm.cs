@@ -57,6 +57,7 @@ namespace XingSub
         private aboutForm aboutForm = new aboutForm();
         private paramsForm paramsForm = new paramsForm();
         private SubInfoForm subInfoForm = new SubInfoForm();
+        private ResyncForm resyncForm = new ResyncForm();
 
         private string configFile = Path.Combine(Environment.CurrentDirectory, "config.dat");
         private XSConfig appConfig;
@@ -301,6 +302,178 @@ namespace XingSub
             NWEToolStripMenuItem.Checked = false;
             MPCToolStripMenuItem.Checked = true;
             appConfig.TimeSource = TimingApp.MediaPlayerClassic;
+        }
+
+        private void pluginParams_Click(object sender, EventArgs e)
+        {
+            ToolStripItem item = (ToolStripItem)sender;
+            string location = pluginsList[int.Parse(item.Name)].Assembly.Location;
+
+            if (!paramsForm.Created)
+            {
+                paramsForm = new paramsForm();
+            }
+            paramsForm.paramsFile = Path.Combine(Path.GetDirectoryName(location), Path.GetFileNameWithoutExtension(location) + ".header");
+            paramsForm.Show();
+        }
+
+        private void importMenuItem_Click(object sender, EventArgs e)
+        {
+            if (askToSave())
+            {
+                List<int> pluginsId = new List<int>();
+                StringBuilder filter = new StringBuilder(255);
+                filter.Append(Localizable.FileTypeAss);
+                for (int i = 0; i < pluginsList.Count; i++)
+                {
+                    IXSPlugin plug = (IXSPlugin)Activator.CreateInstance(pluginsList[i]);
+                    if (plug.GetPluginType() == 0)
+                    {
+                        pluginsId.Add(i);
+                        filter.AppendFormat("{0}|*{1}|", plug.GetFileType(), plug.GetFileExt());
+                    }
+                }
+
+                openFileDialog1.Reset();
+                openFileDialog1.Filter = filter.ToString().TrimEnd("|".ToCharArray());
+                openFileDialog1.Title = Localizable.ImportTitle;
+                openFileDialog1.ShowDialog();
+
+                if (openFileDialog1.FileName.Length == 0) return;
+
+                if (openFileDialog1.FilterIndex == 1)
+                {
+                    subtitles.LoadAss(readFromFile(openFileDialog1.FileName));
+                }
+                else
+                {
+                    int index = pluginsId[openFileDialog1.FilterIndex - 2];
+                    IXSPlugin plugin = (IXSPlugin)Activator.CreateInstance(pluginsList[index]);
+                    subtitles = plugin.ReadAsSubtitle(openFileDialog1.FileName);
+                }
+                ScriptTextBox.Text = subtitles.ToXingSub();
+            }
+        }
+
+        private void exportMenuItem_Click(object sender, EventArgs e)
+        {
+            List<int> pluginsId = new List<int>();
+            StringBuilder filter = new StringBuilder(255);
+            if (appConfig.EffectMode)
+            {
+                for (int i = 0; i < pluginsList.Count; i++)
+                {
+                    IXSPlugin plug = (IXSPlugin)Activator.CreateInstance(pluginsList[i]);
+                    if (plug.GetPluginType() == 2)
+                    {
+                        pluginsId.Add(i);
+                        filter.AppendFormat("{0}|*{1}|", plug.GetFileType(), plug.GetFileExt());
+                    }
+                }
+            }
+            else
+            {
+                filter.Append(Localizable.FileTypeAss);
+                for (int i = 0; i < pluginsList.Count; i++)
+                {
+                    IXSPlugin plug = (IXSPlugin)Activator.CreateInstance(pluginsList[i]);
+                    if (plug.GetPluginType() == 1)
+                    {
+                        pluginsId.Add(i);
+                        filter.AppendFormat("{0}|*{1}|", plug.GetFileType(), plug.GetFileExt());
+                    }
+                }
+            }
+
+            if (appConfig.EffectMode && pluginsId.Count == 0)
+            {
+                MessageBox.Show(Localizable.NoPluginAvailable, Localizable.NoPluginAvailableTitle, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+                return;
+            }
+
+            saveFileDialog1.Reset();
+            saveFileDialog1.Filter = filter.ToString().TrimEnd("|".ToCharArray());
+            saveFileDialog1.Title = Localizable.ExportTitle;
+            saveFileDialog1.ShowDialog();
+
+            if (saveFileDialog1.FileName.Length == 0) return;
+
+            if (appConfig.EffectMode)
+            {
+                int index = pluginsId[saveFileDialog1.FilterIndex - 1];
+                IXSPlugin plugin = (IXSPlugin)Activator.CreateInstance(pluginsList[index]);
+                plugin.SaveFromText(saveFileDialog1.FileName, ScriptTextBox.Text);
+            }
+            else
+            {
+                subtitles.LoadXss(ScriptTextBox.Text);  //更新字幕对象
+                if (saveFileDialog1.FilterIndex == 1)
+                {
+                    StreamWriter fileWriter = File.CreateText(saveFileDialog1.FileName);
+                    fileWriter.Write(subtitles.ToString());
+                    fileWriter.Flush();
+                    fileWriter.Close();
+                }
+                else
+                {
+                    int index = pluginsId[saveFileDialog1.FilterIndex - 2];
+                    IXSPlugin plugin = (IXSPlugin)Activator.CreateInstance(pluginsList[index]);
+                    plugin.SaveFromSubtitle(saveFileDialog1.FileName, subtitles);
+                }
+            }
+
+            MessageBox.Show(Localizable.ExportSussessMessage, Localizable.ExportTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
+        }
+
+        private void autocloseTimeWindowToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            appConfig.AutoClose = !appConfig.AutoClose;
+            autocloseTimeWindowToolStripMenuItem.Checked = appConfig.AutoClose;
+        }
+
+        private void stylesToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!subInfoForm.Created)
+            {
+                subInfoForm = new SubInfoForm();
+            }
+
+            StringBuilder _stylesText = new StringBuilder(255);
+            _stylesText.AppendLine("Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding");
+            foreach (SubStationStyle _style in subtitles.Styles)
+            {
+                _stylesText.AppendLine(_style.ToString());
+            }
+
+            subInfoForm.stylesText.Text = _stylesText.ToString();
+            subInfoForm.resWidth.Text = subtitles.ScriptInfo.PlayResX.ToString();
+            subInfoForm.resHeight.Text = subtitles.ScriptInfo.PlayRexY.ToString();
+            subInfoForm.OKButton.Click += new EventHandler(OKButton_Click);
+
+            subInfoForm.Show();
+        }
+
+        private void resyncToolToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (!resyncForm.Created)
+            {
+                resyncForm = new ResyncForm();
+            }
+            resyncForm.loadFromXingSubToolStripMenuItem.Click += new EventHandler(loadFromXingSubToolStripMenuItem_Click);
+            resyncForm.SaveToXingSub += new SaveToXingSubEventHandler(resyncForm_SaveToXingSub);
+            resyncForm.Show();
+        }
+
+        void resyncForm_SaveToXingSub(AdvancedSubStationAlpha sub)
+        {
+            subtitles = sub;
+            ScriptTextBox.Text = subtitles.ToXingSub();
+        }
+
+        void loadFromXingSubToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            subtitles.LoadXss(ScriptTextBox.Text);
+            resyncForm.LoadFromXingSub(subtitles);
         }
         #endregion
 
@@ -571,127 +744,6 @@ namespace XingSub
             subtitles.Styles.Add(new SubStationStyle());
 
             LoadXSPlugins();
-        }
-
-        private void pluginParams_Click(object sender, EventArgs e)
-        {
-            ToolStripItem item = (ToolStripItem)sender;
-            string location = pluginsList[int.Parse(item.Name)].Assembly.Location;
-
-            if (!paramsForm.Created)
-            {
-                paramsForm = new paramsForm();
-            }
-            paramsForm.paramsFile = Path.Combine(Path.GetDirectoryName(location), Path.GetFileNameWithoutExtension(location) + ".header");
-            paramsForm.Show();
-        }
-
-        private void importMenuItem_Click(object sender, EventArgs e)
-        {
-            if (askToSave())
-            {
-                List<int> pluginsId = new List<int>();
-                StringBuilder filter = new StringBuilder(255);
-                filter.Append(Localizable.FileTypeAss);
-                for (int i = 0; i < pluginsList.Count; i++)
-                {
-                    IXSPlugin plug = (IXSPlugin)Activator.CreateInstance(pluginsList[i]);
-                    if (plug.GetPluginType() == 0)
-                    {
-                        pluginsId.Add(i);
-                        filter.AppendFormat("{0}|*{1}|", plug.GetFileType(), plug.GetFileExt());
-                    }
-                }
-
-                openFileDialog1.Reset();
-                openFileDialog1.Filter = filter.ToString().TrimEnd("|".ToCharArray());
-                openFileDialog1.Title = Localizable.ImportTitle;
-                openFileDialog1.ShowDialog();
-
-                if (openFileDialog1.FileName.Length == 0) return;
-
-                if (openFileDialog1.FilterIndex == 1)
-                {
-                    subtitles.LoadAss(readFromFile(openFileDialog1.FileName));
-                }
-                else
-                {
-                    int index = pluginsId[openFileDialog1.FilterIndex - 2];
-                    IXSPlugin plugin = (IXSPlugin)Activator.CreateInstance(pluginsList[index]);
-                    subtitles = plugin.ReadAsSubtitle(openFileDialog1.FileName);
-                }
-                ScriptTextBox.Text = subtitles.ToXingSub();
-            }
-        }
-
-        private void exportMenuItem_Click(object sender, EventArgs e)
-        {
-            List<int> pluginsId = new List<int>();
-            StringBuilder filter = new StringBuilder(255);
-            if (appConfig.EffectMode)
-            {
-                for (int i = 0; i < pluginsList.Count; i++)
-                {
-                    IXSPlugin plug = (IXSPlugin)Activator.CreateInstance(pluginsList[i]);
-                    if (plug.GetPluginType() == 2)
-                    {
-                        pluginsId.Add(i);
-                        filter.AppendFormat("{0}|*{1}|", plug.GetFileType(), plug.GetFileExt());
-                    }
-                }
-            }
-            else
-            {
-                filter.Append(Localizable.FileTypeAss);
-                for (int i = 0; i < pluginsList.Count; i++)
-                {
-                    IXSPlugin plug = (IXSPlugin)Activator.CreateInstance(pluginsList[i]);
-                    if (plug.GetPluginType() == 1)
-                    {
-                        pluginsId.Add(i);
-                        filter.AppendFormat("{0}|*{1}|", plug.GetFileType(), plug.GetFileExt());
-                    }
-                }
-            }
-            
-            if (appConfig.EffectMode && pluginsId.Count == 0)
-            {
-                MessageBox.Show(Localizable.NoPluginAvailable, Localizable.NoPluginAvailableTitle, MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                return;
-            }
-
-            saveFileDialog1.Reset();
-            saveFileDialog1.Filter = filter.ToString().TrimEnd("|".ToCharArray());
-            saveFileDialog1.Title = Localizable.ExportTitle;
-            saveFileDialog1.ShowDialog();
-
-            if (saveFileDialog1.FileName.Length == 0) return;
-
-            if (appConfig.EffectMode)
-            {
-                int index = pluginsId[saveFileDialog1.FilterIndex - 1];
-                IXSPlugin plugin = (IXSPlugin)Activator.CreateInstance(pluginsList[index]);
-                plugin.SaveFromText(saveFileDialog1.FileName, ScriptTextBox.Text);
-            }
-            else
-            {
-                subtitles.LoadXss(ScriptTextBox.Text);  //更新字幕对象
-                if (saveFileDialog1.FilterIndex == 1)
-                {
-                    StreamWriter fileWriter = File.CreateText(saveFileDialog1.FileName);
-                    fileWriter.Write(subtitles.ToString());
-                    fileWriter.Flush();
-                    fileWriter.Close();
-                }
-                else
-                {
-                    int index = pluginsId[saveFileDialog1.FilterIndex - 2];
-                    IXSPlugin plugin = (IXSPlugin)Activator.CreateInstance(pluginsList[index]);
-                    plugin.SaveFromSubtitle(saveFileDialog1.FileName, subtitles);
-                }
-            }
-
-            MessageBox.Show(Localizable.ExportSussessMessage, Localizable.ExportTitle, MessageBoxButtons.OK, MessageBoxIcon.Information);
         }
 
         private string readFromFile(string fileName)
@@ -967,34 +1019,6 @@ namespace XingSub
                     MessageBox.Show(String.Format(Localizable.FailedToLoadPluginMessage, PluginVersion.ToString()), String.Format(Localizable.FailedToLoadPluginTitle, Path.GetFileName(ase.Location)), MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 }
             }
-        }
-
-        private void autocloseTimeWindowToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            appConfig.AutoClose = !appConfig.AutoClose;
-            autocloseTimeWindowToolStripMenuItem.Checked = appConfig.AutoClose;
-        }
-
-        private void stylesToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (!subInfoForm.Created)
-            {
-                subInfoForm = new SubInfoForm();
-            }
-
-            StringBuilder _stylesText = new StringBuilder(255);
-            _stylesText.AppendLine("Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding");
-            foreach (SubStationStyle _style in subtitles.Styles)
-            {
-                _stylesText.AppendLine(_style.ToString());
-            }
-
-            subInfoForm.stylesText.Text = _stylesText.ToString();
-            subInfoForm.resWidth.Text = subtitles.ScriptInfo.PlayResX.ToString();
-            subInfoForm.resHeight.Text = subtitles.ScriptInfo.PlayRexY.ToString();
-            subInfoForm.OKButton.Click += new EventHandler(OKButton_Click);
-
-            subInfoForm.Show();
         }
 
         void OKButton_Click(object sender, EventArgs e)
