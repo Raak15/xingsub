@@ -192,7 +192,7 @@ namespace XingSub {
         }
         
         /// <summary>
-        ///   查找类似 Loading subtitles... {0} 的本地化字符串。
+        ///   查找类似 Loading subtitles... 的本地化字符串。
         /// </summary>
         internal static string LoadingSubtitleEvents {
             get {
@@ -201,7 +201,7 @@ namespace XingSub {
         }
         
         /// <summary>
-        ///   查找类似 Loading styles... {0} 的本地化字符串。
+        ///   查找类似 Loading styles... 的本地化字符串。
         /// </summary>
         internal static string LoadingSubtitleStyles {
             get {

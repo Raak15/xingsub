@@ -118,6 +118,30 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Drawing" name="System.Drawing, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
+  <data name="fileMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>58, 21</value>
+  </data>
+  <data name="fileMenuItem.Text" xml:space="preserve">
+    <value>文件(&amp;F)</value>
+  </data>
+  <data name="editMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>59, 21</value>
+  </data>
+  <data name="editMenuItem.Text" xml:space="preserve">
+    <value>编辑(&amp;E)</value>
+  </data>
+  <data name="optionsMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>62, 21</value>
+  </data>
+  <data name="optionsMenuItem.Text" xml:space="preserve">
+    <value>选项(&amp;O)</value>
+  </data>
+  <data name="helpMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>61, 21</value>
+  </data>
+  <data name="helpMenuItem.Text" xml:space="preserve">
+    <value>帮助(&amp;H)</value>
+  </data>
   <data name="newMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>205, 22</value>
   </data>
@@ -157,6 +181,12 @@
   <data name="exportMenuItem.Text" xml:space="preserve">
     <value>导出(&amp;E)...</value>
   </data>
+  <data name="toolStripSeparator4.Size" type="System.Drawing.Size, System.Drawing">
+    <value>202, 6</value>
+  </data>
+  <data name="resyncToolToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>205, 22</value>
+  </data>
   <data name="toolStripSeparator1.Size" type="System.Drawing.Size, System.Drawing">
     <value>202, 6</value>
   </data>
@@ -165,12 +195,6 @@
   </data>
   <data name="exitMenuItem.Text" xml:space="preserve">
     <value>退出(&amp;X)</value>
-  </data>
-  <data name="fileMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>58, 21</value>
-  </data>
-  <data name="fileMenuItem.Text" xml:space="preserve">
-    <value>文件(&amp;F)</value>
   </data>
   <data name="cutMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>181, 22</value>
@@ -214,11 +238,11 @@
   <data name="insertNewLineMenuItem.Text" xml:space="preserve">
     <value>插入新行(&amp;I)</value>
   </data>
-  <data name="editMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>59, 21</value>
+  <data name="offsetMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+    <value>172, 22</value>
   </data>
-  <data name="editMenuItem.Text" xml:space="preserve">
-    <value>编辑(&amp;E)</value>
+  <data name="offsetMenuItem.Text" xml:space="preserve">
+    <value>光标偏移</value>
   </data>
   <data name="offsetOneMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>124, 22</value>
@@ -238,11 +262,11 @@
   <data name="offsetBySpaceMenuItem.Text" xml:space="preserve">
     <value>按照空格</value>
   </data>
-  <data name="offsetMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="captureTargetMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>172, 22</value>
   </data>
-  <data name="offsetMenuItem.Text" xml:space="preserve">
-    <value>光标偏移</value>
+  <data name="captureTargetMenuItem.Text" xml:space="preserve">
+    <value>捕捉目标</value>
   </data>
   <data name="NWEToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>231, 22</value>
@@ -256,11 +280,11 @@
   <data name="MPCToolStripMenuItem.Text" xml:space="preserve">
     <value>[图像] Media Player Classic</value>
   </data>
-  <data name="captureTargetMenuItem.Size" type="System.Drawing.Size, System.Drawing">
+  <data name="timingModeMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>172, 22</value>
   </data>
-  <data name="captureTargetMenuItem.Text" xml:space="preserve">
-    <value>捕捉目标</value>
+  <data name="timingModeMenuItem.Text" xml:space="preserve">
+    <value>计时模式</value>
   </data>
   <data name="normalModeMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>124, 22</value>
@@ -274,17 +298,14 @@
   <data name="effectsModeMenuItem.Text" xml:space="preserve">
     <value>特效模式</value>
   </data>
-  <data name="timingModeMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>172, 22</value>
-  </data>
-  <data name="timingModeMenuItem.Text" xml:space="preserve">
-    <value>计时模式</value>
-  </data>
   <data name="autocloseTimeWindowToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>172, 22</value>
   </data>
   <data name="autocloseTimeWindowToolStripMenuItem.Text" xml:space="preserve">
     <value>自动关闭时间窗口</value>
+  </data>
+  <data name="toolStripSeparator2.Size" type="System.Drawing.Size, System.Drawing">
+    <value>169, 6</value>
   </data>
   <data name="paramsToolStripMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>172, 22</value>
@@ -298,23 +319,56 @@
   <data name="stylesToolStripMenuItem.Text" xml:space="preserve">
     <value>样式...</value>
   </data>
-  <data name="optionsMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>62, 21</value>
-  </data>
-  <data name="optionsMenuItem.Text" xml:space="preserve">
-    <value>选项(&amp;O)</value>
-  </data>
   <data name="aboutMenuItem.Size" type="System.Drawing.Size, System.Drawing">
     <value>116, 22</value>
   </data>
   <data name="aboutMenuItem.Text" xml:space="preserve">
     <value>关于(&amp;A)</value>
   </data>
-  <data name="helpMenuItem.Size" type="System.Drawing.Size, System.Drawing">
-    <value>61, 21</value>
+  <data name="contextMenuStrip1.Size" type="System.Drawing.Size, System.Drawing">
+    <value>137, 148</value>
   </data>
-  <data name="helpMenuItem.Text" xml:space="preserve">
-    <value>帮助(&amp;H)</value>
+  <data name="contextCut.Size" type="System.Drawing.Size, System.Drawing">
+    <value>136, 22</value>
+  </data>
+  <data name="contextCut.Text" xml:space="preserve">
+    <value>剪切(&amp;T)</value>
+  </data>
+  <data name="contextCopy.Size" type="System.Drawing.Size, System.Drawing">
+    <value>136, 22</value>
+  </data>
+  <data name="contextCopy.Text" xml:space="preserve">
+    <value>复制(&amp;C)</value>
+  </data>
+  <data name="contextPaste.Size" type="System.Drawing.Size, System.Drawing">
+    <value>136, 22</value>
+  </data>
+  <data name="contextPaste.Text" xml:space="preserve">
+    <value>粘贴(&amp;P)</value>
+  </data>
+  <data name="contextDelete.Size" type="System.Drawing.Size, System.Drawing">
+    <value>136, 22</value>
+  </data>
+  <data name="contextDelete.Text" xml:space="preserve">
+    <value>删除(&amp;D)</value>
+  </data>
+  <data name="toolStripSeparator7.Size" type="System.Drawing.Size, System.Drawing">
+    <value>133, 6</value>
+  </data>
+  <data name="contextSelectAll.Size" type="System.Drawing.Size, System.Drawing">
+    <value>136, 22</value>
+  </data>
+  <data name="contextSelectAll.Text" xml:space="preserve">
+    <value>全选(&amp;A)</value>
+  </data>
+  <data name="toolStripSeparator9.Size" type="System.Drawing.Size, System.Drawing">
+    <value>133, 6</value>
+  </data>
+  <data name="contextInsertNewline.Size" type="System.Drawing.Size, System.Drawing">
+    <value>136, 22</value>
+  </data>
+  <data name="contextInsertNewline.Text" xml:space="preserve">
+    <value>插入新行(&amp;I)</value>
   </data>
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>
