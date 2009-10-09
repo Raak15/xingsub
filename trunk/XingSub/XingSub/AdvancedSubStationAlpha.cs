@@ -297,5 +297,15 @@ namespace XingSub
 
             return String.Format("{0}{1:00}{2:00}{3:00}", hours, minutes, seconds, ms);
         }
+
+        public string MsecondToStamp(int mseconds)
+        {
+            return TimeToStamp(MsecondsToTime(mseconds));
+        }
+
+        public int StampToMsecond(string stamp)
+        {
+            return TimeToMsecond(StampToTime(stamp));
+        }
     }
 }

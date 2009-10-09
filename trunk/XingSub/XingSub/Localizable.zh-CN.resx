@@ -164,6 +164,12 @@
   <data name="InvaildStylesTitle" xml:space="preserve">
     <value>无效样式</value>
   </data>
+  <data name="LoadingSubtitleEvents" xml:space="preserve">
+    <value>正在加载字幕...</value>
+  </data>
+  <data name="LoadingSubtitleStyles" xml:space="preserve">
+    <value>正在加载样式...</value>
+  </data>
   <data name="NewFile" xml:space="preserve">
     <value>新文件</value>
   </data>

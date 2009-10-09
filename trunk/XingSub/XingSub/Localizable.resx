@@ -165,10 +165,10 @@ Please correct it then try again.</value>
     <value>Invaild styles</value>
   </data>
   <data name="LoadingSubtitleEvents" xml:space="preserve">
-    <value>Loading subtitles... {0}</value>
+    <value>Loading subtitles...</value>
   </data>
   <data name="LoadingSubtitleStyles" xml:space="preserve">
-    <value>Loading styles... {0}</value>
+    <value>Loading styles...</value>
   </data>
   <data name="NewFile" xml:space="preserve">
     <value>New File</value>
