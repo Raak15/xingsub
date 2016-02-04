@@ -1,0 +1,1 @@
+This is a program used to subtitles timing and making. I gets timestamps from NeroWaveEditor. After timing you can export the subtitles project to such as .ssa or .srt file. I got this idea from StarSub by MeteorRain and make it more powerful.
